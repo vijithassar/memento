@@ -1,0 +1,16 @@
+div.wrapper {
+  font-family: 'Georgia', 'Times New Roman', 'serif';
+  font-style: xx-large;
+  width: 100%;
+  display: block;
+}
+
+div.explanation {
+  width: 50%;
+  display: block;
+  margin: auto;
+}
+
+div.audio {
+  text-align: center;
+}
