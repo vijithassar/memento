@@ -68,6 +68,8 @@
       rounded_timestamp = Math.floor(timestamp);
       return rounded_timestamp;
     }
+    // get all timestamps registered in the data
+    // object with time_ prefixes
     func.get_breakpoints = function() {
       var keys, times, breakpoints;
       keys = Object.keys(data);
@@ -77,7 +79,44 @@
       breakpoints = times.map(function(item) {
         return item.slice(5);
       });
+      breakpoints = breakpoints.sort();
       return breakpoints;
+    }
+    // get the breakpoints closest to a timestamp
+    func.get_nearest_breakpoints = function(timestamp) {
+      var breakpoints,
+          current_breakpoint,
+          lower_breakpoint,
+          higher_breakpoint,
+          nearest_breakpoints;
+      // get breakpoints
+      breakpoints = func.get_breakpoints();
+      // loop through breakpoints
+      for(var i = 0; i < breakpoints.length; i++) {
+        current_breakpoint = breakpoints[i];
+        // if we're on the first item in the array,
+        // set the lower breakpoint to zero
+        if (i === 0) {
+          lower_breakpoint = 0;
+        }
+        // set lower and higher bounds
+        if (current_breakpoint < timestamp) {
+          lower_breakpoint = current_breakpoint;
+        } else if (current_breakpoint > timestamp) {
+          higher_breakpoint = current_breakpoint;
+        }
+        // when both bounds are set, define the return value
+        if (typeof lower_breakpoint !== 'undefined' && typeof higher_breakpoint !== 'undefined') {
+          nearest_breakpoints = {
+            lower: lower_breakpoint,
+            higher: higher_breakpoint
+          }
+        }
+        // if the return value is defined, return it
+        if (nearest_breakpoints) {
+          return nearest_breakpoints;
+        }
+      }
     }
     // run all functionality
     func.execute = function() {
