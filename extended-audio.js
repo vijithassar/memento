@@ -36,7 +36,7 @@
     // the scoped data via arguments
     func.bind_function = function(label, bound_function) {
       var current_data, timestamp;
-      if (typeof label !== 'string') {
+      if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;
       }
       timestamp = this.get_current_timestamp();
@@ -53,15 +53,17 @@
       }
       return current_data;
     }
+    // get exact timestamp from node
+    func.get_current_timestamp = function() {
+      var timestamp = node.currentTime;
+      return timestamp;
+    }
+    // round timestamp down for use in hash lookup
     func.get_rounded_timestamp = function() {
       var timestamp, rounded_timestamp;
       timestamp = func.get_current_timestamp();
       rounded_timestamp = Math.floor(timestamp);
       return rounded_timestamp;
-    }
-    func.get_current_timestamp = function() {
-      var timestamp = node.currentTime;
-      return timestamp;
     }
     // run all functionality
     func.execute = function() {
