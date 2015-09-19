@@ -46,6 +46,9 @@
     }
     // get data
     func.get_current_data = function(event) {
+      if (typeof event !== 'number') {
+        return;
+      }
       var id, current_data;
       id = 'time_' + event;
       if (data[id]) {
@@ -65,8 +68,20 @@
       rounded_timestamp = Math.floor(timestamp);
       return rounded_timestamp;
     }
+    func.get_breakpoints = function() {
+      var keys, times, breakpoints;
+      keys = Object.keys(data);
+      times = keys.filter(function(item) {
+        return item.slice(0, 5) === 'time_';
+      })
+      breakpoints = times.map(function(item) {
+        return item.slice(5);
+      });
+      return breakpoints;
+    }
     // run all functionality
     func.execute = function() {
+      func.get_breakpoints();
       var currEvt = -1;
       var prevEvt = -1;
       node.ontimeupdate = function(){
