@@ -39,26 +39,37 @@
       if (typeof label !== 'string') {
         return;
       }
-      current_data = this.get_current_data();
-      timestamp = node.currentTime;
+      timestamp = this.get_current_timestamp();
+      rounded_timestamp = this.get_rounded_timestamp();
+      current_data = this.get_current_data(rounded_timestamp);
       func[label] = bound_function(current_data, timestamp, node);
     }
     // get data
     func.get_current_data = function(event) {
       var id, current_data;
       id = 'time_' + event;
-      current_data = data[id];
+      if (data[id]) {
+        current_data = data[id];
+      }
       return current_data;
+    }
+    func.get_rounded_timestamp = function() {
+      var timestamp, rounded_timestamp;
+      timestamp = func.get_current_timestamp();
+      rounded_timestamp = Math.floor(timestamp);
+      return rounded_timestamp;
+    }
+    func.get_current_timestamp = function() {
+      var timestamp = node.currentTime;
+      return timestamp;
     }
     // run all functionality
     func.execute = function() {
       var currEvt = -1;
       var prevEvt = -1;
       node.ontimeupdate = function(){
-        //console.log(node.currentTime);
         var time = node.currentTime;
-        var rounded = Math.round(time);
-
+        var rounded = Math.floor(time);
         for (var i=0; i<data.cuts.length; i++){
           if (data.cuts[i] == rounded){
             if (currEvt != prevEvt) {
