@@ -81,13 +81,14 @@
     }
     // run all functionality
     func.execute = function() {
-      func.get_breakpoints();
       var currEvt = -1;
       var prevEvt = -1;
       node.ontimeupdate = function(){
-        var time = node.currentTime;
-        var rounded = Math.floor(time);
-        for (var i=0; i<data.cuts.length; i++){
+        var time, rounded, cuts;
+        time = node.currentTime;
+        rounded = Math.floor(time);
+        cuts = func.get_breakpoints();
+        for (var i = 0; i < cuts.length; i++){
           if (data.cuts[i] == rounded){
             if (currEvt != prevEvt) {
               func.get_current_data(currEvt);
