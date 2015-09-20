@@ -52,6 +52,21 @@
       });
       return data;
     }
+    func.__update = function() {
+      // every time the node updates
+      node.ontimeupdate = function() {
+        var data, timestamp, actions, action;
+        timestamp = func.timestamp();
+        data = func.data();
+        actions = func.timed_actions(timestamp);
+        for (var i = 0; i < actions.length; i++) {
+          action = actions[i];
+          if (typeof action === 'function') {
+            action(data, timestamp, node);
+          }
+        }
+      }
+    }
     func.__actions = []
     func.__add_action = function(new_function, start, end) {
       if (start) {new_function.start = start}
@@ -180,25 +195,6 @@
       })
       return betweens;
     }
-    // attach an arbitrary function under a key, and pass it
-    // the scoped data via arguments
-    func.extend = function(label, bound_function, breakpoints) {
-      if (typeof label !== 'string' || typeof bound_function !== 'function') {
-        return;
-      }
-      // if we're still running, bind the function with the current values
-      func[label] = function() {
-        var current_data, timestamp, in_range;
-        timestamp = this.timestamp();
-        current_data = this.data(timestamp);
-        // exit if optional breakpoints are supplied but do not match
-        if (breakpoints && !this.test_breakpoints(breakpoints, timestamp)) {
-          return false;
-        }
-        bound_function(current_data, timestamp, node);
-      }
-      return func;
-    }
     // get data
     func.data = function(timestamp) {
       var timestamp = timestamp || this.timestamp(),
@@ -278,6 +274,25 @@
         }
       }
     }
+    // attach an arbitrary function under a key, and pass it
+    // the scoped data via arguments
+    func.extend = function(label, bound_function, breakpoints) {
+      if (typeof label !== 'string' || typeof bound_function !== 'function') {
+        return;
+      }
+      // if we're still running, bind the function with the current values
+      func[label] = function() {
+        var current_data, timestamp, in_range;
+        timestamp = this.timestamp();
+        current_data = this.data(timestamp);
+        // exit if optional breakpoints are supplied but do not match
+        if (breakpoints && !this.test_breakpoints(breakpoints, timestamp)) {
+          return false;
+        }
+        bound_function(current_data, timestamp, node);
+      }
+      return func;
+    }
     // run a function every time the player updates
     func.tick = function(iterator, breakpoints) {
       if (typeof iterator !== 'function') {
@@ -287,21 +302,6 @@
         return;
       } else {
         this.__add_action(iterator);
-      }
-    }
-    func.__update = function() {
-      // every time the node updates
-      node.ontimeupdate = function() {
-        var data, timestamp, actions, action;
-        timestamp = func.timestamp();
-        data = func.data();
-        actions = func.timed_actions(timestamp);
-        for (var i = 0; i < actions.length; i++) {
-          action = actions[i];
-          if (typeof action === 'function') {
-            action(data, timestamp, node);
-          }
-        }
       }
     }
     // fire a function once when the trigger time is passed
