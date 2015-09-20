@@ -22,7 +22,7 @@ var data = [
 ]
 ```
 
-Start and end times can be given either as integers or decimals representing a number of seconds, or alternatively as strings using DD:HH:MM:SS format. You can omit units you aren't actually using, so "1:30" translates into 90 seconds
+Start and end times can be given either as integers or decimals representing a number of seconds, or alternatively as strings using DD:HH:MM:SS format. You can omit units you aren't actually using, so "1:30" translates into 90 seconds.
 
 ```javascript
 // bind with both strings and integers
