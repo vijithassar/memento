@@ -20,7 +20,7 @@
 
   var done_time = {} ;
 
-  get_json('/sample.json', function(results) {
+  get_json('/static/sample.json', function(results) {
     // select audio node based on target string
     var id = 'target';
     var sample_audio = document.getElementById(id);
@@ -70,14 +70,13 @@
 
     function initialize(latLng, sleep_time) {
         latLng = latLng.split(",")
-        $("#content").html("<div id='map'></div>");
         map = new google.maps.Map(document.getElementById('map'), {
           center: { lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])},
           zoom: 7
         });
         setTimeout(function()
           {
-            $("#map").remove();
+            $("#map").empty();
           }, sleep_time * 1000);
     }
 
@@ -87,11 +86,10 @@
           url: "https://api.twitter.com/1/statuses/oembed.json?url=" + encodeURI(tweet_url),
           dataType: "jsonp",
           success: function(data) {
-            $("#content").html("<div id='twitter'></div>");
             $("#twitter").html(data.html);
             twttr.widgets.load($("#twitter"));
             setTimeout(function() {
-                $("#twitter").remove();
+                $("#twitter").empty();
             }, sleep_time * 1000);
           }
         });
@@ -104,13 +102,12 @@
         url: "https://vine.co/oembed.json?url=" + url,
         success: function(data) {
           console.log("appending vine data");
-          $("#content").html("<div id='vine'></div>");
           $("#vine").append(data.html)
         }
       });
       setTimeout(function()
         {
-          $("#vine").remove();
+          $("#vine").empty();
         }, sleep_time * 1000);
     }
 
@@ -118,6 +115,11 @@
       // for now, just change the background image
       $('body').css('background-image', 'url(' + url + ')');
     }
+
+    $('.popup').click(function(){
+      $('.popup').attr('style', '');
+      $(this).css('z-index', 200)
+    })
 
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
