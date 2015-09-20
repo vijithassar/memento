@@ -30,7 +30,7 @@
     "data" : {
       "actions": [{
         "type": "twitter",
-        "url": "https://twitter.com/leyawn/status/638358832561954816"
+        "url": ["https://twitter.com/leyawn/status/638358832561954816"]
       }]
     }
   },
