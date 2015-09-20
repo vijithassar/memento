@@ -2,6 +2,13 @@
   // data to be passed into the instance scope
   var sample = [
     {
+      "start": 1,
+      "end": 12,
+      "data": [
+        1,2,4,5,7
+      ]
+    },
+    {
       "start": 2,
       "end": 5,
       "data": {
