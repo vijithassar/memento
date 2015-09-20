@@ -40,7 +40,7 @@
         return;
       }
       func[label] = function() {
-        timestamp = this.current_timestamp();
+        timestamp = this.timestamp();
         rounded_timestamp = this.rounded_timestamp();
         current_data = this.data(rounded_timestamp);
         bound_function(current_data, timestamp, node);
@@ -49,7 +49,7 @@
     }
     // get data
     func.data = function(timestamp) {
-      var timestamp = timestamp || this.current_timestamp(),
+      var timestamp = timestamp || this.timestamp(),
           nearest_breakpoints,
           current_data;
       current_data = data.filter(function(item) {
@@ -57,17 +57,21 @@
         between = item.start < timestamp && timestamp < item.end;
         return between;
       });
-      return current_data;
+      if (current_data.length === 0) {
+        return false;
+      } else {
+        return current_data;
+      }
     }
     // get exact timestamp from node
-    func.current_timestamp = function() {
+    func.timestamp = function() {
       var timestamp = node.currentTime;
       return timestamp;
     }
     // round timestamp down for use in hash lookup
     func.rounded_timestamp = function() {
       var timestamp, rounded_timestamp;
-      timestamp = func.current_timestamp();
+      timestamp = func.timestamp();
       rounded_timestamp = Math.floor(timestamp);
       return rounded_timestamp;
     }
@@ -98,7 +102,7 @@
           current_breakpoint,
           between,
           next_breakpoint,
-          timestamp = timestamp || this.current_timestamp();
+          timestamp = timestamp || this.timestamp();
       breakpoints = func.breakpoints();
       for (var i = 0; i < breakpoints.length; i++) {
         current_breakpoint = breakpoints[i];
@@ -117,7 +121,7 @@
       }
       node.ontimeupdate = function() {
         var data, timestamp, rounded_timestamp;
-        timestamp = func.current_timestamp();
+        timestamp = func.timestamp();
         rounded_timestamp = func.rounded_timestamp();
         data = func.data(rounded_timestamp);
         iterator(data, timestamp, node);
