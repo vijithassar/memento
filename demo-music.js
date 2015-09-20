@@ -38,7 +38,7 @@
     });
 
     // // trigger a function when a particular timestamp is passed
-    // smart_podcast.trigger(1, function(data, timestamp, node) {
+    // smart_podcast.trigger(2, function(data, timestamp, node) {
     //   console.log('triggered!', data, timestamp, node);
     // });
 

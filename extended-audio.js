@@ -306,23 +306,22 @@
       event = new Event(event_label);
       event_handler = function(event) {
         var data, timestamp;
-        console.log(event);
         data = func.data();
         timestamp = func.timestamp();
         trigger_function(data, timestamp, node);
       }
-      // this.__add_action(event_handler);
       node.addEventListener(event_label, event_handler)
       func.tick(function() {
-        console.log('ticking');
         var timestamp,
             passed;
         if (sent) {
           return;
         } else {
+          timestamp = func.timestamp();
           passed = timestamp > trigger_time;
           if (passed) {
             node.dispatchEvent(event);
+            sent = true;
           }
         }
       });
