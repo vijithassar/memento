@@ -22,6 +22,26 @@
         return data;
       }
     }
+    // add a new item to the bound data
+    func.add_item = function(new_data) {
+      if (typeof data.map !== 'function') {
+        data = [];
+      }
+      if (new_data) {
+        data = data.concat(new_data);
+        return data;
+      }
+    }
+    // remove a bound item by index
+    func.remove_item = function(int) {
+      if (typeof int !== 'number') {
+        return false;
+      }
+      data = data.filter(function(item, index) {
+        return index !== int;
+      })
+      return data;
+    }
     // getter/setter for node
     var node;
     func.node = function(element) {
