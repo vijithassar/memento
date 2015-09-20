@@ -105,7 +105,7 @@
     "data" : {
       "actions": [{
         "type": "link",
-        "url": "www.squarespace.com"
+        "url": "http://www.squarespace.com"
       }]
     }
   },
@@ -125,7 +125,7 @@
     "data" : {
       "actions": [{
         "type": "link",
-        "url": "www.stamps.com"
+        "url": "http://www.stamps.com"
       }]
     }
   }

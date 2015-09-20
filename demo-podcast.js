@@ -59,6 +59,9 @@
                 case "vine":
                   embed_vine(action.url, end-start)
                   break;
+                case "link":
+                  embed_link(action.url)
+                  break;
               }
             }
           }
@@ -111,6 +114,10 @@
         {
           $("#vine").empty();
         }, sleep_time * 1000);
+    }
+
+    function embed_link(url){
+      $("#link").html('<a href="' + url + '" target="_blank">' + url + '</a>')
     }
 
     function initImage(url, sleep_time){
