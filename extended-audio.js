@@ -54,11 +54,19 @@
     }
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
-    func.extend = function(label, bound_function) {
-      var current_data, timestamp;
+    func.extend = function(label, bound_function, breakpoints) {
+      var current_data, timestamp, in_range;
       if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;
       }
+      // exit if optional breakpoints are supplied but do not match
+      if (breakpoints) {
+        in_range = ((breakpoints.low <= timestamp) && (timestamp <= breakpoints.high))
+        if (!in_range) {
+          return false;
+        }
+      }
+      // if we're still running, bind the function with the current values
       func[label] = function() {
         timestamp = this.timestamp();
         rounded_timestamp = this.rounded_timestamp();
