@@ -11,11 +11,11 @@
     // set audio node
     .node(sample_node)
     // set data
-    .data(sample_data);
+    .all_data(sample_data);
 
   // bind a function so it has access to the scoped data via arguments
   smart_podcast.bind_function('test', function(data, timestamp, node) {
-//    console.log('bound', data, timestamp, node)
+    console.log('bound', data, timestamp, node)
   });
 
   // run the bound function on every update
