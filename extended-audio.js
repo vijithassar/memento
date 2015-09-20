@@ -45,12 +45,10 @@
       func[label] = bound_function(current_data, timestamp, node);
     }
     // get data
-    func.get_current_data = function(event) {
-      if (typeof event !== 'number') {
-        return;
-      }
-      var id, current_data;
-      id = 'time_' + event;
+    func.get_current_data = function() {
+      var id, current_data, rounded_timestamp;
+      rounded_timestamp = this.get_rounded_timestamp();
+      id = 'time_' + rounded_timestamp;
       if (data[id]) {
         current_data = data[id];
       }
@@ -118,31 +116,25 @@
         }
         // if the return value is defined, return it
         if (nearest_breakpoints) {
-          console.log(nearest_breakpoints);
           return nearest_breakpoints;
         }
       }
     }
+    func.tick = function(iterator) {
+      if (typeof iterator !== 'function') {
+        return;
+      }
+      node.ontimeupdate = function() {
+        var data, timestamp, rounded_timestamp;
+        timestamp = func.get_current_timestamp();
+        rounded_timestamp = func.get_rounded_timestamp();
+        data = func.get_current_data(rounded_timestamp);
+        iterator(data, timestamp, node);
+      }
+    }
     // run all functionality
     func.execute = function() {
-      var currEvt = -1;
-      var prevEvt = -1;
-      node.ontimeupdate = function() {
-        var rounded_timestamp, rounded, cuts, nearest_breakpoints;
-        rounded_timestamp = func.get_rounded_timestamp();
-        cuts = func.get_breakpoints();
-        nearest_breakpoints = func.get_nearest_breakpoints(rounded_timestamp);
-        for (var i = 0; i < cuts.length; i++){
-          if (cuts[i] == rounded){
-            if (currEvt != prevEvt) {
-              func.get_current_data(currEvt);
-              prevEvt = currEvt;
-            }
-            currEvt = rounded;
-          }
-        }
-      }
-
+      return;
     }
     // return results of the factory
     return func;
