@@ -87,6 +87,8 @@ memento provides additional functionality for exposing data, timestamps, and aud
 
 memento provides a number of ways with which to expose its internal data, timestamp, and media node information to your custom functions.
 
+### Extend ###
+
 **memento.extend()** binds your new function to the current memento object. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute. That function can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
 
 ```javascript
@@ -105,13 +107,40 @@ var my_new_function = function(data, timestamp, node) {
 project.extend('logger', my_new_function);
 ```
 
-**memento.tick()** takes one argument, a function, and fires it every time the current time is updated by the player. The ticking function in turn takes three arguments, for the currently bound data, the current timestamp, and the media node.
+### Tick ###
+
+**memento.tick()** takes one required argument, a function, and fires it every time the current time is updated by the player. The ticking function in turn takes three arguments, for the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // create a memento instance
 var project = memento();
+// fire the callback function whenever the player updates
 project.tick(function(data, timestamp, node) {
   // do whatever you want in here  
   console.log('logging on every update:', data, timestamp, node)
+});
+```
+
+```javascript
+// create a memento instance
+var project = memento();
+// fire the callback function whenever the player updates
+project.tick(function(data, timestamp, node) {
+  // do whatever you want in here  
+  console.log('logging on every update:', data, timestamp, node)
+});
+```
+
+### Trigger ###
+
+**memento.trigger()** fires a function at a specified point in time. It takes two arguments: the first is a timestamp either as an integer or float or a string in "DD:HH:MM:SS" format, and the second is the function to be fired. The triggered function in turn takes three arguments, for the current data, current timestamp, and media node.
+
+```javascript
+// create a memento instance
+var project = memento();
+// fire the callback function whenever the player updates
+project.trigger('1:30', function(data, timestamp, node) {
+  // do whatever you want in here  
+  console.log('logging at 90 seconds:', data, timestamp, node)
 });
 ```
