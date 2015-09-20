@@ -13,8 +13,13 @@
     // set data
     .data(sample_data);
 
+
+  smart_podcast.bind_function('test', function(data, timestamp, node) {
+    console.log('bound', data, timestamp, node)
+  });
+
   smart_podcast.tick(function(data, timestamp, node) {
-   console.log('hi!', data, timestamp, node);
+    smart_podcast.test();
   });
 
   // execute instance
