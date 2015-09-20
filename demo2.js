@@ -52,7 +52,8 @@
                   initialize(action.url,3)
                   break;
                 case "twitter":
-                  embed_tweet(action.url,end-start)
+                  embed_tweet(action.url,end-start);
+                  break;
                 case "vine":
                   embed_vine(action.url, 10)
                   break;
@@ -82,6 +83,7 @@
 
     function embed_tweet(tweet_url, sleep_time) {
         $.ajax({
+          type: 'GET',
           url: "https://api.twitter.com/1/statuses/oembed.json?url=" + encodeURI(tweet_url),
           dataType: "jsonp",
           success: function(data) {
@@ -93,6 +95,7 @@
             }, sleep_time * 1000);
           }
         });
+    }
 
     function embed_vine(url, sleep_time) {
       $.ajax({
@@ -101,6 +104,7 @@
         url: "https://vine.co/oembed.json?url=" + url,
         success: function(data) {
           console.log("appending vine data");
+          $("#content").html("<div id='vine'></div>");
           $("#vine").append(data.html)
         }
       });
