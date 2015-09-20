@@ -6,8 +6,9 @@
   var extaudio = function() {
     // return value of the factory function
     var func = function() {
-      // instance execution; currently just aliases to data()
-      return this.data();
+      if (typeof func.data === 'function') {
+        return func.data()
+      }
     }
     // getter/setter for bound data
     var data;
