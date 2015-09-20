@@ -18,6 +18,7 @@ div.explanation p {
   width:70%;
   border-radius:10px;
   margin-bottom:1em;
+  text-align:center;
 }
 
 .popup>*{
@@ -27,4 +28,8 @@ div.explanation p {
 
 #map {
   height:400px;
+}
+
+.popup a {
+  font-size:2em;
 }
