@@ -6,11 +6,8 @@
   var extaudio = function() {
     // return value of the factory function
     var func = function() {
-      // calling the function will just call its own execution
-      // methods, if they exist
-      if (typeof func.execute === 'function') {
-        func.execute();
-      }
+      // instance execution; currently just aliases to data()
+      return this.data();
     }
     // getter/setter for bound data
     var data;
@@ -102,7 +99,7 @@
       var timestamp = node.currentTime;
       return timestamp;
     }
-    // round timestamp down for use in hash lookup
+    // round timestamp down for use in less precise lookups
     func.rounded_timestamp = function() {
       var timestamp, rounded_timestamp;
       timestamp = func.timestamp();
@@ -114,16 +111,20 @@
     func.breakpoints = function() {
       var breakpoints, start, end;
       breakpoints = [];
+      // for each item
       for (var i = 0; i < data.length; i++) {
+        // check start
         start = data[i].start;
-        end = data[i].end;
         if (breakpoints.indexOf(start) === -1) {
           breakpoints.push(start);
         }
+        // check end
+        end = data[i].end;
         if (breakpoints.indexOf(end) === -1) {
           breakpoints.push(end);
         }
       }
+      // sort chronologically
       breakpoints = breakpoints.sort(function(a, b) {
         return a > b;
       });
@@ -141,8 +142,10 @@
       for (var i = 0; i < breakpoints.length; i++) {
         current_breakpoint = breakpoints[i];
         next_breakpoint = breakpoints[i + 1];
+        // if the timestamp is between one breakpoint and the next
         between = current_breakpoint < timestamp && timestamp < next_breakpoint;
         if (between) {
+          // return both values as an object
           nearest_breakpoints = {low: current_breakpoint, high: next_breakpoint};
           return nearest_breakpoints;
         }
@@ -153,17 +156,15 @@
       if (typeof iterator !== 'function') {
         return;
       }
+      // every time the node updates
       node.ontimeupdate = function() {
         var data, timestamp, rounded_timestamp;
+        // assign all values
         timestamp = func.timestamp();
-        rounded_timestamp = func.rounded_timestamp();
-        data = func.data(rounded_timestamp);
+        data = func.data(timestamp);
+        // run the function with the scoped values
         iterator(data, timestamp, node);
       }
-    }
-    // run all functionality? doesn't do anything!
-    func.execute = function() {
-      return;
     }
     // return results of the factory
     return func;
