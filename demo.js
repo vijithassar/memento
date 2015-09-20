@@ -12,7 +12,6 @@
         status = xhr.status;
         if (status == 200) {
           data = JSON.parse(xhr.responseText);
-          console.log(data);
           callback(data);
         }
       }
