@@ -52,9 +52,8 @@
           rounded_timestamp,
           nearest_breakpoints;
       nearest_breakpoints = this.get_nearest_breakpoints(current_timestamp);
-      console.log(nearest_breakpoints);
       if (nearest_breakpoints) {
-        id = 'time_' + nearest_breakpoints.lower;
+        id = 'time_' + nearest_breakpoints.low;
         if (data[id]) {
           current_data = data[id];
         }
