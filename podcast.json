@@ -1,0 +1,94 @@
+[
+  {
+    "start": 1,
+    "end": 8,
+    "data": {
+      "image": "http://www.co.burlington.nj.us/ImageRepository/Path?filePath=%2fdocuments%5cIntranet%5c167%2fFarm+Fair+2013_201403271010508392.jpg",
+      "actions": [{
+        "type": "map",
+        "url": "40.0417,-74.7343999"
+      }]
+    }
+  },
+  {
+    "start": 11,
+    "end": 19,
+    "data": {
+      "image": "http://media.npr.org/assets/img/2015/07/17/_aph4800-small-2-438fa2f8a441de68849dd8e12b69bb4a53fcc214-s900-c85.jpg"
+    }
+  },
+  {
+    "start": 35,
+    "end": 50,
+    "data": {
+      "image": "chart of guesses",
+    }
+  },
+  {
+    "start": 73,
+    "end": 113,
+    "data" : {
+      "actions": [{
+        "type": "twitter",
+        "url": "https://twitter.com/leyawn/status/638358832561954816"
+      }]
+    }
+  },
+  {
+    "start": 138,
+    "end" : 146,
+    "data" : {
+      "actions": [{
+        "type": "vine",
+        "url": "https://vine.co/v/eIXejbQ2utM"
+      }]
+    }
+  },
+  {
+    "start": 150,
+    "end" : 155,
+    "data" : {
+      "image": "http://36.media.tumblr.com/b5ceac987fe6bde7e414a71ea8b1ad2b/tumblr_nudh6sShuf1ufhnako1_r3_1280.jpg "
+    }
+  },
+  {
+    "start": 158,
+    "end" : 161,
+    "data" : {
+      "actions": [{
+        "type": "link",
+        "url": "https://itunes.apple.com/us/podcast/reply-all/id941907967?mt=2"
+      }]
+    }
+  },
+  {
+    "start": 163 ,
+    "end" : 169,
+    "data" : {
+      "actions": [{
+        "type": "link",
+        "url": "www.squarespace.com"
+      }]
+    }
+  },
+  {
+    "start": 170 ,
+    "end" : 179,
+    "data" : {
+      "actions": [{
+        "type": "link",
+        "url": "https://www.fanduel.com/fantasy-football"
+      }]
+    }
+  },
+  {
+    "start": 180 ,
+    "end" : 189,
+    "data" : {
+      "actions": [{
+        "type": "link",
+        "url": "www.stamps.com"
+      }]
+    }
+  }
+]
