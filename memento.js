@@ -1,7 +1,5 @@
 (function() {
 
-  console.log('setting up extended node functionality');
-
   // function factory
   var memento = function() {
     // return value of the factory function
