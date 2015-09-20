@@ -1,7 +1,7 @@
 (function() {
   // data to be passed into the instance scope
-  var sample = {
-    "time_2": {
+  var sample = [
+    {
       "start": 2,
       "end": 5,
       "data": {
@@ -18,7 +18,7 @@
         }]
       }
     },
-    "time_5": {
+    {
       "start": 5,
       "end": 14,
       "data": {
@@ -35,7 +35,7 @@
         }]
       }
     },
-    "time_15": {
+    {
       "start": 15,
       "end": 30,
       "data": {
@@ -52,7 +52,7 @@
         }]
       }
     }
-  };
+  ];
   // export to window scope
   window.sample_data = sample;
 }).call(this);
