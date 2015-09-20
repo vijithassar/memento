@@ -1,6 +1,6 @@
 (function() {
 
-  console.log('setting up extended audio functionality');
+  console.log('setting up extended media functionality');
 
   // function factory
   var extaudio = function() {
@@ -42,14 +42,14 @@
       })
       return data;
     }
-    // getter/setter for audio node
-    var audio;
-    func.audio = function(element) {
+    // getter/setter for media node
+    var media;
+    func.media = function(element) {
       if (element) {
-        audio = element;
+        media = element;
         return func;
       } else {
-        return audio;
+        return media;
       }
     }
     // attach an arbitrary function under a key, and pass it
@@ -63,7 +63,7 @@
         timestamp = this.timestamp();
         rounded_timestamp = this.rounded_timestamp();
         current_data = this.data(rounded_timestamp);
-        bound_function(current_data, timestamp, audio);
+        bound_function(current_data, timestamp, media);
       }
       return func;
     }
@@ -78,7 +78,6 @@
           return false;
         }
         between = (item.start <= timestamp) && (timestamp <= item.end);
-//        console.log(item.start, timestamp, item.end, between);
         return between;
       });
       current_data.sort(function(a, b) {
@@ -90,9 +89,9 @@
         return current_data;
       }
     }
-    // get exact timestamp from audio
+    // get exact timestamp from media
     func.timestamp = function() {
-      var timestamp = audio.currentTime;
+      var timestamp = media.currentTime;
       return timestamp;
     }
     // round timestamp down for use in hash lookup
@@ -146,12 +145,12 @@
       if (typeof iterator !== 'function') {
         return;
       }
-      audio.ontimeupdate = function() {
+      media.ontimeupdate = function() {
         var data, timestamp, rounded_timestamp;
         timestamp = func.timestamp();
         rounded_timestamp = func.rounded_timestamp();
         data = func.data(rounded_timestamp);
-        iterator(data, timestamp, audio);
+        iterator(data, timestamp, media);
       }
     }
     // run all functionality? doesn't do anything!
