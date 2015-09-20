@@ -11,17 +11,55 @@
     }
   },
   {
-    "start": 11,
-    "end": 19,
+    "start": 9,
+    "end": 12,
     "data": {
       "image": "http://media.npr.org/assets/img/2015/07/17/_aph4800-small-2-438fa2f8a441de68849dd8e12b69bb4a53fcc214-s900-c85.jpg"
+    }
+  },
+  {
+    "start": 13,
+    "end": 16,
+    "data": {
+      "image": "http://media.npr.org/assets/img/2015/07/17/_aph4795-small-2-c60f97c2916a5b0c135123b868fb193ee6dc1383-s800-c85.jpg"
+    }
+  },
+  {
+    "start": 17,
+    "end": 20,
+    "data": {
+      "image": "http://media.npr.org/assets/img/2015/07/17/_aph4794-small-2-0551e86e9e06cd7f71636a2581b3d8e519ecbc53-s800-c85.jpg"
+    }
+  },
+  {
+    "start": 21,
+    "end": 26,
+    "data": {
+      "image": "http://www.robbynackner.com/wp-content/uploads/2014/04/livestock-being-weighed.jpg"
+    }
+  },
+  {
+    "start": 28,
+    "end": 31,
+    "data" : {
+      "actions": [{
+        "type": "twitter",
+        "url": ["https://twitter.com/planetmoney/status/629798918893797376"]
+      }]
     }
   },
   {
     "start": 35,
     "end": 50,
     "data": {
-      "image": "chart of guesses"
+      "image": "images/cow_estimate.png"
+    }
+  },
+  {
+    "start": 57,
+    "end": 67,
+    "data": {
+      "image": "https://pbs.twimg.com/profile_images/535929052171739136/Z59s1XPU.jpeg "
     }
   },
   {
