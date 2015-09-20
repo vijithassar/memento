@@ -81,7 +81,7 @@ memento provides additional functionality for exposing data, timestamps, and aud
 - **memento.all_data()** gets or sets all bound data, ignoring relevance to the current playback timestamp. When used as a setter, it takes one argument, which should be an array of data items. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored.
 - **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp which can be an integer, float, or a string in "DD:HH:MM:SS" format. You can omit units you aren't actually using, so "1:30" translates into 90 seconds.
 - **memento.timestamp()** retrieves a number representing the current playback position in seconds.
-- **memento.seconds()** is a helper method which converts timestamps from strings in format "DD:HH:MM:SS" into an integer representing the number of seconds. It takes that string as its only argument, but if passed a number will transparently return it.
+- **memento.seconds()** is a helper method which converts timestamps from strings in format "DD:HH:MM:SS" into an integer representing the number of seconds. You can omit units you aren't actually using, so "1:30" translates into 90 seconds. It takes that string as its only argument, but if passed a number will transparently return it.
 
 # Integrations #
 
