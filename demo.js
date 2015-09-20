@@ -13,6 +13,12 @@
     // set data
     .data(sample_data);
 
+  smart_podcast.get_current_data();
+
+  smart_podcast.tick(function(data, timestamp, node) {
+    console.log('hi!', data, timestamp, node);
+  });
+
   // execute instance
   smart_podcast();
 
