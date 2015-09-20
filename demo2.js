@@ -20,7 +20,7 @@
 
   var done_time = {} ;
 
-  get_json('/static/sample.json', function(results) {
+  get_json('/sample.json', function(results) {
     // select audio node based on target string
     var id = 'target';
     var sample_audio = document.getElementById(id);
@@ -31,7 +31,7 @@
       // set data
       .all_data(results);
 
-    smart_podcast.extend('map', function(data, timestamp, node){
+    smart_podcast.extend('run', function(data, timestamp, node){
       // get the data that we want.
       for (timeobj in data) {
         start =  parseInt(data[timeobj].start);
@@ -52,7 +52,9 @@
                   initialize(action.url,3)
                   break;
                 case "twitter":
-                  embed_tweet(action.url,end-start);
+                  action.url.forEach(function (url) {
+                      embed_tweet(url,end-start);
+                  });
                   break;
                 case "vine":
                   embed_vine(action.url, 10)
@@ -86,7 +88,7 @@
           url: "https://api.twitter.com/1/statuses/oembed.json?url=" + encodeURI(tweet_url),
           dataType: "jsonp",
           success: function(data) {
-            $("#twitter").html(data.html);
+            $("#twitter").append(data.html);
             twttr.widgets.load($("#twitter"));
             setTimeout(function() {
                 $("#twitter").empty();
@@ -123,7 +125,7 @@
 
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
-      smart_podcast.map();
+      smart_podcast.run();
     });
     // execute instance
     smart_podcast();
