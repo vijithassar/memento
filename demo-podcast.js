@@ -49,7 +49,7 @@
               action = actions[num];
               switch(action.type) {
                 case "map":
-                  initialize(action.url,3)
+                  initialize(action.url,end-start)
                   break;
                 case "twitter":
                   action.url.forEach(function (url) {
@@ -57,13 +57,13 @@
                   });
                   break;
                 case "vine":
-                  embed_vine(action.url, 10)
+                  embed_vine(action.url, end-start)
                   break;
               }
             }
           }
           if (image_url){
-            initImage(image_url);
+            initImage(image_url, end-start);
           }
 
         }
@@ -113,9 +113,13 @@
         }, sleep_time * 1000);
     }
 
-    function initImage(url){
+    function initImage(url, sleep_time){
       // for now, just change the background image
       $('body').css('background-image', 'url(' + url + ')');
+      setTimeout(function() {
+        $('body').css('background-image', 'none');
+      }, sleep_time * 1000);
+
     }
 
     $('.popup').click(function(){
