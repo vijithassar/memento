@@ -59,18 +59,18 @@
       if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;
       }
-      // exit if optional breakpoints are supplied but do not match
-      if (breakpoints) {
-        in_range = ((breakpoints.low <= timestamp) && (timestamp <= breakpoints.high))
-        if (!in_range) {
-          return false;
-        }
-      }
       // if we're still running, bind the function with the current values
       func[label] = function() {
         timestamp = this.timestamp();
         rounded_timestamp = this.rounded_timestamp();
         current_data = this.data(rounded_timestamp);
+        // exit if optional breakpoints are supplied but do not match
+        if (breakpoints) {
+          in_range = ((breakpoints.low <= timestamp) && (timestamp <= breakpoints.high))
+          if (!in_range) {
+            return false;
+          }
+        }
         bound_function(current_data, timestamp, node);
       }
       return func;
