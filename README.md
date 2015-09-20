@@ -77,7 +77,7 @@ var thirty_second_data = smart_audio.data(30);
 
 # Core API #
 
-memento provides additional functionality for exposing data, timestamps, and audio from its internal scope so you can act on it using your own functions.
+Most basic functionality in memento deals with setting up the data binds or retrieving data at a particular point.
 
 - **memento.node()** gets or sets the bound media. When used as a setter, it takes one argument, which should be a DOM element for an HTML5 audio or video node.
 - **memento.all_data()** gets or sets all bound data, ignoring relevance to the current playback timestamp. When used as a setter, it takes one argument, which should be an array of data items. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored.
