@@ -98,9 +98,20 @@ var project = memento();
 // and media node
 var my_new_function = function(data, timestamp, node) {
   // do whatever you want in here
-  console.log(data, timestamp, node);
+  console.log('logging when fired:', data, timestamp, node);
 }
 // bind it to the memento instance under the method
 // name .logger()
 project.extend('logger', my_new_function);
+```
+
+**memento.tick()** takes one argument, a function, and fires it every time the current time is updated by the player. The ticking function in turn takes three arguments, for the currently bound data, the current timestamp, and the media node.
+
+```javascript
+// create a memento instance
+var project = memento();
+project.tick(function(data, timestamp, node) {
+  // do whatever you want in here  
+  console.log('logging on every update:', data, timestamp, node)
+});
 ```
