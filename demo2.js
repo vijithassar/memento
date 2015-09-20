@@ -31,7 +31,7 @@
       // set data
       .all_data(results);
 
-    smart_podcast.extend('map', function(data, timestamp, node){
+    smart_podcast.extend('run', function(data, timestamp, node){
       // get the data that we want.
       for (timeobj in data) {
         start =  parseInt(data[timeobj].start);
@@ -51,13 +51,17 @@
                 case "map":
                   initialize(action.url,3)
                   break;
+                case "twitter":
+                  action.url.forEach(function (url) {
+                      embed_tweet(url,end-start);
+                  });
+                  break;
                 case "vine":
                   embed_vine(action.url, 10)
                   break;
               }
             }
           }
-
           if (image_url){
             initImage(image_url);
           }
@@ -74,8 +78,23 @@
         });
         setTimeout(function()
           {
-            $("#map").remove();
+            $("#map").empty();
           }, sleep_time * 1000);
+    }
+
+    function embed_tweet(tweet_url, sleep_time) {
+        $.ajax({
+          type: 'GET',
+          url: "https://api.twitter.com/1/statuses/oembed.json?url=" + encodeURI(tweet_url),
+          dataType: "jsonp",
+          success: function(data) {
+            $("#twitter").append(data.html);
+            twttr.widgets.load($("#twitter"));
+            setTimeout(function() {
+                $("#twitter").empty();
+            }, sleep_time * 1000);
+          }
+        });
     }
 
     function embed_vine(url, sleep_time) {
@@ -90,7 +109,7 @@
       });
       setTimeout(function()
         {
-          $("#vine").remove();
+          $("#vine").empty();
         }, sleep_time * 1000);
     }
 
@@ -98,9 +117,15 @@
       // for now, just change the background image
       $('body').css('background-image', 'url(' + url + ')');
     }
+
+    $('.popup').click(function(){
+      $('.popup').attr('style', '');
+      $(this).css('z-index', 200)
+    })
+
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
-      smart_podcast.map();
+      smart_podcast.run();
     });
     // execute instance
     smart_podcast();
