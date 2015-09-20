@@ -34,7 +34,9 @@
     func.__add_extractor = function(obj) {
       obj.__extract = function(key) {
         if ( (key === 'start') || (key === 'end') ) {
-          return func.seconds(obj[key]);
+          if (obj[key]) {
+            return func.seconds(obj[key]);
+          }
         }
         if (obj[key]) {
           return obj[key];
