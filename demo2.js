@@ -20,7 +20,7 @@
 
   var done_time = {} ;
 
-  get_json('/sample.json', function(results) {
+  get_json('/static/sample.json', function(results) {
     // select audio node based on target string
     var id = 'target';
     var sample_audio = document.getElementById(id);
@@ -98,6 +98,12 @@
       // for now, just change the background image
       $('body').css('background-image', 'url(' + url + ')');
     }
+
+    $('.popup').click(function(){
+      $('.popup').attr('style', '');
+      $(this).css('z-index', 200)
+    })
+
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
       smart_podcast.map();
