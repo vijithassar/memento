@@ -14,7 +14,7 @@
     var data;
     func.all_data = function(obj) {
       if (obj) {
-        data = obj;
+        data = func.__wrap(obj);
         return func;
       } else {
         return data;
@@ -33,6 +33,9 @@
     // add an abstract getter function
     func.__add_extractor = function(obj) {
       obj.__extract = function(key) {
+        if ( (key === 'start') || (key === 'end') ) {
+          return func.seconds(obj[key]);
+        }
         if (obj[key]) {
           return obj[key];
         } else {
@@ -41,10 +44,36 @@
       }
       return obj;
     }
-    // extend all items in the data array
+    func.seconds = function(time) {
+      var has_colon,
+          is_number,
+          time_elements,
+          hours,
+          minutes,
+          seconds;
+      if (time.indexOf && time.indexOf(':') === -1) {
+        has_colon = true;
+      } else {
+        has_colon = false;
+      }
+      is_number = typeof time === 'number';
+      // if it's just a numerical value, return it
+      if (!has_colon && is_number) {
+        return time;
+      } else {
+        time_elements = time.split(':').reverse();
+        seconds = parseInt(time_elements[0]) || 0;
+        minutes = parseInt(time_elements[1]) || 0;
+        hours = parseInt(time_elements[2]) || 0;
+      }
+      seconds = seconds + (minutes * 60) + (hours * 60 * 60);
+      return seconds;
+    }
+    // extend all items in the data array with custom methods
     func.__wrap = function(data) {
       data = data.map(function(item) {
-        return func.__add_extractor(item);
+        item = func.__add_extractor(item);
+        return item;
       });
       return data;
     }
@@ -133,7 +162,6 @@
       var timestamp = timestamp || this.timestamp(),
           nearest_breakpoints,
           current_data;
-      data = this.__wrap(data);
       current_data = data.filter(function(item) {
         var between, breakpoints, start, end;
         start = item.__extract('start');
@@ -171,12 +199,12 @@
       // for each item
       for (var i = 0; i < data.length; i++) {
         // check start
-        start = data[i].start;
+        start = data[i].__extract('start');
         if (breakpoints.indexOf(start) === -1) {
           breakpoints.push(start);
         }
         // check end
-        end = data[i].end;
+        end = data[i].__extract('end');
         if (breakpoints.indexOf(end) === -1) {
           breakpoints.push(end);
         }
