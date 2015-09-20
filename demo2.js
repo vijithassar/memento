@@ -20,7 +20,7 @@
 
   var done_time = {} ;
 
-  get_json('/sample.json', function(results) {
+  get_json('/static/sample.json', function(results) {
     // select audio node based on target string
     var id = 'target';
     var sample_audio = document.getElementById(id);
@@ -43,6 +43,8 @@
 
           timeobj_data = data[timeobj].data;
           actions =  timeobj_data.actions;
+
+          var image_url = timeobj_data.image;
           // if the current time object has an actions option...
           if (actions) {
             for (num in actions) {
@@ -53,6 +55,10 @@
                   break;
               }
             }
+          }
+
+          if (image_url){
+            initImage(image_url);
           }
 
           console.log(done_time);
@@ -70,6 +76,11 @@
           {
             $("#map").empty();
           }, sleep_time * 1000);
+    }
+
+    function initImage(url){
+      // for now, just change the background image
+      $('body').css('background-image', 'url(' + url + ')');
     }
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
