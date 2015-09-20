@@ -6,6 +6,8 @@ momentary data binding along a timeline for HTML5 media
 
 memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data.
 
+[video demo](https://twitter.com/lamthuyvo/status/645688414675828737)
+
 # Data #
 
 Memento binds with arrays. Each object must have "start" and "end" properties in order to be recalled at the proper time. Each item doesn't necessarily have to be a hashmap, though – you can bind an array of anything else (strings, numbers, arrays, nulls, etc) as long as you define "start" and "end" as additional properties on the item.
