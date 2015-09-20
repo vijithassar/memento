@@ -22,3 +22,7 @@ div.audio {
 audio {
   width: 100%;
 }
+
+#map {
+  height: 100%;
+}
