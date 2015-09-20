@@ -37,10 +37,10 @@
       }, {
         "type": "twitter",
         "url": "twitter.com/url/tweet"
-      }], {
+      }, {
         "type": "vine",
         "url": "https://vine.co/v/eIXejbQ2utM"
-      },
+      }],
       "functions": [{
         "function_name": "name"
       }]
