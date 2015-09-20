@@ -46,13 +46,20 @@
     }
     // get data
     func.get_current_data = function() {
-      var id, current_data, rounded_timestamp;
-      rounded_timestamp = this.get_rounded_timestamp();
-      id = 'time_' + rounded_timestamp;
-      if (data[id]) {
-        current_data = data[id];
+      var id,
+          current_data,
+          current_timestamp,
+          rounded_timestamp,
+          nearest_breakpoints;
+      nearest_breakpoints = this.get_nearest_breakpoints(current_timestamp);
+      console.log(nearest_breakpoints);
+      if (nearest_breakpoints) {
+        id = 'time_' + nearest_breakpoints.lower;
+        if (data[id]) {
+          current_data = data[id];
+        }
+        return current_data;
       }
-      return current_data;
     }
     // get exact timestamp from node
     func.get_current_timestamp = function() {
@@ -85,37 +92,18 @@
     // get the breakpoints closest to a timestamp
     func.get_nearest_breakpoints = function(timestamp) {
       var breakpoints,
+          nearest_breakpoints,
           current_breakpoint,
-          lower_breakpoint,
-          higher_breakpoint,
-          nearest_breakpoints;
-      // get breakpoints
+          between,
+          next_breakpoint,
+          timestamp = timestamp || this.get_current_timestamp();
       breakpoints = func.get_breakpoints();
-      // loop through breakpoints
       for (var i = 0; i < breakpoints.length; i++) {
-        // if we're on the first item in the array,
-        // set the lower breakpoint to zero
         current_breakpoint = breakpoints[i];
-        if (timestamp < breakpoints[0]) {
-          lower_breakpoint = 0;
-          higher_breakpoint = breakpoints[0];
-        } else {
-          // set lower and higher bounds
-          if (current_breakpoint < timestamp) {
-            lower_breakpoint = current_breakpoint;
-          } else if (current_breakpoint > timestamp) {
-            higher_breakpoint = current_breakpoint;
-          }
-        }
-        // when both bounds are set, define the return value
-        if (typeof lower_breakpoint !== 'undefined' && typeof higher_breakpoint !== 'undefined') {
-          nearest_breakpoints = {
-            lower: lower_breakpoint,
-            higher: higher_breakpoint
-          }
-        }
-        // if the return value is defined, return it
-        if (nearest_breakpoints) {
+        next_breakpoint = breakpoints[i + 1];
+        between = current_breakpoint < timestamp && timestamp < next_breakpoint;
+        if (between) {
+          nearest_breakpoints = {low: current_breakpoint, high: next_breakpoint};
           return nearest_breakpoints;
         }
       }
