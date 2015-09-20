@@ -20,6 +20,34 @@
         return data;
       }
     }
+    // getter/setter for media node
+    var node;
+    func.node = function(element) {
+      if (element) {
+        node = element;
+        return func;
+      } else {
+        return node;
+      }
+    }
+    // add an abstract getter function
+    func.__add_extractor = function(obj) {
+      obj.__extract = function(key) {
+        if (obj[key]) {
+          return obj[key];
+        } else {
+          return false;
+        }
+      }
+      return obj;
+    }
+    // extend all items in the data array
+    func.__wrap = function(data) {
+      data = data.map(function(item) {
+        return func.__add_extractor(item);
+      });
+      return data;
+    }
     // add a new item to the bound data
     func.add_item = function(new_data) {
       if (typeof data.map !== 'function') {
@@ -40,15 +68,10 @@
       })
       return data;
     }
-    // getter/setter for media node
-    var node;
-    func.node = function(element) {
-      if (element) {
-        node = element;
-        return func;
-      } else {
-        return node;
-      }
+    // get exact timestamp from node
+    func.timestamp = function() {
+      var timestamp = node.currentTime;
+      return timestamp;
     }
     // test whether a timestamp is between a range
     func.test_breakpoints = function(breakpoints, timestamp) {
@@ -122,16 +145,12 @@
       current_data.sort(function(a, b) {
         return a.start > b.start;
       })
+      current_data = func.__wrap(current_data);
       if (current_data.length === 0) {
         return false;
       } else {
         return current_data;
       }
-    }
-    // get exact timestamp from node
-    func.timestamp = function() {
-      var timestamp = node.currentTime;
-      return timestamp;
     }
     // round timestamp down for use in less precise lookups
     func.rounded_timestamp = function() {
