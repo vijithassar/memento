@@ -39,10 +39,10 @@
       if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;
       }
-      timestamp = this.get_current_timestamp();
-      rounded_timestamp = this.get_rounded_timestamp();
-      current_data = this.get_current_data(rounded_timestamp);
       func[label] = function() {
+        timestamp = this.get_current_timestamp();
+        rounded_timestamp = this.get_rounded_timestamp();
+        current_data = this.get_current_data(rounded_timestamp);
         bound_function(current_data, timestamp, node);
       }
       return func;
