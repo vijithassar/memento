@@ -10,7 +10,7 @@ memento.js binds data to regions of audio or video and allows you to quickly rec
 
 # Data #
 
-Memento binds with arrays. Each object must have "start" and "end" properties in order to be recalled at the proper time. Each item doesn't necessarily have to be a hashmap, though – you can bind an array of anything else (strings, numbers, arrays, nulls, etc) as long as you define "start" and "end" as additional properties on the item.
+Memento binds with arrays. Each item in the array must have "start" and "end" properties in order to be recalled at the proper time. It doesn't necessarily have to be a hashmap, though – you can bind an array of anything else (strings, numbers, arrays, nulls, etc) as long as you define "start" and "end" as additional properties on the item first.
 
 ```javascript
 // fruits with corresponding ranges
