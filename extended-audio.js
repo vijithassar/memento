@@ -7,7 +7,7 @@
     // return value of the factory function
     var func = function() {
       if (typeof func.data === 'function') {
-        return func.data()
+        func.__update();
       }
     }
     // getter/setter for bound data
@@ -51,6 +51,33 @@
         return item;
       });
       return data;
+    }
+    func.__actions = []
+    func.__add_action = function(new_function, start, end) {
+      if (start) {new_function.start = start}
+      if (end) {new_function.end = end}
+      func.__actions.push(new_function);
+    }
+    func.all_actions = function() {
+      var actions;
+      actions = this.__actions;
+      return actions;
+    }
+    func.timed_actions = function(timestamp) {
+      var all_actions, timed_actions, match;
+      timestamp = timestamp || this.timestamp();
+      all_actions = this.all_actions();
+      timed_actions = all_actions.filter(function(item) {
+        var breakpoints;
+        if (!item.start && !item.end) {
+          return true;
+        } else {
+          breakpoints = {low: start, high: end};
+          match = this.test_breakpoints(breakpoints);
+          return match;
+        }
+      });
+      return timed_actions;
     }
     // add a new item to the bound data
     func.add_item = function(new_data) {
@@ -240,33 +267,63 @@
       }
     }
     // run a function every time the player updates
-    func.tick = function(iterator) {
+    func.tick = function(iterator, breakpoints) {
       if (typeof iterator !== 'function') {
         return;
       }
+      if (breakpoints && !this.test_breakpoints(breakpoints)) {
+        return;
+      } else {
+        this.__add_action(iterator);
+      }
+    }
+    func.__update = function() {
       // every time the node updates
       node.ontimeupdate = function() {
-        var data, timestamp, rounded_timestamp;
-        // assign all values
+        var data, timestamp, actions, action;
         timestamp = func.timestamp();
-        data = func.data(timestamp);
-        // run the function with the scoped values
-        iterator(data, timestamp, node);
+        data = func.data();
+        actions = func.timed_actions(timestamp);
+        for (var i = 0; i < actions.length; i++) {
+          action = actions[i];
+          if (typeof action === 'function') {
+            action(data, timestamp, node);
+          }
+        }
       }
     }
     // fire a function once when the trigger time is passed
     func.trigger = function(trigger_time, trigger_function) {
-      var sent;
+      var sent,
+          counter,
+          event,
+          event_label,
+          event_handler;
       sent = false;
       // resolve trigger time to seconds in case it's a string
       trigger_time = this.seconds(trigger_time);
-      this.tick(function() {
-        var timestamp, passed;
+      event_label = 'trigger-' + trigger_time;
+      event = new Event(event_label);
+      event_handler = function(event) {
+        var data, timestamp;
+        console.log(event);
+        data = func.data();
         timestamp = func.timestamp();
-        passed = timestamp > trigger_time;
-        if (passed && !sent) {
-          sent = true;
-          trigger_function(func.data(), timestamp, func.node());
+        trigger_function(data, timestamp, node);
+      }
+      // this.__add_action(event_handler);
+      node.addEventListener(event_label, event_handler)
+      func.tick(function() {
+        console.log('ticking');
+        var timestamp,
+            passed;
+        if (sent) {
+          return;
+        } else {
+          passed = timestamp > trigger_time;
+          if (passed) {
+            node.dispatchEvent(event);
+          }
         }
       });
     }
