@@ -78,14 +78,18 @@
     // get all timestamps registered in the data
     // object with time_ prefixes
     func.get_breakpoints = function() {
-      var keys, times, breakpoints;
-      keys = Object.keys(data);
-      times = keys.filter(function(item) {
-        return item.slice(0, 5) === 'time_';
-      })
-      breakpoints = times.map(function(item) {
-        return parseInt(item.slice(5));
-      });
+      var breakpoints, start, end;
+      breakpoints = [];
+      for (var i = 0; i < data.length; i++) {
+        start = data[i].start;
+        end = data[i].end;
+        if (breakpoints.indexOf(start) === -1) {
+          breakpoints.push(start);
+        }
+        if (breakpoints.indexOf(end) === -1) {
+          breakpoints.push(end);
+        }
+      }
       breakpoints = breakpoints.sort(function(a, b) {
         return a > b;
       });
