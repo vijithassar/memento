@@ -19,7 +19,7 @@
         "url": "twitter.com/url/tweet"
       }, {
         "type": "map",
-        "url": "lat,lng"
+        "url": "29.9544444,-90.075"
         }],
       "functions": [{
         "function_name": "name"
@@ -37,7 +37,10 @@
       }, {
         "type": "twitter",
         "url": "twitter.com/url/tweet"
-      }],
+      }], {
+        "type": "vine",
+        "url": "https://vine.co/v/eIXejbQ2utM"
+      },
       "functions": [{
         "function_name": "name"
       }]
