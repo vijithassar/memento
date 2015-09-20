@@ -14,7 +14,7 @@
     }
     // getter/setter for bound data
     var data;
-    func.data = function(obj) {
+    func.all_data = function(obj) {
       if (obj) {
         data = obj;
         return func;
@@ -40,44 +40,40 @@
         return;
       }
       func[label] = function() {
-        timestamp = this.get_current_timestamp();
-        rounded_timestamp = this.get_rounded_timestamp();
-        current_data = this.get_current_data(rounded_timestamp);
+        timestamp = this.current_timestamp();
+        rounded_timestamp = this.rounded_timestamp();
+        current_data = this.data(rounded_timestamp);
         bound_function(current_data, timestamp, node);
       }
       return func;
     }
     // get data
-    func.get_current_data = function() {
-      var id,
-          current_data,
-          current_timestamp,
-          rounded_timestamp,
-          nearest_breakpoints;
-      nearest_breakpoints = this.get_nearest_breakpoints(current_timestamp);
-      if (nearest_breakpoints) {
-        id = 'time_' + nearest_breakpoints.low;
-        if (data[id]) {
-          current_data = data[id];
-        }
-        return current_data;
-      }
+    func.data = function(timestamp) {
+      var timestamp = timestamp || this.current_timestamp(),
+          nearest_breakpoints,
+          current_data;
+      current_data = data.filter(function(item) {
+        var between;
+        between = item.start < timestamp && timestamp < item.end;
+        return between;
+      });
+      return current_data;
     }
     // get exact timestamp from node
-    func.get_current_timestamp = function() {
+    func.current_timestamp = function() {
       var timestamp = node.currentTime;
       return timestamp;
     }
     // round timestamp down for use in hash lookup
-    func.get_rounded_timestamp = function() {
+    func.rounded_timestamp = function() {
       var timestamp, rounded_timestamp;
-      timestamp = func.get_current_timestamp();
+      timestamp = func.current_timestamp();
       rounded_timestamp = Math.floor(timestamp);
       return rounded_timestamp;
     }
     // get all timestamps registered in the data
     // object with time_ prefixes
-    func.get_breakpoints = function() {
+    func.breakpoints = function() {
       var breakpoints, start, end;
       breakpoints = [];
       for (var i = 0; i < data.length; i++) {
@@ -96,14 +92,14 @@
       return breakpoints;
     }
     // get the breakpoints closest to a timestamp
-    func.get_nearest_breakpoints = function(timestamp) {
+    func.nearest_breakpoints = function(timestamp) {
       var breakpoints,
           nearest_breakpoints,
           current_breakpoint,
           between,
           next_breakpoint,
-          timestamp = timestamp || this.get_current_timestamp();
-      breakpoints = func.get_breakpoints();
+          timestamp = timestamp || this.current_timestamp();
+      breakpoints = func.breakpoints();
       for (var i = 0; i < breakpoints.length; i++) {
         current_breakpoint = breakpoints[i];
         next_breakpoint = breakpoints[i + 1];
@@ -121,9 +117,9 @@
       }
       node.ontimeupdate = function() {
         var data, timestamp, rounded_timestamp;
-        timestamp = func.get_current_timestamp();
-        rounded_timestamp = func.get_rounded_timestamp();
-        data = func.get_current_data(rounded_timestamp);
+        timestamp = func.current_timestamp();
+        rounded_timestamp = func.rounded_timestamp();
+        data = func.data(rounded_timestamp);
         iterator(data, timestamp, node);
       }
     }
