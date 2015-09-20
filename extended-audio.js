@@ -42,14 +42,14 @@
       })
       return data;
     }
-    // getter/setter for node
-    var node;
-    func.node = function(element) {
+    // getter/setter for audio node
+    var audio;
+    func.audio = function(element) {
       if (element) {
-        node = element;
+        audio = element;
         return func;
       } else {
-        return node;
+        return audio;
       }
     }
     // attach an arbitrary function under a key, and pass it
@@ -63,7 +63,7 @@
         timestamp = this.timestamp();
         rounded_timestamp = this.rounded_timestamp();
         current_data = this.data(rounded_timestamp);
-        bound_function(current_data, timestamp, node);
+        bound_function(current_data, timestamp, audio);
       }
       return func;
     }
@@ -86,9 +86,9 @@
         return current_data;
       }
     }
-    // get exact timestamp from node
+    // get exact timestamp from audio
     func.timestamp = function() {
-      var timestamp = node.currentTime;
+      var timestamp = audio.currentTime;
       return timestamp;
     }
     // round timestamp down for use in hash lookup
@@ -142,12 +142,12 @@
       if (typeof iterator !== 'function') {
         return;
       }
-      node.ontimeupdate = function() {
+      audio.ontimeupdate = function() {
         var data, timestamp, rounded_timestamp;
         timestamp = func.timestamp();
         rounded_timestamp = func.rounded_timestamp();
         data = func.data(rounded_timestamp);
-        iterator(data, timestamp, node);
+        iterator(data, timestamp, audio);
       }
     }
     // run all functionality? doesn't do anything!
