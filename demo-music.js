@@ -37,10 +37,10 @@
       console.log('bound', data, timestamp, node);
     });
 
-    // // trigger a function when a particular timestamp is passed
-    // smart_podcast.trigger(1, function(data, timestamp, node) {
-    //   console.log('triggered!', data, timestamp, node);
-    // });
+    // trigger a function when a particular timestamp is passed
+    smart_podcast.trigger(2, function(data, timestamp, node) {
+      console.log('triggered!', data, timestamp, node);
+    });
 
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
