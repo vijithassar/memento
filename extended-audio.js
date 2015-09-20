@@ -57,6 +57,9 @@
         between = item.start < timestamp && timestamp < item.end;
         return between;
       });
+      current_data.sort(function(a, b) {
+        return a.start > b.start;
+      })
       if (current_data.length === 0) {
         return false;
       } else {
