@@ -54,7 +54,7 @@
     }
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
-    func.bind_function = function(label, bound_function) {
+    func.extend = function(label, bound_function) {
       var current_data, timestamp;
       if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;

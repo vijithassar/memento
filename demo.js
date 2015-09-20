@@ -14,7 +14,7 @@
     .all_data(sample_data);
 
   // bind a function so it has access to the scoped data via arguments
-  smart_podcast.bind_function('test', function(data, timestamp, audio) {
+  smart_podcast.extend('test', function(data, timestamp, audio) {
     console.log('bound', data, timestamp, audio)
   });
 
