@@ -42,7 +42,10 @@
       timestamp = this.get_current_timestamp();
       rounded_timestamp = this.get_rounded_timestamp();
       current_data = this.get_current_data(rounded_timestamp);
-      func[label] = bound_function(current_data, timestamp, node);
+      func[label] = function() {
+        bound_function(current_data, timestamp, node);
+      }
+      return func;
     }
     // get data
     func.get_current_data = function() {
