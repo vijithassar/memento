@@ -1,6 +1,6 @@
 (function() {
 
-  console.log('setting up extended media functionality');
+  console.log('setting up extended node functionality');
 
   // function factory
   var extaudio = function() {
@@ -43,13 +43,13 @@
       return data;
     }
     // getter/setter for media node
-    var media;
-    func.media = function(element) {
+    var node;
+    func.node = function(element) {
       if (element) {
-        media = element;
+        node = element;
         return func;
       } else {
-        return media;
+        return node;
       }
     }
     // attach an arbitrary function under a key, and pass it
@@ -63,7 +63,7 @@
         timestamp = this.timestamp();
         rounded_timestamp = this.rounded_timestamp();
         current_data = this.data(rounded_timestamp);
-        bound_function(current_data, timestamp, media);
+        bound_function(current_data, timestamp, node);
       }
       return func;
     }
@@ -89,9 +89,9 @@
         return current_data;
       }
     }
-    // get exact timestamp from media
+    // get exact timestamp from node
     func.timestamp = function() {
-      var timestamp = media.currentTime;
+      var timestamp = node.currentTime;
       return timestamp;
     }
     // round timestamp down for use in hash lookup
@@ -145,12 +145,12 @@
       if (typeof iterator !== 'function') {
         return;
       }
-      media.ontimeupdate = function() {
+      node.ontimeupdate = function() {
         var data, timestamp, rounded_timestamp;
         timestamp = func.timestamp();
         rounded_timestamp = func.rounded_timestamp();
         data = func.data(rounded_timestamp);
-        iterator(data, timestamp, media);
+        iterator(data, timestamp, node);
       }
     }
     // run all functionality? doesn't do anything!
