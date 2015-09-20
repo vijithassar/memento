@@ -123,16 +123,6 @@ project.tick(function(data, timestamp, node) {
 });
 ```
 
-```javascript
-// create a memento instance
-var project = memento();
-// fire the callback function whenever the player updates
-project.tick(function(data, timestamp, node) {
-  // do whatever you want in here  
-  console.log('logging on every update:', data, timestamp, node)
-});
-```
-
 ### Trigger ###
 
 **memento.trigger()** fires a function at a specified point in time. It takes two arguments: the first is a timestamp either as an integer or float or a string in "DD:HH:MM:SS" format, and the second is the function to be fired. The triggered function in turn takes three arguments, for the current data, current timestamp, and media node.
