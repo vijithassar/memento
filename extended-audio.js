@@ -74,7 +74,11 @@
           current_data;
       current_data = data.filter(function(item) {
         var between;
-        between = item.start < timestamp && timestamp < item.end;
+        if (!item.start || !item.end) {
+          return false;
+        }
+        between = (item.start <= timestamp) && (timestamp <= item.end);
+//        console.log(item.start, timestamp, item.end, between);
         return between;
       });
       current_data.sort(function(a, b) {
