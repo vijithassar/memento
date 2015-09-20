@@ -18,3 +18,7 @@ div.explanation p {
 div.audio {
   text-align: center;
 }
+
+audio {
+  width: 100%;
+}
