@@ -50,24 +50,56 @@
         return node;
       }
     }
+    // test whether a timestamp is between a range
+    func.test_breakpoints = function(breakpoints, timestamp) {
+      var mode;
+      timestamp = timestamp || this.timestamp();
+      if (breakpoints.low) {
+        mode = 'single'
+      } else if (breakpoints.length && typeof breakpoints.map === 'function') {
+        mode = 'multiple'
+      }
+      // if you only pass in one breakpoints object
+      // test it and return a boolean
+      if (mode === 'single') {
+        return this.test_single_breakpoint(breakpoints, timestamp)
+      // if you pass in an array of breakpoints objects,
+      // test all and return a mapped array of booleans
+      } else if (mode === 'multiple') {
+        return this.test_multiple_breakpoints(breakpoints, timestamp);
+      }
+    }
+    // test a single range
+    func.test_single_breakpoint = function(breakpoints, timestamp) {
+      var between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) )
+      return between;
+    }
+    // test multiple ranges and return a map;
+    // uses the single item test internally
+    func.test_multiple_breakpoints = function(breakpoints, timestamp) {
+      var betweens;
+      timestamp = timestamp || this.timestamp();
+      betweens = breakpoints.map(function(item) {
+        var between;
+        between = test_single_breakpoint(item, timestamp);
+        return between;
+      })
+      return betweens;
+    }
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
     func.extend = function(label, bound_function, breakpoints) {
-      var current_data, timestamp, in_range;
       if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;
       }
       // if we're still running, bind the function with the current values
       func[label] = function() {
+        var current_data, timestamp, in_range;
         timestamp = this.timestamp();
-        rounded_timestamp = this.rounded_timestamp();
-        current_data = this.data(rounded_timestamp);
+        current_data = this.data(timestamp);
         // exit if optional breakpoints are supplied but do not match
-        if (breakpoints) {
-          in_range = ((breakpoints.low <= timestamp) && (timestamp <= breakpoints.high))
-          if (!in_range) {
-            return false;
-          }
+        if (breakpoints && !this.test_breakpoints(breakpoints, timestamp)) {
+          return false;
         }
         bound_function(current_data, timestamp, node);
       }
@@ -79,11 +111,12 @@
           nearest_breakpoints,
           current_data;
       current_data = data.filter(function(item) {
-        var between;
+        var between, breakpoints;
         if (!item.start || !item.end) {
           return false;
         }
-        between = (item.start <= timestamp) && (timestamp <= item.end);
+        breakpoints = {low: item.start, high: item.end};
+        between = func.test_breakpoints(breakpoints, timestamp);
         return between;
       });
       current_data.sort(function(a, b) {
