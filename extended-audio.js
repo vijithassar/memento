@@ -44,31 +44,6 @@
       }
       return obj;
     }
-    func.seconds = function(time) {
-      var has_colon,
-          is_number,
-          time_elements,
-          hours,
-          minutes,
-          seconds;
-      if (time.indexOf && time.indexOf(':') === -1) {
-        has_colon = true;
-      } else {
-        has_colon = false;
-      }
-      is_number = typeof time === 'number';
-      // if it's just a numerical value, return it
-      if (!has_colon && is_number) {
-        return time;
-      } else {
-        time_elements = time.split(':').reverse();
-        seconds = parseInt(time_elements[0]) || 0;
-        minutes = parseInt(time_elements[1]) || 0;
-        hours = parseInt(time_elements[2]) || 0;
-      }
-      seconds = seconds + (minutes * 60) + (hours * 60 * 60);
-      return seconds;
-    }
     // extend all items in the data array with custom methods
     func.__wrap = function(data) {
       data = data.map(function(item) {
@@ -101,6 +76,33 @@
     func.timestamp = function() {
       var timestamp = node.currentTime;
       return timestamp;
+    }
+    // resolve string times in format DD:HH:MM:SS to integers
+    func.seconds = function(time) {
+      var has_colon,
+          is_number,
+          time_elements,
+          hours,
+          minutes,
+          seconds;
+      if (time.indexOf && time.indexOf(':') === -1) {
+        has_colon = true;
+      } else {
+        has_colon = false;
+      }
+      is_number = typeof time === 'number';
+      // if it's just a numerical value, return it
+      if (!has_colon && is_number) {
+        return time;
+      } else {
+        time_elements = time.split(':').reverse();
+        seconds = parseInt(time_elements[0]) || 0;
+        minutes = parseInt(time_elements[1]) || 0;
+        hours = parseInt(time_elements[2]) || 0;
+        days = parseInt(time_elements[3]) || 0;
+      }
+      seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
+      return seconds;
     }
     // test whether a timestamp is between a range
     func.test_breakpoints = function(breakpoints, timestamp) {
