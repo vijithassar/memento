@@ -12,6 +12,7 @@ html, body {
 
 body {
   background-size:cover;
+  background-position: center center;
 }
 
 div.wrapper {
@@ -48,6 +49,11 @@ audio {
   width:70%;
   border-radius:10px;
   margin-bottom:1em;
+}
+
+.popup>*{
+  position:relative;
+  margin:0 auto;
 }
 
 #map {

@@ -78,7 +78,7 @@
         });
         setTimeout(function()
           {
-            $("#map").empty();
+            $("#map").empty().removeAttr('style');
           }, sleep_time * 1000);
     }
 
