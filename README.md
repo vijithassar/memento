@@ -64,7 +64,7 @@ smart_audio.all_data(data_set);
 Now, as you play or scrub the audio, you can retrieve the matching data for time ranges which overlap the current playback position by calling the .data() method on the memento object.
 
 ```javascript
-// bind data to memento object
+// retrieve all data bound to the current timestamp 
 var current_data = smart_audio.data();
 ```
 
