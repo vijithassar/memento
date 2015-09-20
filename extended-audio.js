@@ -77,7 +77,7 @@
         return item.slice(0, 5) === 'time_';
       })
       breakpoints = times.map(function(item) {
-        return item.slice(5);
+        return parseInt(item.slice(5));
       });
       breakpoints = breakpoints.sort();
       return breakpoints;
@@ -92,19 +92,20 @@
       // get breakpoints
       breakpoints = func.get_breakpoints();
       // loop through breakpoints
-      for(var i = 0; i < breakpoints.length; i++) {
-        current_breakpoint = breakpoints[i];
+      for (var i = 0; i < breakpoints.length; i++) {
         // if we're on the first item in the array,
         // set the lower breakpoint to zero
         if (i === 0) {
           lower_breakpoint = 0;
           higher_breakpoint = breakpoints[0];
-        }
-        // set lower and higher bounds
-        if (current_breakpoint < timestamp) {
-          lower_breakpoint = current_breakpoint;
-        } else if (current_breakpoint > timestamp) {
-          higher_breakpoint = current_breakpoint;
+        } else {
+          current_breakpoint = breakpoints[i];
+          // set lower and higher bounds
+          if (current_breakpoint < timestamp) {
+            lower_breakpoint = current_breakpoint;
+          } else if (current_breakpoint > timestamp) {
+            higher_breakpoint = current_breakpoint;
+          }
         }
         // when both bounds are set, define the return value
         if (typeof lower_breakpoint !== 'undefined' && typeof higher_breakpoint !== 'undefined') {
@@ -129,6 +130,7 @@
         rounded = Math.floor(time);
         cuts = func.get_breakpoints();
         nearest_breakpoints = func.get_nearest_breakpoints();
+        console.log(cuts, nearest_breakpoints);
         for (var i = 0; i < cuts.length; i++){
           if (cuts[i] == rounded){
             if (currEvt != prevEvt) {
