@@ -3,7 +3,7 @@
   console.log('setting up extended node functionality');
 
   // function factory
-  var extaudio = function() {
+  var memento = function() {
     // return value of the factory function
     var func = function() {
       if (typeof func.data === 'function') {
@@ -344,6 +344,6 @@
   }
 
   // attach factory to global space
-  window.extaudio = extaudio;
+  window.memento = memento;
 
 }).call(this);

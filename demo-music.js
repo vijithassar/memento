@@ -53,7 +53,7 @@
       var sample_audio = document.getElementById(id);
 
       // instantiate
-      var smart_podcast = extaudio()
+      var smart_podcast = memento()
         // set audio node
         .node(sample_audio)
         // set data
