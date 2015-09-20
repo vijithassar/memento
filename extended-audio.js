@@ -77,7 +77,8 @@
       var timestamp = node.currentTime;
       return timestamp;
     }
-    // resolve string times in format DD:HH:MM:SS to integers
+    // resolve string times in format DD:HH:MM:SS to a number
+    // of seconds
     func.seconds = function(time) {
       var has_colon,
           is_number,
@@ -252,6 +253,22 @@
         // run the function with the scoped values
         iterator(data, timestamp, node);
       }
+    }
+    // fire a function once when the trigger time is passed
+    func.trigger = function(trigger_time, trigger_function) {
+      var sent;
+      sent = false;
+      // resolve trigger time to seconds in case it's a string
+      trigger_time = this.seconds(trigger_time);
+      this.tick(function() {
+        var timestamp, passed;
+        timestamp = func.timestamp();
+        passed = timestamp > trigger_time;
+        if (passed && !sent) {
+          sent = true;
+          trigger_function(func.data(), timestamp, func.node());
+        }
+      });
     }
     // return results of the factory
     return func;
