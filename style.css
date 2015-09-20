@@ -11,6 +11,10 @@ div.explanation {
   margin: auto;
 }
 
+div.explanation p {
+  text-align: left;
+}
+
 div.audio {
   text-align: center;
 }
