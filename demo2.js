@@ -20,7 +20,7 @@
 
   var done_time = {} ;
 
-  get_json('/static/sample.json', function(results) {
+  get_json('/sample.json', function(results) {
     // select audio node based on target string
     var id = 'target';
     var sample_audio = document.getElementById(id);
@@ -36,9 +36,7 @@
       for (timeobj in data) {
         start =  parseInt(data[timeobj].start);
         end = parseInt(data[timeobj].end);
-        console.log(done_time)
         if (!done_time[start]) {
-          console.log("in start")
           done_time[start] = true;
 
           timeobj_data = data[timeobj].data;
@@ -53,6 +51,9 @@
                 case "map":
                   initialize(action.url,3)
                   break;
+                case "vine":
+                  embed_vine(action.url, 10)
+                  break;
               }
             }
           }
@@ -61,7 +62,6 @@
             initImage(image_url);
           }
 
-          console.log(done_time);
         }
       }
     });
@@ -74,8 +74,24 @@
         });
         setTimeout(function()
           {
-            $("#map").empty();
+            $("#map").remove();
           }, sleep_time * 1000);
+    }
+
+    function embed_vine(url, sleep_time) {
+      $.ajax({
+        async: false,
+        type: 'GET',
+        url: "https://vine.co/oembed.json?url=" + url,
+        success: function(data) {
+          console.log("appending vine data");
+          $("#vine").append(data.html)
+        }
+      });
+      setTimeout(function()
+        {
+          $("#vine").remove();
+        }, sleep_time * 1000);
     }
 
     function initImage(url){
