@@ -110,6 +110,7 @@
         }
       }
     }
+    // run a function every time the player updates
     func.tick = function(iterator) {
       if (typeof iterator !== 'function') {
         return;
@@ -122,7 +123,7 @@
         iterator(data, timestamp, node);
       }
     }
-    // run all functionality
+    // run all functionality? doesn't do anything!
     func.execute = function() {
       return;
     }
