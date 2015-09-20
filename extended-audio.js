@@ -14,11 +14,43 @@
     var data;
     func.all_data = function(obj) {
       if (obj) {
-        data = obj;
+        data = func.__wrap(obj);
         return func;
       } else {
         return data;
       }
+    }
+    // getter/setter for media node
+    var node;
+    func.node = function(element) {
+      if (element) {
+        node = element;
+        return func;
+      } else {
+        return node;
+      }
+    }
+    // add an abstract getter function
+    func.__add_extractor = function(obj) {
+      obj.__extract = function(key) {
+        if ( (key === 'start') || (key === 'end') ) {
+          return func.seconds(obj[key]);
+        }
+        if (obj[key]) {
+          return obj[key];
+        } else {
+          return false;
+        }
+      }
+      return obj;
+    }
+    // extend all items in the data array with custom methods
+    func.__wrap = function(data) {
+      data = data.map(function(item) {
+        item = func.__add_extractor(item);
+        return item;
+      });
+      return data;
     }
     // add a new item to the bound data
     func.add_item = function(new_data) {
@@ -40,15 +72,38 @@
       })
       return data;
     }
-    // getter/setter for media node
-    var node;
-    func.node = function(element) {
-      if (element) {
-        node = element;
-        return func;
+    // get exact timestamp from node
+    func.timestamp = function() {
+      var timestamp = node.currentTime;
+      return timestamp;
+    }
+    // resolve string times in format DD:HH:MM:SS to a number
+    // of seconds
+    func.seconds = function(time) {
+      var has_colon,
+          is_number,
+          time_elements,
+          hours,
+          minutes,
+          seconds;
+      if (time.indexOf && time.indexOf(':') === -1) {
+        has_colon = true;
       } else {
-        return node;
+        has_colon = false;
       }
+      is_number = typeof time === 'number';
+      // if it's just a numerical value, return it
+      if (!has_colon && is_number) {
+        return time;
+      } else {
+        time_elements = time.split(':').reverse();
+        seconds = parseInt(time_elements[0]) || 0;
+        minutes = parseInt(time_elements[1]) || 0;
+        hours = parseInt(time_elements[2]) || 0;
+        days = parseInt(time_elements[3]) || 0;
+      }
+      seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
+      return seconds;
     }
     // test whether a timestamp is between a range
     func.test_breakpoints = function(breakpoints, timestamp) {
@@ -111,27 +166,26 @@
           nearest_breakpoints,
           current_data;
       current_data = data.filter(function(item) {
-        var between, breakpoints;
-        if (!item.start || !item.end) {
+        var between, breakpoints, start, end;
+        start = item.__extract('start');
+        end = item.__extract('end');
+        if (!start || !end) {
           return false;
         }
-        breakpoints = {low: item.start, high: item.end};
+        breakpoints = {low: start, high: end};
         between = func.test_breakpoints(breakpoints, timestamp);
         return between;
       });
-      current_data.sort(function(a, b) {
-        return a.start > b.start;
+      current_data = current_data.sort(function(a, b) {
+        a_start = a.__extract('start');
+        b_start = b.__extract('start');
+        return a_start > b_start;
       })
       if (current_data.length === 0) {
         return false;
       } else {
         return current_data;
       }
-    }
-    // get exact timestamp from node
-    func.timestamp = function() {
-      var timestamp = node.currentTime;
-      return timestamp;
     }
     // round timestamp down for use in less precise lookups
     func.rounded_timestamp = function() {
@@ -148,12 +202,12 @@
       // for each item
       for (var i = 0; i < data.length; i++) {
         // check start
-        start = data[i].start;
+        start = data[i].__extract('start');
         if (breakpoints.indexOf(start) === -1) {
           breakpoints.push(start);
         }
         // check end
-        end = data[i].end;
+        end = data[i].__extract('end');
         if (breakpoints.indexOf(end) === -1) {
           breakpoints.push(end);
         }
@@ -199,6 +253,22 @@
         // run the function with the scoped values
         iterator(data, timestamp, node);
       }
+    }
+    // fire a function once when the trigger time is passed
+    func.trigger = function(trigger_time, trigger_function) {
+      var sent;
+      sent = false;
+      // resolve trigger time to seconds in case it's a string
+      trigger_time = this.seconds(trigger_time);
+      this.tick(function() {
+        var timestamp, passed;
+        timestamp = func.timestamp();
+        passed = timestamp > trigger_time;
+        if (passed && !sent) {
+          sent = true;
+          trigger_function(func.data(), timestamp, func.node());
+        }
+      });
     }
     // return results of the factory
     return func;
