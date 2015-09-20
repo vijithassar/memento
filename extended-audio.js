@@ -68,9 +68,21 @@
       timestamp = timestamp || this.timestamp();
       all_actions = this.all_actions();
       timed_actions = all_actions.filter(function(item) {
-        var breakpoints;
-        if (!item.start && !item.end) {
+        var breakpoints,
+            both_undefined,
+            either_undefined,
+            one_defined;
+        both_undefined = !item.start && !item.end;
+        either_undefined = !item.start || !item.end;
+        one_undefined = ( (!item.start && item.end) || (item.start && !item.end) )
+        if (both_undefined) {
           return true;
+        }
+        if (one_undefined) {
+          return false;
+        }
+        if (!item.start || !item.end) {
+          return false;
         } else {
           breakpoints = {low: start, high: end};
           match = this.test_breakpoints(breakpoints);
@@ -310,6 +322,7 @@
         timestamp = func.timestamp();
         trigger_function(data, timestamp, node);
       }
+      this.__add_action(event_handler, trigger_time, null);
       node.addEventListener(event_label, event_handler)
       func.tick(function() {
         var timestamp,
