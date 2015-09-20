@@ -79,7 +79,9 @@
       breakpoints = times.map(function(item) {
         return parseInt(item.slice(5));
       });
-      breakpoints = breakpoints.sort();
+      breakpoints = breakpoints.sort(function(a, b) {
+        return a > b;
+      });
       return breakpoints;
     }
     // get the breakpoints closest to a timestamp
