@@ -133,19 +133,23 @@
       var timestamp = timestamp || this.timestamp(),
           nearest_breakpoints,
           current_data;
+      data = this.__wrap(data);
       current_data = data.filter(function(item) {
-        var between, breakpoints;
-        if (!item.start || !item.end) {
+        var between, breakpoints, start, end;
+        start = item.__extract('start');
+        end = item.__extract('end');
+        if (!start || !end) {
           return false;
         }
-        breakpoints = {low: item.start, high: item.end};
+        breakpoints = {low: start, high: end};
         between = func.test_breakpoints(breakpoints, timestamp);
         return between;
       });
-      current_data.sort(function(a, b) {
-        return a.start > b.start;
+      current_data = current_data.sort(function(a, b) {
+        a_start = a.__extract('start');
+        b_start = b.__extract('start');
+        return a_start > b_start;
       })
-      current_data = func.__wrap(current_data);
       if (current_data.length === 0) {
         return false;
       } else {
