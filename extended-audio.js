@@ -97,11 +97,11 @@
       for (var i = 0; i < breakpoints.length; i++) {
         // if we're on the first item in the array,
         // set the lower breakpoint to zero
-        if (i === 0) {
+        current_breakpoint = breakpoints[i];
+        if (timestamp < breakpoints[0]) {
           lower_breakpoint = 0;
           higher_breakpoint = breakpoints[0];
         } else {
-          current_breakpoint = breakpoints[i];
           // set lower and higher bounds
           if (current_breakpoint < timestamp) {
             lower_breakpoint = current_breakpoint;
@@ -118,6 +118,7 @@
         }
         // if the return value is defined, return it
         if (nearest_breakpoints) {
+          console.log(nearest_breakpoints);
           return nearest_breakpoints;
         }
       }
@@ -127,12 +128,10 @@
       var currEvt = -1;
       var prevEvt = -1;
       node.ontimeupdate = function() {
-        var time, rounded, cuts, nearest_breakpoints;
-        time = node.currentTime;
-        rounded = Math.floor(time);
+        var rounded_timestamp, rounded, cuts, nearest_breakpoints;
+        rounded_timestamp = func.get_rounded_timestamp();
         cuts = func.get_breakpoints();
-        nearest_breakpoints = func.get_nearest_breakpoints();
-        console.log(cuts, nearest_breakpoints);
+        nearest_breakpoints = func.get_nearest_breakpoints(rounded_timestamp);
         for (var i = 0; i < cuts.length; i++){
           if (cuts[i] == rounded){
             if (currEvt != prevEvt) {

@@ -13,6 +13,8 @@
     // set data
     .data(sample_data);
 
+  smart_podcast.get_current_data();
+
   // execute instance
   smart_podcast();
 
