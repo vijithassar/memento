@@ -16,7 +16,7 @@
         "url": "youtube.com/url"
       }, {
         "type": "twitter",
-        "url": "twitter.com/url/tweet"
+        "url": "https://twitter.com/triciabobeda/status/645395274341421056"
       }, {
         "type": "map",
         "url": "lat,lng"
@@ -36,7 +36,7 @@
         "url": "youtube.com/url"
       }, {
         "type": "twitter",
-        "url": "twitter.com/url/tweet"
+        "url": "https://twitter.com/rememberlenny/status/645380335283380224"
       }],
       "functions": [{
         "function_name": "name"
@@ -53,7 +53,7 @@
         "url": "youtube.com/url"
       }, {
         "type": "twitter",
-        "url": "twitter.com/url/tweet"
+        "url": "https://twitter.com/audiohacktest/status/645624756704833536"
       }],
       "functions": [{
         "function_name": "name"

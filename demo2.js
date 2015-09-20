@@ -36,9 +36,7 @@
       for (timeobj in data) {
         start =  parseInt(data[timeobj].start);
         end = parseInt(data[timeobj].end);
-        console.log(done_time)
         if (!done_time[start]) {
-          console.log("in start")
           done_time[start] = true;
 
           timeobj_data = data[timeobj].data;
@@ -51,17 +49,19 @@
                 case "map":
                   initialize(action.url,3)
                   break;
+                case "twitter":
+                  show_tweet(action.url,end-start)
+                  break;
               }
             }
           }
-
-          console.log(done_time);
         }
       }
     });
 
     function initialize(latLng, sleep_time) {
         latLng = latLng.split(",")
+        $("#content").html("<div id='map'></div>");
         map = new google.maps.Map(document.getElementById('map'), {
           center: { lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])},
           zoom: 7
@@ -71,6 +71,22 @@
             $("#map").empty();
           }, sleep_time * 1000);
     }
+
+    function show_tweet(tweet_url, sleep_time) {
+        $.ajax({
+          url: "https://api.twitter.com/1/statuses/oembed.json?url=" + encodeURI(tweet_url),
+          dataType: "jsonp",
+          success: function(data) {
+            $("#content").html("<div id='twitter'></div>");
+            $("#twitter").html(data.html);
+            twttr.widgets.load($("#twitter"));
+            setTimeout(function() {
+                $("#twitter").remove();
+            }, sleep_time * 1000);
+          }
+        });
+    }
+
     // run the bound function on every update
     smart_podcast.tick(function(data, timestamp, node) {
       smart_podcast.map();
