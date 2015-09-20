@@ -19,7 +19,7 @@
     xhr.send();
   };
 
-  get_json('/static/sample.json', function(results) {
+  get_json('/sample.json', function(results) {
     // select audio node based on target string
     var id = 'target';
     var sample_audio = document.getElementById(id);
