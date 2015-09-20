@@ -19,7 +19,14 @@
     xhr.send();
   };
 
-  get_json('/static/sample.json', function(results) {
+  var token = 'UdWMZbV5maoJaLEh1hZ0eHLCTeYYTSVfFmpcCfsi-g7r6o46rwa8sK1v826LzyPj'
+  var endpoint = 'http://api.genius.com/songs/'
+  var song_id = 1376
+  var url = endpoint + song_id + '?access_token=' + token
+
+  get_json(url, function(results) {
+
+    console.log(results);
 
     // select audio node based on target string
     var id = 'target';
