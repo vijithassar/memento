@@ -8,7 +8,7 @@ momentary data binding along a timeline for HTML5 media
 
 memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data.
 
-Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node. It doesn't meaningfully use JavaScript events, though. Instead, it allows the media node to deliver data payloads that change over time, and then your application can take it from there.
+Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node. It doesn't meaningfully use JavaScript events, though. Instead, it wraps around a playable media node and a queryable data structure, and then uses timing information from the former to deliver dynamic data payloads from the latter that change over time.
 
 [video demo](https://twitter.com/lamthuyvo/status/645688414675828737)
 
@@ -26,7 +26,7 @@ var data = [
 ];
 ```
 
-Data cannot be bound to a point, only to a range. Binding data to an exact point in time would be incompatible with our reality, in which a point is mathematically infinitesimal and thus the data would never actually be available for extraction during script execution. With that said, you are free to make your bound range as small as JavaScript float precision allows, and/or use the memento.trigger() integration to act once on a specific piece of data.
+Data cannot be bound to a point, only to a range. Binding data to an exact point in time would be incompatible with our reality, in which a point is considered mathematically infinitesimal and thus the data would never actually be available for extraction during script execution. With that said, you are free to make your bound range as small as JavaScript float precision allows, and/or use the memento.trigger() integration to act once on a specific piece of data.
 
 # Timestamps #
 
@@ -91,7 +91,7 @@ var thirty_second_data = smart_audio.data(30);
 Most basic functionality in memento deals with setting up the data binds or retrieving data at a particular point.
 
 - **memento.node()** sets the bound media or retrieves the existing bound media. When used as a setter, it takes one argument, which should be a DOM element for an HTML5 audio or video node.
-- **memento.all_data()** sets the bound data or retrieves the existing bound data. When used as a setter, it takes one argument, which should be an array of data items. When used as a getter, it returns all data, ignoring relevance to the current playback timestamp. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored.
+- **memento.all_data()** sets the bound data or retrieves the existing bound data. When used as a setter, it takes one argument, which should be an array of data items. When used as a getter, it returns all data, ignoring relevance to the current playback timestamp. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored. This behavior can be useful in cases where you want to bind data initially but don't have all the timestamp information yet.
 - **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp in numerical or string format.
 - **memento.timestamp()** retrieves a number representing the current playback position in seconds.
 
