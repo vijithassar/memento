@@ -24,6 +24,8 @@ var data = [
 ]
 ```
 
+Data cannot be bound to a point, only to a range. The former would be incompatible with our reality, in which a point is infinitesimal and thus the data would never actually be available for extraction. However, you are free to make your bound range as small as JavaScript float precision allows, and/or use the memento.trigger() integration to act once on a specific piece of data.
+
 # Timestamps #
 
 Internally, memento represents all timestamps as numerical integers and floats representing elapsed seconds. However, it can also accept timestamps as a string, in DD:HH:MM:SS format. Partial seconds are allowed in this string timestamp format. Unused time elements can be omitted from the string timestamps, so "1:30" will translate to 90 seconds.
