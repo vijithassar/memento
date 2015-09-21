@@ -293,12 +293,14 @@
     }
     // run a function every time the player updates
     func.tick = function(breakpoints, iterator) {
+      var breakpoints_match;
+      breakpoints_match = this.test_breakpoints(breakpoints)
       if (typeof iterator !== 'function') {
         return;
       }
-      if (breakpoints && breakpoints !== true && !this.test_breakpoints(breakpoints)) {
+      if (breakpoints && breakpoints !== true && !breakpoints_match) {
         return;
-      } else if (breakpoints === true){
+      } else if (breakpoints === true || breakpoints_match){
         this.__add_action(iterator);
       }
     }
