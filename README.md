@@ -24,7 +24,7 @@ var data = [
 ]
 ```
 
-Data cannot be bound to a point, only to a range. The former would be incompatible with our reality, in which a point is infinitesimal and thus the data would never actually be available for extraction. However, you are free to make your bound range as small as JavaScript float precision allows, and/or use the memento.trigger() integration to act once on a specific piece of data.
+Data cannot be bound to a point, only to a range. Binding data to an exact point in time would be incompatible with our reality, in which a point is mathematically infinitesimal and thus the data would never actually be available for extraction during script execution. With that said, you are free to make your bound range as small as JavaScript float precision allows, and/or use the memento.trigger() integration to act once on a specific piece of data.
 
 # Timestamps #
 
