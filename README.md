@@ -95,6 +95,14 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 memento provides a number of ways with which to expose its internal data, timestamp, and media node information to your custom functions.
 
+For the most part, functions that use these integrations are stored as an array of registered function on the memento instance object. In order to fire them, you'll need to call the memento instance – which is a function – in order to get it to start watching the media node timestamp updates.
+
+```javascript
+// fire the instance function, allowing
+// integrated functions to execute
+project();
+```
+
 ### Extend ###
 
 **memento.extend()** binds a new function to the current memento object such that it can be called as a method and access the internal memento data, timestamp, and node information. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The newly extended method can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
