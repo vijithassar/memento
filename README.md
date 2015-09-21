@@ -97,7 +97,8 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 # Integrations #
 
-memento provides a number of ways with which to expose its internal data, timestamp, and media node information to your custom functions.
+memento provides a number of ways with which to expose its internal information to your custom functions. You can of course feel free to extend any memento instance through timeouts, intervals, events, or direct addition of new methods. The primary benefit of using the integrations is that they pass the data, timestamp, and media node from memento's internal scope into the new function via arguments.
+
 
 Functions that use these integrations are stored as an array of registered functions which is itself saved on the memento instance object. In order to fire integrated functions, you'll need to call the memento instance function in order to get it to start watching the media node timestamp updates.
 
@@ -132,8 +133,6 @@ project.extend('logger', my_new_function);
 // call the new logger function
 project.logger();
 ```
-
-You can of course feel free to extend any memento instance with your own methods; this code includes no warranty. The primary benefit of using the .extend() integration is that it passes the data, timestamp, and media node from memento's internal scope into the new function via arguments.
 
 ### Tick ###
 
