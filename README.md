@@ -125,6 +125,8 @@ var my_new_function = function(data, timestamp, node) {
 // bind it to the memento instance under the method
 // name .logger()
 project.extend('logger', my_new_function);
+// call the new logger function
+project.logger()
 ```
 
 ### Tick ###
