@@ -179,7 +179,7 @@ project.tick(breakpoints, function(data, timestamp, node) {
 
 // create a memento instance
 var project = memento();
-// fire the callback function whenever the player updates
+// fire the callback function at one minute and thirty seconds
 project.trigger('1:30', function(data, timestamp, node) {
   // do whatever you want in here  
   console.log('logging at 90 seconds:', data, timestamp, node);
