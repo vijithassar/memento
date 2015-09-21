@@ -103,6 +103,8 @@ Functions that use these integrations are stored as an array of registered funct
 project();
 ```
 
+Core API functionality can be used without calling the instance.
+
 ### Extend ###
 
 **memento.extend()** binds a new function to the current memento object such that it can be called as a method and access the internal memento data, timestamp, and node information. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The newly extended method can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
