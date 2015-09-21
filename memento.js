@@ -278,7 +278,7 @@
     }
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
-    func.extend = function(label, bound_function, breakpoints) {
+    func.extend = function(label, bound_function) {
       if (typeof label !== 'string' || typeof bound_function !== 'function') {
         return;
       }
@@ -287,22 +287,18 @@
         var current_data, timestamp, in_range;
         timestamp = this.timestamp();
         current_data = this.data(timestamp);
-        // exit if optional breakpoints are supplied but do not match
-        if (breakpoints && !this.test_breakpoints(breakpoints, timestamp)) {
-          return false;
-        }
         bound_function(current_data, timestamp, node);
       }
       return func;
     }
     // run a function every time the player updates
-    func.tick = function(iterator, breakpoints) {
+    func.tick = function(breakpoints, iterator) {
       if (typeof iterator !== 'function') {
         return;
       }
-      if (breakpoints && !this.test_breakpoints(breakpoints)) {
+      if (breakpoints && breakpoints !== true && !this.test_breakpoints(breakpoints)) {
         return;
-      } else {
+      } else if (breakpoints === true){
         this.__add_action(iterator);
       }
     }
