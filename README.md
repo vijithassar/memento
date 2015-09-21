@@ -131,7 +131,7 @@ project.extend('logger', my_new_function);
 project.logger()
 ```
 
-You can of course feel free to extend any memento instance with your own methods; this code includes no warranty. The primary benefit of using the .extend() method is that it passes the data, timestamp, and media node from memento's internal scope into the new function via arguments.
+You can of course feel free to extend any memento instance with your own methods; this code includes no warranty. The primary benefit of using the .extend() integration is that it passes the data, timestamp, and media node from memento's internal scope into the new function via arguments.
 
 ### Tick ###
 
