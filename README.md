@@ -112,7 +112,7 @@ Basic functionality can be used without calling the instance.
 
 ### Extend ###
 
-**memento.extend()** integrates a new function with the current memento object such that it can be called as a method whenever desired elsewhere in the script. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The extension function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**memento.extend()** integrates a new function with the current memento object such that it can be *called whenever desired* elsewhere in the script. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The extension function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // create a memento instance
@@ -136,7 +136,7 @@ project.logger();
 
 ### Tick ###
 
-**memento.tick()** integrates a new function with the current memento object such that it will be called continuously by the player. It takes one required argument, a function, and fires it every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**memento.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes one required argument, a function, and fires it every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // create a memento instance
@@ -150,7 +150,7 @@ project.tick(function(data, timestamp, node) {
 
 ### Trigger ###
 
-**memento.trigger()** integrates a new function with the current memento object such that it will be called once at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: for the currently bound data, the current timestamp, and the media node.
+**memento.trigger()** integrates a new function with the current memento object such that it will be *called once* at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: for the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // create a memento instance
