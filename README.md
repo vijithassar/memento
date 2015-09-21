@@ -121,8 +121,7 @@ Basic functionality can be used without calling the instance.
 var project = memento();
 
 // define a custom function that takes the three
-// binding arguments for current data, timestamp,
-// and media node
+// integration arguments
 var my_new_function = function(data, timestamp, node) {
   // do whatever you want in here
   console.log('logging when method is called:', data, timestamp, node);
