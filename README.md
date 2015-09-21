@@ -23,7 +23,7 @@ var data = [
   {start: 8, end: 12, data: "apple"}
   {start: 10, end: 22, data: "pineapple"}
   {start: 25, end: 35, data: "orange"}
-]
+];
 ```
 
 Data cannot be bound to a point, only to a range. Binding data to an exact point in time would be incompatible with our reality, in which a point is mathematically infinitesimal and thus the data would never actually be available for extraction during script execution. With that said, you are free to make your bound range as small as JavaScript float precision allows, and/or use the memento.trigger() integration to act once on a specific piece of data.
@@ -130,7 +130,7 @@ var my_new_function = function(data, timestamp, node) {
 project.extend('logger', my_new_function);
 
 // call the new logger function
-project.logger()
+project.logger();
 ```
 
 You can of course feel free to extend any memento instance with your own methods; this code includes no warranty. The primary benefit of using the .extend() integration is that it passes the data, timestamp, and media node from memento's internal scope into the new function via arguments.
@@ -145,7 +145,7 @@ var project = memento();
 // fire the callback function whenever the player updates
 project.tick(function(data, timestamp, node) {
   // do whatever you want in here  
-  console.log('logging on every update:', data, timestamp, node)
+  console.log('logging on every update:', data, timestamp, node);
 });
 ```
 
@@ -159,7 +159,7 @@ var project = memento();
 // fire the callback function whenever the player updates
 project.trigger('1:30', function(data, timestamp, node) {
   // do whatever you want in here  
-  console.log('logging at 90 seconds:', data, timestamp, node)
+  console.log('logging at 90 seconds:', data, timestamp, node);
 });
 ```
 
