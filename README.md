@@ -161,8 +161,9 @@ As with most other memento time values, breakpoints can be provided as integers,
 
 // create a memento instance
 var project = memento();
+// define breakpoints
 var breakpoints = {low: 30, high: "0:45"};
-// fire the callback function whenever the player updates
+// fire the callback function whenever the player updates if it's between breakpoints
 project.tick(breakpoints, function(data, timestamp, node) {
   // do whatever you want in here  
   console.log('logging on every update:', data, timestamp, node);
