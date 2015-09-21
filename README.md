@@ -6,7 +6,7 @@ momentary data binding along a timeline for HTML5 media
 
 # Overview #
 
-memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data.
+memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data. Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node.
 
 [video demo](https://twitter.com/lamthuyvo/status/645688414675828737)
 
@@ -157,4 +157,4 @@ project.trigger('1:30', function(data, timestamp, node) {
 
 The .trigger() integration is the only memento feature that uses JavaScript events. The bound audio node is used as the element for the listener. The listener is also added to the internal array of registered functions, but this is only a formality which provides predictable registration behavior alongside the integrations that don't use events, and it has no meaningful effect on functionality. Triggered functions only have a start value when internally registered, and the end value is undefined.
 
-The precise moment of execution for a triggered function may vary somewhat. Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node. The media node updates the page as playback progresses, but it doesn't do so on every audio or video frame; the specific rate at which the updates occur may vary. As such, memento can't always expect an update to occur at the exact moment for which a trigger was registered. Instead, it compares the current playback time to the registered trigger timestamp, and will fire the function if that threshold has been passed.
+The precise moment of execution for a triggered function may vary somewhat. The media node updates the page as playback progresses, but it doesn't do so on every audio or video frame; the specific rate at which the updates occur may vary. As such, memento can't always expect an update to occur at the exact moment for which a trigger was registered. Instead, it compares the current playback time to the registered trigger timestamp, and will fire the function if that threshold has been passed.
