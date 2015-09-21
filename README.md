@@ -152,3 +152,5 @@ project.trigger('1:30', function(data, timestamp, node) {
   console.log('logging at 90 seconds:', data, timestamp, node)
 });
 ```
+
+Note that .trigger() is the only memento feature that uses JavaScript events. The bound audio node is used as the element for the listener. The listener is also added to the internal array of registered functions, but this is only a formality which provides predictable registration behavior alongside the integrations that don't use events, and it has no meaningful effect on functionality. Triggered functions only have a start value when internally registered, and the end value is undefined.
