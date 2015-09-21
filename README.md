@@ -22,10 +22,12 @@ var data = [
 ]
 ```
 
-Start and end times can be given either as integers or decimals representing a number of seconds, or alternatively as strings using DD:HH:MM:SS format. You can omit units you aren't actually using, so "1:30" translates into 90 seconds.
+# Timestamps #
+
+Internally, memento represents all timestamps as numerical integers and floats representing elapsed seconds. However, it can also accept timestamps as a string, in DD:HH:MM:SS format. Partial seconds are allowed in this string timestamp format. Unused time elements can be omitted from the string timestamps, so "1:30" will translate to 90 seconds.
 
 ```javascript
-// bind with both strings and integers
+// bind a data set which uses both strings and integers
 var data = [
   {start: 1, end: 7, data: "banana"}
   {start: "0:08", end: "0:12", data: "apple"}
@@ -33,10 +35,6 @@ var data = [
   {start: 25, end: "0:35", data: "orange"}
 ];
 ```
-
-# Timestamps #
-
-Internally, memento represents all timestamps as numerical integers and floats representing elapsed seconds. However, it can also accept timestamps as a string, in DD:HH:MM:SS format. Partial seconds are allowed in this string timestamp format. Unused time elements can be omitted from the string timestamps, so "1:30" will translate to 90 seconds.
 
 **memento.seconds()** is available as a helper function which will convert string timestamps into numbers. It takes a single argument, which should be a string representing the timestamp. If the argument supplied is a number, it will be transparently returned.
 
