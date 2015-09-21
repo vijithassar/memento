@@ -82,7 +82,7 @@ The .data() method can also take an optional timestamp in string or numerical fo
 var thirty_second_data = smart_audio.data(30);
 ```
 
-# Core API #
+# Basic Functionality #
 
 Most basic functionality in memento deals with setting up the data binds or retrieving data at a particular point.
 
@@ -103,7 +103,7 @@ Functions that use these integrations are stored as an array of registered funct
 project();
 ```
 
-Core API functionality can be used without calling the instance.
+Basic functionality can be used without calling the instance.
 
 ### Extend ###
 
