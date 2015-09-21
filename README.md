@@ -118,7 +118,7 @@ var project = memento();
 // and media node
 var my_new_function = function(data, timestamp, node) {
   // do whatever you want in here
-  console.log('logging when fired:', data, timestamp, node);
+  console.log('logging when method is called:', data, timestamp, node);
 }
 // bind it to the memento instance under the method
 // name .logger()
