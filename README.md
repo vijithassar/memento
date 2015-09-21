@@ -49,6 +49,7 @@ var data = [
 First, instantiate a memento object by running the memento() function factory, which returns a function instance.
 
 ```javascript
+// create a memento instance
 var project = memento();
 ```
 
