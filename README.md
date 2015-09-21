@@ -34,6 +34,10 @@ var data = [
 ];
 ```
 
+# Timestamps #
+
+Internally, memento represents all timestamps as numerical integers and floats representing elapsed seconds. However, it can also accept timestamps as a string, in DD:HH:MM:SS format. Partial seconds are allowed in this string format.
+
 # Setup #
 
 First, instantiate a memento object by running the memento() function factory, which returns a function instance.
@@ -67,7 +71,7 @@ Now, as you play or scrub the audio, you can retrieve the matching data for time
 var current_data = project.data();
 ```
 
-This will be an *array* of all matching data elements from the input array; this means that multiple matching data elements can overlap on a particular time position, but it also means you may need to navigate around an array even if you only expect one result.
+The return value of the .data() method will be a boolean false if there is no data bound to ranges overlapping the current timestamp. If there is matching data, the return value of the .data() method will be an *array* of all matching data elements from the input array. This means that multiple matching data elements can overlap on a particular time position, but it also means you may need to navigate around an array even if you only expect one result.
 
 The .data() method can also take an optional timestamp in string or numerical format to retrieve data for a playback position other than the current one.
 
@@ -92,7 +96,7 @@ memento provides a number of ways with which to expose its internal data, timest
 
 ### Extend ###
 
-**memento.extend()** binds your new function to the current memento object. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute. That function can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
+**memento.extend()** binds a new function to the current memento object such that it can be called as a method and access the internal memento data, timestamp, and node information. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called that method key. The newly extended method can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
 
 ```javascript
 // create a memento instance
@@ -126,7 +130,7 @@ project.tick(function(data, timestamp, node) {
 
 ### Trigger ###
 
-**memento.trigger()** fires a function at a specified point in time. It takes two arguments: the first is a timestamp either as an integer or float or a string in "DD:HH:MM:SS" format, and the second is the function to be fired. The triggered function in turn takes three arguments, for the current data, current timestamp, and media node.
+**memento.trigger()** fires a function at a specified point in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments, for the current data, current timestamp, and media node.
 
 ```javascript
 // create a memento instance
