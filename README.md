@@ -95,7 +95,7 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 memento provides a number of ways with which to expose its internal data, timestamp, and media node information to your custom functions.
 
-For the most part, functions that use these integrations are stored as an array of registered function on the memento instance object. In order to fire them, you'll need to call the memento instance – which is a function – in order to get it to start watching the media node timestamp updates.
+Functions that use these integrations are stored as an array of registered functions which is itself saved on the memento instance object. In order to fire integrated functions, you'll need to call the memento instance function in order to get it to start watching the media node timestamp updates.
 
 ```javascript
 // fire the instance function, allowing
