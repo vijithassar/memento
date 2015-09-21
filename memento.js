@@ -343,7 +343,7 @@
     return func;
   }
 
-  // attach factory to global space
+  // attach factory to global scope
   window.memento = memento;
 
 }).call(this);
