@@ -53,7 +53,7 @@ First, instantiate a memento object by running the memento() function factory, w
 var project = memento();
 ```
 
-Use the .node() method to bind that object to an HTML5 media element.
+Use the .node() method to bind an HTML5 media element to the instance.
 
 ```javascript
 // select audio node
@@ -62,7 +62,7 @@ var audio = document.getElementById('target-audio');
 project.node(audio);
 ```
 
-Bind the data using the .all_data() method.
+Use the .all_data() method to bind an array to the instance.
 
 ```javascript
 // fetch data however you wish
