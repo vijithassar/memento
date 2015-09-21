@@ -1,5 +1,7 @@
 (function() {
 
+  'use strict';
+
   // function factory
   var memento = function() {
     // return value of the factory function
@@ -67,7 +69,7 @@
         }
       }
     }
-    func.__actions = []
+    func.__actions = [];
     func.__add_action = function(new_function, start, end) {
       if (start) {new_function.start = start}
       if (end) {new_function.end = end}
