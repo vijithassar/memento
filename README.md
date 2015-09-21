@@ -172,7 +172,7 @@ project.tick(breakpoints, function(data, timestamp, node) {
 
 ### Trigger ###
 
-**memento.trigger()** integrates a new function with the current memento object such that it will be *called once* at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: for the currently bound data, the current timestamp, and the media node.
+**memento.trigger()** integrates a new function with the current memento object such that it will be *called once* at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // fire a logging function at 90 seconds
@@ -186,6 +186,6 @@ project.trigger('1:30', function(data, timestamp, node) {
 });
 ```
 
-The .trigger() integration is the only memento feature that uses JavaScript events. The bound audio node is used as the element for the listener. The listener is also added to the internal array of registered functions, but this is only a formality which provides predictable registration behavior alongside the integrations that don't use events, and it has no meaningful effect on functionality. Triggered functions only have a start value when internally registered, and the end value is undefined.
+The .trigger() integration is the only memento feature that uses JavaScript events. The bound audio node is used as the listener element. The event handler is also added to the internal array of registered functions, but this is only a formality which provides predictable registration behavior alongside the integrations that don't use events, and it has no meaningful effect on functionality. Triggered functions only have a start value when internally registered, and the end value is undefined.
 
 The precise moment of execution for a triggered function may vary somewhat. The media node updates the page as playback progresses, but it doesn't do so on every audio or video frame; the specific rate at which the updates occur may vary. As such, memento can't always expect an update to occur at the exact moment for which a trigger was registered. Instead, it compares the current playback time to the registered trigger timestamp, and will fire the function if that threshold has been passed.
