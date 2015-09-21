@@ -6,7 +6,9 @@ momentary data binding along a timeline for HTML5 media
 
 # Overview #
 
-memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data. Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node.
+memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data.
+
+Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node. It doesn't meaningfully use events, though. Instead, it allows the media node to deliver changing data sets during playback, and then your application can take it from there.
 
 [video demo](https://twitter.com/lamthuyvo/status/645688414675828737)
 
