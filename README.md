@@ -138,7 +138,7 @@ project.logger();
 
 ### Tick ###
 
-**memento.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes two arguments. The first is either an object containing breakpoints in between the ticking will be enabled, or else a boolean true to enable ticking at all times. The second argument is a function which will be fired every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**memento.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes two arguments. The first is either an object containing breakpoints in between which the ticking will be enabled, or else a boolean true to enable ticking at all times. The second argument is a function which will be fired every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // tick a logging function constantly
