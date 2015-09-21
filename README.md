@@ -36,34 +36,35 @@ var data = [
 
 # Setup #
 
-First, instantiate a memento object.
+First, instantiate a memento object by running the memento() function factory, which returns a function instance.
 
 ```javascript
-var smart_audio = memento();
+var project = memento();
 ```
 
-Use the .node() method to bind that object to an HTML5 media player.
+Use the .node() method to bind that object to an HTML5 media element.
 
 ```javascript
 // select audio node
 var audio = document.getElementById('target-audio');
 // bind audio to memento object
-smart_audio.node(audio);
+project.node(audio);
 ```
+
 Bind the data using the .all_data() method.
 
 ```javascript
 // fetch data however you wish
 var data_set = get_data();
 // bind all data to memento object
-smart_audio.all_data(data_set);
+project.all_data(data_set);
 ```
 
 Now, as you play or scrub the audio, you can retrieve the matching data for time ranges which overlap the current playback position by calling the .data() method on the memento object.
 
 ```javascript
 // retrieve all data bound to the current timestamp
-var current_data = smart_audio.data();
+var current_data = project.data();
 ```
 
 This will be an *array* of all matching data elements from the input array; this means that multiple matching data elements can overlap on a particular time position, but it also means you may need to navigate around an array even if you only expect one result.
