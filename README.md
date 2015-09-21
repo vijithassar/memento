@@ -65,9 +65,9 @@ Bind the data using the .all_data() method.
 
 ```javascript
 // fetch data however you wish
-var data_set = get_data();
+var data = get_data();
 // bind all data to memento object
-project.all_data(data_set);
+project.all_data(data);
 ```
 
 Now, as you play or scrub the audio, you can retrieve the matching data for time ranges which overlap the current playback position by calling the .data() method on the memento object.
