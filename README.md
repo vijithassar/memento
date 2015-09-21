@@ -19,9 +19,9 @@ memento binds arrays. Each item in the array must have "start" and "end" propert
 ```javascript
 // fruits with corresponding ranges
 var data = [
-  {start: 1, end: 7, data: "banana"}
-  {start: 8, end: 12, data: "apple"}
-  {start: 10, end: 22, data: "pineapple"}
+  {start: 1, end: 7, data: "banana"},
+  {start: 8, end: 12, data: "apple"},
+  {start: 10, end: 22, data: "pineapple"},
   {start: 25, end: 35, data: "orange"}
 ];
 ```
@@ -35,9 +35,9 @@ Internally, memento represents all timestamps as numerical integers and floats r
 ```javascript
 // bind a data set which uses both strings and integers
 var data = [
-  {start: 1, end: 7, data: "banana"}
-  {start: "0:08", end: "0:12", data: "apple"}
-  {start: 10, end: 22, data: "pineapple"}
+  {start: 1, end: 7, data: "banana"},
+  {start: "0:08", end: "0:12", data: "apple"},
+  {start: 10, end: 22, data: "pineapple"},
   {start: 25, end: "0:35", data: "orange"}
 ];
 ```
