@@ -344,6 +344,12 @@
   }
 
   // attach factory to global scope
-  window.memento = memento;
+  if (!window.memento) {
+    window.memento = memento;
+  } else if (!window.memento_factory) {
+    window.memento_factory = memento;
+  } else {
+    console.log('could not expose memento.js because global variables named "memento" and "memento_factory" already exist');
+  }
 
 }).call(this);

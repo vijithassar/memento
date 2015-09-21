@@ -53,6 +53,8 @@ First, instantiate a memento object by running the memento() function factory, w
 var project = memento();
 ```
 
+If for some reason you already have a global variable named "memento" then the library will expose itself under the name "memento_factory" instead.
+
 Use the .node() method to bind an HTML5 media element to the instance.
 
 ```javascript
