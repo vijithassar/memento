@@ -36,7 +36,9 @@ var data = [
 
 # Timestamps #
 
-Internally, memento represents all timestamps as numerical integers and floats representing elapsed seconds. However, it can also accept timestamps as a string, in DD:HH:MM:SS format. Partial seconds are allowed in this string format.
+Internally, memento represents all timestamps as numerical integers and floats representing elapsed seconds. However, it can also accept timestamps as a string, in DD:HH:MM:SS format. Partial seconds are allowed in this string timestamp format. Unused time elements can be omitted from the string timestamps, so "1:30" will translate to 90 seconds.
+
+**memento.seconds()** is available as a helper function which will convert string timestamps into numbers. It takes a single argument, which should be a string representing the timestamp. If the argument supplied is a number, it will be transparently returned.
 
 # Setup #
 
@@ -86,9 +88,8 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 - **memento.node()** gets or sets the bound media. When used as a setter, it takes one argument, which should be a DOM element for an HTML5 audio or video node.
 - **memento.all_data()** gets or sets all bound data, ignoring relevance to the current playback timestamp. When used as a setter, it takes one argument, which should be an array of data items. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored.
-- **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp which can be an integer, float, or a string in "DD:HH:MM:SS" format. You can omit units you aren't actually using, so "1:30" translates into 90 seconds.
+- **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp in numerical or string format.
 - **memento.timestamp()** retrieves a number representing the current playback position in seconds.
-- **memento.seconds()** is a helper method which converts timestamps from strings in format "DD:HH:MM:SS" into an integer representing the number of seconds. You can omit units you aren't actually using, so "1:30" translates into 90 seconds. It takes that string as its only argument, but if passed a number will transparently return it.
 
 # Integrations #
 
@@ -96,7 +97,7 @@ memento provides a number of ways with which to expose its internal data, timest
 
 ### Extend ###
 
-**memento.extend()** binds a new function to the current memento object such that it can be called as a method and access the internal memento data, timestamp, and node information. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called that method key. The newly extended method can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
+**memento.extend()** binds a new function to the current memento object such that it can be called as a method and access the internal memento data, timestamp, and node information. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The newly extended method can in turn take three arguments – current data, current timestamp, and media node – after which you can do whatever else you want with them.
 
 ```javascript
 // create a memento instance
