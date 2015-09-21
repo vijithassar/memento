@@ -115,6 +115,8 @@ Basic functionality can be used without calling the instance.
 **memento.extend()** integrates a new function with the current memento object such that it can be *called whenever desired* elsewhere in the script. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The extension function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
+// add a new logging function
+
 // create a memento instance
 var project = memento();
 
@@ -130,19 +132,38 @@ var my_new_function = function(data, timestamp, node) {
 // name .logger()
 project.extend('logger', my_new_function);
 
-// call the new logger function
+// call the new logging function
 project.logger();
 ```
 
 ### Tick ###
 
-**memento.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes one required argument, a function, and fires it every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**memento.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes two arguments. The first is either an object containing breakpoints in between the ticking will be enabled, or else a boolean true to enable ticking at all times. The second argument is a function which will be fired every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
+// tick a logging function constantly
+
 // create a memento instance
 var project = memento();
 // fire the callback function whenever the player updates
-project.tick(function(data, timestamp, node) {
+project.tick(true, function(data, timestamp, node) {
+  // do whatever you want in here  
+  console.log('logging on every update:', data, timestamp, node);
+});
+```
+
+In this case the breakpoints represent a time range just like those from the data bind, which use the notation "start" and "end," but breakpoints use the slightly different semantics "low" and "high" to account for internal cases where the higher breakpoint is not an ending – for example, when representing the current data bind state, the "high" key in the breakpoints object might actually correspond to the "start" time of a new upcoming bound data item.
+
+As with most other memento time values, breakpoints can be provided as integers, floats, or strings.
+
+```javascript
+// tick a logging function between 30 seconds and 45 seconds
+
+// create a memento instance
+var project = memento();
+var breakpoints = {low: 30, high: "0:45"};
+// fire the callback function whenever the player updates
+project.tick(breakpoints, function(data, timestamp, node) {
   // do whatever you want in here  
   console.log('logging on every update:', data, timestamp, node);
 });
@@ -153,6 +174,8 @@ project.tick(function(data, timestamp, node) {
 **memento.trigger()** integrates a new function with the current memento object such that it will be *called once* at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: for the currently bound data, the current timestamp, and the media node.
 
 ```javascript
+// fire a logging function at 90 seconds
+
 // create a memento instance
 var project = memento();
 // fire the callback function whenever the player updates
