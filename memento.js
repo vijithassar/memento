@@ -153,7 +153,12 @@
         return time;
       } else {
         time_elements = time.split(':').reverse();
-        seconds = parseInt(time_elements[0]) || 0;
+        seconds = time_elements[0] || "0";
+        if (seconds.indexOf('.') !== -1) {
+          seconds = parseFloat(seconds);
+        } else {
+          seconds = parseInt(seconds);
+        }
         minutes = parseInt(time_elements[1]) || 0;
         hours = parseInt(time_elements[2]) || 0;
         days = parseInt(time_elements[3]) || 0;
@@ -166,14 +171,14 @@
       var mode;
       timestamp = timestamp || this.timestamp();
       if (breakpoints.low) {
-        mode = 'single'
+        mode = 'single';
       } else if (breakpoints.length && typeof breakpoints.map === 'function') {
-        mode = 'multiple'
+        mode = 'multiple';
       }
       // if you only pass in one breakpoints object
       // test it and return a boolean
       if (mode === 'single') {
-        return this.test_single_breakpoint(breakpoints, timestamp)
+        return this.test_single_breakpoint(breakpoints, timestamp);
       // if you pass in an array of breakpoints objects,
       // test all and return a mapped array of booleans
       } else if (mode === 'multiple') {
@@ -182,7 +187,19 @@
     }
     // test a single range
     func.test_single_breakpoint = function(breakpoints, timestamp) {
-      var between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) )
+      var between;
+      // resolve breakpoints to numbers if necessary
+      if (typeof timestamp !== 'number') {
+        timestamp = func.seconds(timestamp);
+      }
+      if (typeof breakpoints.low !== 'number') {
+        breakpoints.low = func.seconds(breakpoints.low);
+      }
+      if (typeof breakpoints.high !== 'number') {
+        breakpoints.high = func.seconds(breakpoints.high);
+      }
+      // check timestamp position
+      between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) );
       return between;
     }
     // test multiple ranges and return a map;
