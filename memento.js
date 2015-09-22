@@ -230,11 +230,14 @@
         between = func.test_breakpoints(breakpoints, timestamp);
         return between;
       });
-      current_data = current_data.sort(function(a, b) {
-        a_start = a.__extract('start');
-        b_start = b.__extract('start');
-        return a_start > b_start;
-      })
+      if (current_data.length > 1) {
+        current_data = current_data.sort(function(a, b) {
+          var a_start, b_start;
+          a_start = a.__extract('start');
+          b_start = b.__extract('start');
+          return a_start > b_start;
+        });
+      }
       if (current_data.length === 0) {
         return false;
       } else {
