@@ -102,7 +102,7 @@
           return false;
         } else {
           breakpoints = {low: item.start, high: item.end};
-          match = this.test_breakpoints(breakpoints);
+          match = func.test_breakpoints(breakpoints);
           return match;
         }
       });
@@ -318,6 +318,9 @@
       }
       if (breakpoints === true) {
         this.__add_action(iterator);
+      }
+      if (breakpoints.low && breakpoints.high) {
+        this.__add_action(iterator, breakpoints.low, breakpoints.high);
       }
     }
     // fire a function once when the trigger time is passed
