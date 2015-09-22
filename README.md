@@ -102,20 +102,9 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 memento provides a number of ways with which to expose its internal information to your custom functions. You should of course feel free to augment any memento instance through the use of timeouts, intervals, events, or direct addition of new methods. The primary benefit of using the integrations is that they pass the data, timestamp, and media node from memento's internal scope into the new function via arguments.
 
-
-Functions that use these integrations are stored as an array of registered functions which is itself saved on the memento instance object. In order to fire integrated functions, you'll need to call the memento instance function in order to get it to start watching the media node timestamp updates.
-
-```javascript
-// fire the instance function, allowing
-// integrated functions to execute
-project();
-```
-
-Basic functionality can be used without calling the instance.
-
 ### Extend ###
 
-**memento.extend()** integrates a new function with the current memento object such that it can be *called whenever desired* elsewhere in the script. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The extension function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**.extend()** integrates a new function with the current memento object such that it can be *called whenever desired* elsewhere in the script. It takes two arguments: the first is a string that will be used as the name of the new bound method, and the second is a function that will execute when called by that method key. The extension function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // add a new logging function
@@ -140,13 +129,15 @@ project.logger();
 
 ### Tick ###
 
-**memento.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes two arguments. The first is either an object containing breakpoints in between which the ticking will be enabled, or else a boolean true to enable ticking at all times. The second argument is a function which will be fired every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**.tick()** integrates a new function with the current memento object such that it will be *called continuously* by the player. It takes two arguments. The first is either an object containing breakpoints in between which the ticking will be enabled, or else a boolean true to enable ticking at all times. The second argument is a function which will be fired every time the current time is updated by the player. The ticking function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // tick a logging function constantly
 
 // create a memento instance
 var project = memento();
+// call the memento instance to start watching the media updates
+project();
 // fire the callback function whenever the player updates
 project.tick(true, function(data, timestamp, node) {
   // do whatever you want in here  
@@ -163,6 +154,8 @@ As with most other memento time values, breakpoints can be provided as integers,
 
 // create a memento instance
 var project = memento();
+// call the memento instance to start watching the media updates
+project();
 // define breakpoints
 var breakpoints = {low: 30, high: "0:45"};
 // fire the callback function whenever the player updates if it's between breakpoints
@@ -174,7 +167,7 @@ project.tick(breakpoints, function(data, timestamp, node) {
 
 ### Trigger ###
 
-**memento.trigger()** integrates a new function with the current memento object such that it will be *called once* at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
+**.trigger()** integrates a new function with the current memento object such that it will be *called once* at a particular moment in time. It takes two arguments: the first is a timestamp, and the second is the function to be fired. The triggered function in turn takes three arguments: the currently bound data, the current timestamp, and the media node.
 
 ```javascript
 // fire a logging function at 90 seconds
@@ -188,6 +181,18 @@ project.trigger('1:30', function(data, timestamp, node) {
 });
 ```
 
-The .trigger() integration is the only memento feature that uses JavaScript events. The bound audio node is used as the listener element. The event handler is also added to the internal array of registered functions, but this is only a formality which provides predictable registration behavior alongside the integrations that don't use events, and it has no meaningful effect on functionality. Triggered functions only have a start value when internally registered, and the end value is undefined.
+The .trigger() integration is the only memento feature that uses JavaScript events. The bound audio node is used as the listener element. The event handler is also added to the internal array of registered functions, but this is only a formality which provides predictable registration behavior alongside the integrations that don't use events, and it has no meaningful effect on functionality. Triggered functions only have a start value when internally registered, and the end value is undefined. The .trigger() integration uses .tick() internally.
 
 The precise moment of execution for a triggered function may vary somewhat. The media node updates the page as playback progresses, but it doesn't do so on every audio or video frame; the specific rate at which the updates occur may vary. As such, memento can't always expect an update to occur at the exact moment for which a trigger was registered. Instead, it compares the current playback time to the registered trigger timestamp, and will fire the function if that threshold has been passed.
+
+## Media Updates ##
+
+Functions that use time-sensitive integrations like .trigger() and .tick() are stored as an array of registered functions which is itself saved on the memento instance object. In order to fire integrated functions, you'll need to call the memento instance function in order to get it to start watching the media node timestamp updates.
+
+```javascript
+// fire the instance function, allowing
+// integrated functions to execute
+project();
+```
+
+Basic functionality and methods added through the .extend() integration can be used without calling the instance.
