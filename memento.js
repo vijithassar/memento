@@ -329,7 +329,8 @@
           counter,
           event,
           event_label,
-          event_handler;
+          event_handler,
+          trigger_start;
       sent = false;
       // resolve trigger time to seconds in case it's a string
       trigger_time = this.seconds(trigger_time);
@@ -343,7 +344,7 @@
       }
       this.__add_action(event_handler, trigger_time, null);
       node.addEventListener(event_label, event_handler)
-      func.tick(function() {
+      func.tick(true, function() {
         var timestamp,
             passed;
         if (sent) {
