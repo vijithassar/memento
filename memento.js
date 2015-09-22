@@ -139,6 +139,7 @@
       var has_colon,
           is_number,
           time_elements,
+          days,
           hours,
           minutes,
           seconds;
