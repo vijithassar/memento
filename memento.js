@@ -88,7 +88,7 @@
         var breakpoints,
             both_undefined,
             either_undefined,
-            one_defined;
+            one_undefined;
         both_undefined = !item.start && !item.end;
         either_undefined = !item.start || !item.end;
         one_undefined = ( (!item.start && item.end) || (item.start && !item.end) )
@@ -101,7 +101,7 @@
         if (!item.start || !item.end) {
           return false;
         } else {
-          breakpoints = {low: start, high: end};
+          breakpoints = {low: item.start, high: item.end};
           match = this.test_breakpoints(breakpoints);
           return match;
         }
@@ -313,14 +313,10 @@
     }
     // run a function every time the player updates
     func.tick = function(breakpoints, iterator) {
-      var breakpoints_match;
-      breakpoints_match = this.test_breakpoints(breakpoints)
       if (typeof iterator !== 'function') {
         return;
       }
-      if (breakpoints && breakpoints !== true && !breakpoints_match) {
-        return;
-      } else if (breakpoints === true || breakpoints_match){
+      if (breakpoints === true) {
         this.__add_action(iterator);
       }
     }
