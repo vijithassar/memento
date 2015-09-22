@@ -86,7 +86,7 @@ The .data() method can also take an optional timestamp in string or numerical fo
 
 ```javascript
 // get bound data for thirty seconds in
-var thirty_second_data = smart_audio.data(30);
+var thirty_second_data = project.data(30);
 ```
 
 # Basic Functionality #
@@ -95,7 +95,7 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 - **memento.node()** sets the bound media or retrieves the existing bound media. When used as a setter, it takes one argument, which should be a DOM element for an HTML5 audio or video node.
 - **memento.all_data()** sets the bound data or retrieves the existing bound data. When used as a setter, it takes one argument, which should be an array of data items. When used as a getter, it returns all data, ignoring relevance to the current playback timestamp. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored. This behavior can be useful in cases where you want to bind data initially but don't have all the timestamp information yet.
-- **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp in numerical or string format.
+- **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp in numerical or string format, in which case it will return the data bound to that timestamp instead of to the current playback time.
 - **memento.timestamp()** retrieves a number representing the current playback position in seconds.
 
 # Integrations #
