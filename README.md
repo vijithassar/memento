@@ -14,7 +14,7 @@ Conceptually, memento can be thought of as a way to slave all JavaScript executi
 
 # Data #
 
-memento binds arrays. Each item in the array must have "start" and "end" properties in order to be recalled at the proper time. It doesn't necessarily have to be a hashmap, though – you can bind an array of anything else (strings, numbers, arrays, nulls, etc) as long as you define "start" and "end" as additional properties on the item first.
+memento binds arrays. Each item in the array must have "start" and "end" properties in order to be recalled at the proper time. It doesn't necessarily have to be a hashmap, though – you can bind an array of anything else as long as you define "start" and "end" as additional properties on the item first.
 
 ```javascript
 // fruits with corresponding ranges
