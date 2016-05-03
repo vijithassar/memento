@@ -3,15 +3,18 @@
   'use strict';
 
   // function factory
-  var memento = function() {
+  var memento;
+  memento = function() {
     // return value of the factory function
-    var func = function() {
+    var func,
+        data,
+        node;
+    func = function() {
       if (typeof func.data === 'function') {
         func.__update();
       }
-    }
+    };
     // getter/setter for bound data
-    var data;
     func.all_data = function(obj) {
       if (obj) {
         data = func.__wrap(obj);
@@ -19,9 +22,8 @@
       } else {
         return data;
       }
-    }
+    };
     // getter/setter for media node
-    var node;
     func.node = function(element) {
       if (element) {
         node = element;
@@ -29,7 +31,7 @@
       } else {
         return node;
       }
-    }
+    };
     // add an abstract getter function
     func.__add_extractor = function(obj) {
       obj.__extract = function(key) {
@@ -45,7 +47,7 @@
         }
       }
       return obj;
-    }
+    };
     // extend all items in the data array with custom methods
     func.__wrap = function(data) {
       data = data.map(function(item) {
@@ -53,11 +55,14 @@
         return item;
       });
       return data;
-    }
+    };
     func.__update = function() {
       // every time the node updates
       node.ontimeupdate = function() {
-        var data, timestamp, actions, action;
+        var data,
+            timestamp,
+            actions,
+            action;
         timestamp = func.timestamp();
         data = func.data();
         actions = func.timed_actions(timestamp);
@@ -67,21 +72,23 @@
             action(data, timestamp, node);
           }
         }
-      }
-    }
+      };
+    };
     func.__actions = [];
     func.__add_action = function(new_function, start, end) {
-      if (start) {new_function.start = start}
-      if (end) {new_function.end = end}
+      if (start) {new_function.start = start;}
+      if (end) {new_function.end = end;}
       func.__actions.push(new_function);
-    }
+    };
     func.all_actions = function() {
       var actions;
       actions = this.__actions;
       return actions;
-    }
+    };
     func.timed_actions = function(timestamp) {
-      var all_actions, timed_actions, match;
+      var all_actions,
+          timed_actions,
+          match;
       timestamp = timestamp || this.timestamp();
       all_actions = this.all_actions();
       timed_actions = all_actions.filter(function(item) {
@@ -107,7 +114,7 @@
         }
       });
       return timed_actions;
-    }
+    };
     // add a new item to the bound data
     func.add_item = function(new_data) {
       if (typeof data.map !== 'function') {
@@ -117,7 +124,7 @@
         data = data.concat(new_data);
         return data;
       }
-    }
+    };
     // remove a bound item by index
     func.remove_item = function(int) {
       if (typeof int !== 'number') {
@@ -127,12 +134,12 @@
         return index !== int;
       })
       return data;
-    }
+    };
     // get exact timestamp from node
     func.timestamp = function() {
       var timestamp = node.currentTime;
       return timestamp;
-    }
+    };
     // resolve string times in format DD:HH:MM:SS to a number
     // of seconds
     func.seconds = function(time) {
@@ -166,7 +173,7 @@
       }
       seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
       return seconds;
-    }
+    };
     // test whether a timestamp is between a range
     func.test_breakpoints = function(breakpoints, timestamp) {
       var mode;
@@ -185,7 +192,7 @@
       } else if (mode === 'multiple') {
         return this.test_multiple_breakpoints(breakpoints, timestamp);
       }
-    }
+    };
     // test a single range
     func.test_single_breakpoint = function(breakpoints, timestamp) {
       var between;
@@ -202,7 +209,7 @@
       // check timestamp position
       between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) );
       return between;
-    }
+    };
     // test multiple ranges and return a map;
     // uses the single item test internally
     func.test_multiple_breakpoints = function(breakpoints, timestamp) {
@@ -212,9 +219,9 @@
         var between;
         between = test_single_breakpoint(item, timestamp);
         return between;
-      })
+      });
       return betweens;
-    }
+    };
     // get data
     func.data = function(timestamp) {
       var timestamp = timestamp || this.timestamp(),
@@ -251,7 +258,7 @@
       timestamp = func.timestamp();
       rounded_timestamp = Math.floor(timestamp);
       return rounded_timestamp;
-    }
+    };
     // get all timestamps registered in the data
     // object with time_ prefixes
     func.breakpoints = function() {
@@ -275,7 +282,7 @@
         return a > b;
       });
       return breakpoints;
-    }
+    };
     // get the breakpoints closest to a timestamp
     func.nearest_breakpoints = function(timestamp) {
       var breakpoints,
@@ -296,7 +303,7 @@
           return nearest_breakpoints;
         }
       }
-    }
+    };
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
     func.extend = function(label, bound_function) {
@@ -305,13 +312,15 @@
       }
       // if we're still running, bind the function with the current values
       func[label] = function() {
-        var current_data, timestamp, in_range;
+        var timestamp,
+            current_data,
+            in_range;
         timestamp = this.timestamp();
         current_data = this.data(timestamp);
         bound_function(current_data, timestamp, node);
       }
       return func;
-    }
+    };
     // run a function every time the player updates
     func.tick = function(breakpoints, iterator) {
       if (typeof iterator !== 'function') {
@@ -323,7 +332,7 @@
       if (breakpoints.low && breakpoints.high) {
         this.__add_action(iterator, breakpoints.low, breakpoints.high);
       }
-    }
+    };
     // fire a function once when the trigger time is passed
     func.trigger = function(trigger_time, trigger_function) {
       var sent,
@@ -342,7 +351,7 @@
         data = func.data();
         timestamp = func.timestamp();
         trigger_function(data, timestamp, node);
-      }
+      };
       this.__add_action(event_handler, trigger_time, null);
       node.addEventListener(event_label, event_handler)
       func.tick(true, function() {
@@ -359,10 +368,10 @@
           }
         }
       });
-    }
+    };
     // return results of the factory
     return func;
-  }
+  };
 
   // attach factory to global scope
   if (!window.memento) {
