@@ -10,8 +10,6 @@ memento.js binds data to regions of audio or video and allows you to quickly rec
 
 Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node. It doesn't meaningfully use JavaScript events, though. Instead, it wraps around a playable media node and a queryable data structure, and then uses timing information from the former to deliver dynamic data payloads from the latter that automatically change over time.
 
-[video demo](https://twitter.com/lamthuyvo/status/645688414675828737)
-
 # Data #
 
 memento binds arrays. Each item in the array must have "start" and "end" properties in order to be recalled at the proper time. It doesn't necessarily have to be a hashmap, though – you can bind an array of anything else as long as you define "start" and "end" as additional properties on the item first.
