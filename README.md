@@ -2,7 +2,7 @@
 
 momentary data binding along a timeline for HTML5 media
 
-![clock](./header.png)
+![clock](https://cloud.githubusercontent.com/assets/3488572/22381495/d2357e86-e48f-11e6-909b-f8f1e33022a8.png)
 
 # Overview #
 
@@ -148,7 +148,7 @@ var project = memento();
 project();
 // fire the callback function whenever the player updates
 project.tick(true, function(data, timestamp, node) {
-  // do whatever you want in here  
+  // do whatever you want in here
   console.log('logging on every update:', data, timestamp, node);
 });
 ```
@@ -168,7 +168,7 @@ project();
 var breakpoints = {low: 30, high: "0:45"};
 // fire the callback function whenever the player updates if it's between breakpoints
 project.tick(breakpoints, function(data, timestamp, node) {
-  // do whatever you want in here  
+  // do whatever you want in here
   console.log('logging on every update:', data, timestamp, node);
 });
 ```
@@ -184,7 +184,7 @@ project.tick(breakpoints, function(data, timestamp, node) {
 var project = memento();
 // fire the callback function at one minute and thirty seconds
 project.trigger('1:30', function(data, timestamp, node) {
-  // do whatever you want in here  
+  // do whatever you want in here
   console.log('logging at 90 seconds:', data, timestamp, node);
 });
 ```
