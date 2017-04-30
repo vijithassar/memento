@@ -7,8 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
-    "lint": "eslint --config eslintrc.json source/*.js && eslint --config eslintrc.json test/*.js"
+    "pretest": "npm run build",
+    "test": "mocha ./test",
+    "build": "rollup --config --output build/memento.js -- index.js",
+    "lint": "eslint --config ./eslintrc.json ./*.js && eslint --config ./eslintrc.json ./test/*.js",
+    "zip": "zip -j build/mnemento.zip -- LICENSE README.md build/memento.js build/memento.min.js",
+    "compile": "npm run lint && npm run test && npm run build && npm run zip",
+    "prepublish": "npm run compile",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -30,6 +36,7 @@
   "homepage": "https://github.com/vijithassar/memento#readme",
   "devDependencies": {
     "eslint": "^3.19.0",
-    "mocha": "^3.3.0"
+    "mocha": "^3.3.0",
+    "rollup": "^0.41.6"
   }
 }
