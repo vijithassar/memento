@@ -1,0 +1,35 @@
+{
+  "name": "memento",
+  "version": "0.1.1",
+  "description": "data binding for HTML5 media nodes",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint --config eslintrc.json source/*.js && eslint --config eslintrc.json test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vijithassar/memento.git"
+  },
+  "keywords": [
+    "audio",
+    "video",
+    "media",
+    "HTML5",
+    "data",
+    "binding"
+  ],
+  "author": "Vijith Assar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vijithassar/memento/issues"
+  },
+  "homepage": "https://github.com/vijithassar/memento#readme",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "mocha": "^3.3.0"
+  }
+}
