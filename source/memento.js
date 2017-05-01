@@ -233,7 +233,7 @@ memento = function() {
         }
     }
     // get all timestamps registered in the data
-    // object with time_ prefixes
+    // object
     instance.breakpoints = function() {
         var breakpoints,
             start,
