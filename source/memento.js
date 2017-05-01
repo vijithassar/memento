@@ -116,9 +116,7 @@ memento = function() {
   };
   // get exact timestamp from node
   instance.timestamp = function() {
-    var timestamp;
-    timestamp = node.currentTime;
-    return timestamp;
+    return node.currentTime;
   };
   // resolve string times in format DD:HH:MM:SS to a number
   // of seconds
