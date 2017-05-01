@@ -82,15 +82,15 @@ memento = function() {
   };
   instance.all_actions = function() {
     var actions;
-    actions = this.__actions;
+    actions = instance.__actions;
     return actions;
   };
   instance.timed_actions = function(timestamp) {
     var all_actions,
         timed_actions,
         match;
-    timestamp = timestamp || this.timestamp();
-    all_actions = this.all_actions();
+    timestamp = timestamp || instance.timestamp();
+    all_actions = instance.all_actions();
     timed_actions = all_actions.filter(function(item) {
       var breakpoints,
           both_undefined,
@@ -185,7 +185,7 @@ memento = function() {
   // test whether a timestamp is between a range
   instance.test_breakpoints = function(breakpoints, timestamp) {
     var mode;
-    timestamp = timestamp || this.timestamp();
+    timestamp = timestamp || instance.timestamp();
     if (breakpoints.low) {
       mode = 'single';
     } else if (breakpoints.length && typeof breakpoints.map === 'function') {
@@ -194,11 +194,11 @@ memento = function() {
     // if you only pass in one breakpoints object
     // test it and return a boolean
     if (mode === 'single') {
-      return this.test_single_breakpoint(breakpoints, timestamp);
+      return instance.test_single_breakpoint(breakpoints, timestamp);
     // if you pass in an array of breakpoints objects,
     // test all and return a mapped array of booleans
     } else if (mode === 'multiple') {
-      return this.test_multiple_breakpoints(breakpoints, timestamp);
+      return instance.test_multiple_breakpoints(breakpoints, timestamp);
     }
   };
   // test a single range
@@ -222,7 +222,7 @@ memento = function() {
   // uses the single item test internally
   instance.test_multiple_breakpoints = function(breakpoints, timestamp) {
     var betweens;
-    timestamp = timestamp || this.timestamp();
+    timestamp = timestamp || instance.timestamp();
     betweens = breakpoints.map(function(item) {
       var between;
       between = instance.test_single_breakpoint(item, timestamp);
@@ -232,7 +232,7 @@ memento = function() {
   };
   // get data
   instance.data = function(timestamp) {
-    var timestamp = timestamp || this.timestamp(),
+    var timestamp = timestamp || instance.timestamp(),
         nearest_breakpoints,
         current_data;
     current_data = data.filter(function(item) {
@@ -302,7 +302,7 @@ memento = function() {
         between,
         next_breakpoint,
         timestamp;
-    timestamp = timestamp || this.timestamp();
+    timestamp = timestamp || instance.timestamp();
     breakpoints = instance.breakpoints();
     for (var i = 0; i < breakpoints.length; i++) {
       current_breakpoint = breakpoints[i];
@@ -327,8 +327,8 @@ memento = function() {
       var timestamp,
           current_data,
           in_range;
-      timestamp = this.timestamp();
-      current_data = this.data(timestamp);
+      timestamp = instance.timestamp();
+      current_data = instance.data(timestamp);
       bound_function(current_data, timestamp, node);
     }
     return instance;
@@ -339,10 +339,10 @@ memento = function() {
       return;
     }
     if (breakpoints === true) {
-      this.__add_action(iterator);
+      instance.__add_action(iterator);
     }
     if (breakpoints.low && breakpoints.high) {
-      this.__add_action(iterator, breakpoints.low, breakpoints.high);
+      instance.__add_action(iterator, breakpoints.low, breakpoints.high);
     }
   };
   // fire a function once when the trigger time is passed
@@ -355,7 +355,7 @@ memento = function() {
         trigger_start;
     sent = false;
     // resolve trigger time to seconds in case it's a string
-    trigger_time = this.seconds(trigger_time);
+    trigger_time = instance.seconds(trigger_time);
     event_label = 'trigger-' + trigger_time;
     event = new Event(event_label);
     event_handler = function(event) {
@@ -364,7 +364,7 @@ memento = function() {
       timestamp = instance.timestamp();
       trigger_function(data, timestamp, node);
     };
-    this.__add_action(event_handler, trigger_time, null);
+    instance.__add_action(event_handler, trigger_time, null);
     node.addEventListener(event_label, event_handler)
     instance.tick(true, function() {
       var timestamp,
