@@ -154,7 +154,7 @@ memento = function() {
     }
     // add a new item to the bound data
     instance.add_item = function(new_data) {
-        if (typeof data.map !== 'function') {
+        if (! data || typeof data.map !== 'function') {
             data = [];
         }
         if (new_data) {
@@ -164,7 +164,8 @@ memento = function() {
     };
     // remove a bound item by index
     instance.remove_item = function(int) {
-        if (typeof int !== 'number' && int > data.length) {
+        if (typeof int !== 'number' || int > data.length) {
+            console.error('array index to remove is invalid');
             return;
         }
         let result = data[int];
