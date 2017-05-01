@@ -35,3 +35,12 @@ describe('data loading', function() {
         assert.notEqual(instance.all_data().pop().a, first.pop().a);
     });
 });
+
+describe('seconds helper', function() {
+    it('resolves strings', function() {
+        let instance = memento();
+        assert.equal(instance.seconds('1:30'), 90);
+        assert.equal(instance.seconds('2:35'), 155);
+        assert.equal(instance.seconds('1:01:30'), 3690);
+    });
+});
