@@ -118,9 +118,7 @@ memento = function() {
         instance.__actions.push(new_function);
     };
     instance.all_actions = function() {
-        var actions;
-        actions = instance.__actions;
-        return actions;
+        return instance.__actions;
     };
     instance.timed_actions = function() {
         var all_actions,
