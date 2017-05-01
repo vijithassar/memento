@@ -312,6 +312,7 @@ memento = function() {
     // fire a function once when the trigger time is passed
     instance.trigger = function(trigger_time, trigger_function) {
         var sent,
+            previous,
             event,
             event_label,
             event_handler;
@@ -332,15 +333,15 @@ memento = function() {
         instance.tick(true, function() {
             var timestamp,
                 passed;
-            if (sent) {
-                return;
-            } else {
-                timestamp = instance.timestamp();
-                passed = timestamp > trigger_time;
-                if (passed) {
-                    node.dispatchEvent(event);
-                    sent = true;
-                }
+            timestamp = instance.timestamp();
+            passed = timestamp > trigger_time;
+            if (! previous || previous < timestamp) {
+                sent = false;
+            }
+            previous = timestamp;
+            if (passed && ! sent) {
+                node.dispatchEvent(event);
+                sent = true;
             }
         });
     };
@@ -348,4 +349,4 @@ memento = function() {
     return instance;
 };
 
-export { memento, test_single_breakpoint, test_multiple_breakpoints };
+export { memento };
