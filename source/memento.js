@@ -5,19 +5,19 @@ memento = function() {
   // return value of the factory function
   var func,
       data,
+      input,
       node;
   func = function() {
-    if (typeof func.data === 'function') {
-      func.__update();
-    }
+    return;
   };
   // getter/setter for bound data
   func.all_data = function(obj) {
     if (obj) {
+      input = obj;
       data = func.__wrap(obj);
       return func;
     } else {
-      return data;
+      return input;
     }
   };
   // getter/setter for media node
@@ -47,11 +47,12 @@ memento = function() {
   };
   // extend all items in the data array with custom methods
   func.__wrap = function(data) {
-    data = data.map(function(item) {
+    var wrapped;
+    wrapped = data.map(function(item) {
       item = func.__add_extractor(item);
       return item;
     });
-    return data;
+    return wrapped;
   };
   func.__update = function() {
     // every time the node updates
@@ -112,6 +113,9 @@ memento = function() {
     });
     return timed_actions;
   };
+  func.watch = function() {
+    func.__update();
+  }
   // add a new item to the bound data
   func.add_item = function(new_data) {
     if (typeof data.map !== 'function') {
