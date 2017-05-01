@@ -66,12 +66,6 @@ describe('timestamp', function() {
     it('retrieves node timestamp', function() {
         assert.equal(instance.timestamp(), 1);
     });
-    it('rounds', function() {
-        assert.equal(instance.rounded_timestamp(1.1), 1);
-    });
-    it('always rounds with Math.floor', function() {
-        assert.equal(instance.rounded_timestamp(1.9), 1);
-    });
 });
 
 describe('breakpoints', function() {

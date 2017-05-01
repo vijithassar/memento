@@ -232,14 +232,6 @@ memento = function() {
       return current_data;
     }
   }
-  // round timestamp down for use in less precise lookups
-  instance.rounded_timestamp = function() {
-    var timestamp,
-        rounded_timestamp;
-    timestamp = instance.timestamp();
-    rounded_timestamp = Math.floor(timestamp);
-    return rounded_timestamp;
-  };
   // get all timestamps registered in the data
   // object with time_ prefixes
   instance.breakpoints = function() {
