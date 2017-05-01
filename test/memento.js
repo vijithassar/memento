@@ -50,14 +50,14 @@ describe('actions', function() {
 
 describe('mutation', function() {
     it('adds item', function() {
-        let instance = memento().all_data([{a: 1}]);
+        let instance = memento().payload([{a: 1}]);
         instance.add_item({b: 2});
-        assert.equal(instance.all_data().length, 2);
+        assert.equal(instance.payload().length, 2);
     });
     it('remove item', function() {
-        let instance = memento().all_data([{a: 1}]);
+        let instance = memento().payload([{a: 1}]);
         instance.remove_item(0);
-        assert.equal(instance.all_data().length, 0);
+        assert.equal(instance.payload().length, 0);
     });
 });
 
@@ -117,21 +117,21 @@ describe('breakpoints', function() {
 
 describe('data', function() {
     it('exists', function() {
-        assert.equal(typeof memento().all_data, 'function');
+        assert.equal(typeof memento().payload, 'function');
     });
     it('stores data', function() {
         let data = [{a: 1}];
         let instance = memento();
-        instance.all_data(data);
-        assert.equal(instance.all_data(), data);
+        instance.payload(data);
+        assert.equal(instance.payload(), data);
     });
     it('overwrites data', function() {
         let first = [{a: 1}];
         let second = [{a: 2}];
         let instance = memento();
-        instance.all_data(first);
-        instance.all_data(second);
-        assert.notEqual(instance.all_data().pop().a, first.pop().a);
+        instance.payload(first);
+        instance.payload(second);
+        assert.notEqual(instance.payload().pop().a, first.pop().a);
     });
 });
 
@@ -163,7 +163,7 @@ describe('integrations', function() {
     let datum = {start: 1, end: 3, value: 1};
     let instance = memento()
         .node(player)
-        .all_data([datum]);
+        .payload([datum]);
     instance.watch();
     describe('extend', function() {
         instance.extend('test', function(data, timestamp, node) {

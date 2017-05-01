@@ -9,7 +9,7 @@ memento = function() {
       node;
   instance = {};
   // getter/setter for bound data
-  instance.all_data = function(new_data) {
+  instance.payload = function(new_data) {
     if (new_data) {
       data = new_data;
       return instance;
