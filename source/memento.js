@@ -1,5 +1,25 @@
 // function factory
-var memento;
+var memento,
+    update;
+    
+update = function() {
+  // every time the node updates
+  this.node().ontimeupdate = function() {
+    var data,
+        timestamp,
+        actions,
+        action;
+    timestamp = this.timestamp();
+    data = this.data();
+    actions = this.timed_actions(timestamp);
+    for (var i = 0; i < actions.length; i++) {
+      action = actions[i];
+      if (typeof action === 'function') {
+        action(data, timestamp, node);
+      }
+    }
+  };
+};
 
 memento = function() {
   // return value of the factory function
@@ -25,24 +45,6 @@ memento = function() {
     } else {
       return node;
     }
-  };
-  instance.__update = function() {
-    // every time the node updates
-    node.ontimeupdate = function() {
-      var data,
-          timestamp,
-          actions,
-          action;
-      timestamp = instance.timestamp();
-      data = instance.data();
-      actions = instance.timed_actions(timestamp);
-      for (var i = 0; i < actions.length; i++) {
-        action = actions[i];
-        if (typeof action === 'function') {
-          action(data, timestamp, node);
-        }
-      }
-    };
   };
   instance.__actions = [];
   instance.__add_action = function(new_function, start, end) {
@@ -90,7 +92,7 @@ memento = function() {
     return timed_actions;
   };
   instance.watch = function() {
-    instance.__update();
+      update.call(instance);
   }
   // add a new item to the bound data
   instance.add_item = function(new_data) {
