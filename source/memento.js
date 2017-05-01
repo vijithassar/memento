@@ -2,27 +2,27 @@
 var memento,
     update,
     seconds,
-    test_breakpoints,
     test_single_breakpoint,
     test_multiple_breakpoints;
-    
+
 update = function(instance) {
-  // every time the node updates
-  instance.node().ontimeupdate = function() {
-    var data,
-        timestamp,
-        actions,
-        action;
-    timestamp = instance.timestamp();
-    data = instance.data();
-    actions = instance.timed_actions(timestamp);
-    for (var i = 0; i < actions.length; i++) {
-      action = actions[i];
-      if (typeof action === 'function') {
-        action(data, timestamp, node);
-      }
-    }
-  };
+    // every time the node updates
+    instance.node().ontimeupdate = function() {
+        var data,
+            timestamp,
+            actions,
+            action,
+            i;
+        timestamp = instance.timestamp();
+        data = instance.data();
+        actions = instance.timed_actions(timestamp);
+        for (i = 0; i < actions.length; i++) {
+            action = actions[i];
+            if (typeof action === 'function') {
+                action(data, timestamp, instance.node());
+            }
+        }
+    };
 };
 
 seconds = function(time) {
@@ -44,15 +44,15 @@ seconds = function(time) {
     return time;
   } else {
     time_elements = time.split(':').reverse();
-    seconds = time_elements[0] || "0";
+    seconds = time_elements[0] || '0';
     if (seconds.indexOf('.') !== -1) {
-      seconds = parseFloat(seconds);
+      seconds = parseFloat(seconds, 10);
     } else {
-      seconds = parseInt(seconds);
+      seconds = parseInt(seconds, 10);
     }
-    minutes = parseInt(time_elements[1]) || 0;
-    hours = parseInt(time_elements[2]) || 0;
-    days = parseInt(time_elements[3]) || 0;
+    minutes = parseInt(time_elements[1], 10) || 0;
+    hours = parseInt(time_elements[2], 10) || 0;
+    days = parseInt(time_elements[3], 10) || 0;
   }
   seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
   return seconds;
@@ -71,7 +71,7 @@ test_single_breakpoint = function(breakpoints, timestamp) {
     breakpoints.high = seconds(breakpoints.high);
   }
   // check timestamp position
-  between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) );
+  between = ((breakpoints.low <= timestamp) && (timestamp <= breakpoints.high));
   return between;
 };
 
@@ -87,7 +87,6 @@ memento = function() {
   // return value of the factory function
   var instance,
       data,
-      input,
       node;
   instance = {};
   // getter/setter for bound data
@@ -123,20 +122,17 @@ memento = function() {
     actions = instance.__actions;
     return actions;
   };
-  instance.timed_actions = function(timestamp) {
+  instance.timed_actions = function() {
     var all_actions,
         timed_actions,
         match;
-    timestamp = timestamp || instance.timestamp();
     all_actions = instance.all_actions();
     timed_actions = all_actions.filter(function(item) {
       var breakpoints,
           both_undefined,
-          either_undefined,
           one_undefined;
       both_undefined = !item.start && !item.end;
-      either_undefined = !item.start || !item.end;
-      one_undefined = ( (!item.start && item.end) || (item.start && !item.end) )
+      one_undefined = ((!item.start && item.end) || (item.start && !item.end))
       if (both_undefined) {
         return true;
       }
@@ -204,11 +200,13 @@ memento = function() {
   };
   // get data
   instance.data = function(timestamp) {
-    var timestamp = timestamp || instance.timestamp(),
-        nearest_breakpoints,
-        current_data;
+    var current_data;
+    timestamp = timestamp || instance.timestamp()
     current_data = data.filter(function(item) {
-      var between, breakpoints, start, end;
+      var between,
+          breakpoints,
+          start,
+          end;
       start = item.start;
       end = item.end;
       if (!start || !end) {
@@ -220,7 +218,8 @@ memento = function() {
     });
     if (current_data.length > 1) {
       current_data = current_data.sort(function(a, b) {
-        var a_start, b_start;
+        var a_start,
+            b_start;
         a_start = a.start;
         b_start = b.start;
         return a_start > b_start;
@@ -237,10 +236,11 @@ memento = function() {
   instance.breakpoints = function() {
     var breakpoints,
         start,
-        end;
+        end,
+        i;
     breakpoints = [];
     // for each item
-    for (var i = 0; i < data.length; i++) {
+    for (i = 0; i < data.length; i++) {
       // check start
       start = data[i].start;
       if (breakpoints.indexOf(start) === -1) {
@@ -265,10 +265,10 @@ memento = function() {
         current_breakpoint,
         between,
         next_breakpoint,
-        timestamp;
+        i;
     timestamp = timestamp || instance.timestamp();
     breakpoints = instance.breakpoints();
-    for (var i = 0; i < breakpoints.length; i++) {
+    for (i = 0; i < breakpoints.length; i++) {
       current_breakpoint = breakpoints[i];
       next_breakpoint = breakpoints[i + 1];
       // if the timestamp is between one breakpoint and the next
@@ -289,8 +289,7 @@ memento = function() {
     // if we're still running, bind the function with the current values
     instance[label] = function() {
       var timestamp,
-          current_data,
-          in_range;
+          current_data;
       timestamp = instance.timestamp();
       current_data = instance.data(timestamp);
       bound_function(current_data, timestamp, node);
@@ -312,18 +311,17 @@ memento = function() {
   // fire a function once when the trigger time is passed
   instance.trigger = function(trigger_time, trigger_function) {
     var sent,
-        counter,
         event,
         event_label,
-        event_handler,
-        trigger_start;
+        event_handler;
     sent = false;
     // resolve trigger time to seconds in case it's a string
     trigger_time = instance.seconds(trigger_time);
     event_label = 'trigger-' + trigger_time;
     event = new Event(event_label);
-    event_handler = function(event) {
-      var data, timestamp;
+    event_handler = function() {
+      var data,
+          timestamp;
       data = instance.data();
       timestamp = instance.timestamp();
       trigger_function(data, timestamp, node);
