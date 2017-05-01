@@ -164,13 +164,14 @@ memento = function() {
     };
     // remove a bound item by index
     instance.remove_item = function(int) {
-        if (typeof int !== 'number') {
-            return false;
+        if (typeof int !== 'number' && int > data.length) {
+            return;
         }
+        let result = data[int];
         data = data.filter(function(item, index) {
             return index !== int;
         });
-        return data;
+        return result;
     };
     // get exact timestamp from node
     instance.timestamp = function() {
