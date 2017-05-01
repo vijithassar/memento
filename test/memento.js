@@ -5,8 +5,8 @@ describe('factory', function() {
     it('exists', function() {
         assert.equal(typeof memento, 'function');
     });
-    it('returns a function', function() {
-        assert.equal(typeof memento(), 'function');
+    it('returns an object', function() {
+        assert.equal(typeof memento(), 'object');
     });
 });
 

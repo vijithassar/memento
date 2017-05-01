@@ -3,38 +3,36 @@ var memento;
 
 memento = function() {
   // return value of the factory function
-  var func,
+  var instance,
       data,
       input,
       node;
-  func = function() {
-    return;
-  };
+  instance = {};
   // getter/setter for bound data
-  func.all_data = function(obj) {
+  instance.all_data = function(obj) {
     if (obj) {
       input = obj;
-      data = func.__wrap(obj);
-      return func;
+      data = instance.__wrap(obj);
+      return instance;
     } else {
       return input;
     }
   };
   // getter/setter for media node
-  func.node = function(element) {
+  instance.node = function(element) {
     if (element) {
       node = element;
-      return func;
+      return instance;
     } else {
       return node;
     }
   };
   // add an abstract getter function
-  func.__add_extractor = function(obj) {
+  instance.__add_extractor = function(obj) {
     obj.__extract = function(key) {
       if ( (key === 'start') || (key === 'end') ) {
         if (obj[key]) {
-          return func.seconds(obj[key]);
+          return instance.seconds(obj[key]);
         }
       }
       if (obj[key]) {
@@ -46,24 +44,24 @@ memento = function() {
     return obj;
   };
   // extend all items in the data array with custom methods
-  func.__wrap = function(data) {
+  instance.__wrap = function(data) {
     var wrapped;
     wrapped = data.map(function(item) {
-      item = func.__add_extractor(item);
+      item = instance.__add_extractor(item);
       return item;
     });
     return wrapped;
   };
-  func.__update = function() {
+  instance.__update = function() {
     // every time the node updates
     node.ontimeupdate = function() {
       var data,
           timestamp,
           actions,
           action;
-      timestamp = func.timestamp();
-      data = func.data();
-      actions = func.timed_actions(timestamp);
+      timestamp = instance.timestamp();
+      data = instance.data();
+      actions = instance.timed_actions(timestamp);
       for (var i = 0; i < actions.length; i++) {
         action = actions[i];
         if (typeof action === 'function') {
@@ -72,18 +70,22 @@ memento = function() {
       }
     };
   };
-  func.__actions = [];
-  func.__add_action = function(new_function, start, end) {
-    if (start) {new_function.start = start;}
-    if (end) {new_function.end = end;}
-    func.__actions.push(new_function);
+  instance.__actions = [];
+  instance.__add_action = function(new_function, start, end) {
+    if (start) {
+        new_function.start = start;
+    }
+    if (end) {
+        new_function.end = end;
+    }
+    instance.__actions.push(new_function);
   };
-  func.all_actions = function() {
+  instance.all_actions = function() {
     var actions;
     actions = this.__actions;
     return actions;
   };
-  func.timed_actions = function(timestamp) {
+  instance.timed_actions = function(timestamp) {
     var all_actions,
         timed_actions,
         match;
@@ -107,17 +109,17 @@ memento = function() {
         return false;
       } else {
         breakpoints = {low: item.start, high: item.end};
-        match = func.test_breakpoints(breakpoints);
+        match = instance.test_breakpoints(breakpoints);
         return match;
       }
     });
     return timed_actions;
   };
-  func.watch = function() {
-    func.__update();
+  instance.watch = function() {
+    instance.__update();
   }
   // add a new item to the bound data
-  func.add_item = function(new_data) {
+  instance.add_item = function(new_data) {
     if (typeof data.map !== 'function') {
       data = [];
     }
@@ -127,7 +129,7 @@ memento = function() {
     }
   };
   // remove a bound item by index
-  func.remove_item = function(int) {
+  instance.remove_item = function(int) {
     if (typeof int !== 'number') {
       return false;
     }
@@ -137,13 +139,13 @@ memento = function() {
     return data;
   };
   // get exact timestamp from node
-  func.timestamp = function() {
+  instance.timestamp = function() {
     var timestamp = node.currentTime;
     return timestamp;
   };
   // resolve string times in format DD:HH:MM:SS to a number
   // of seconds
-  func.seconds = function(time) {
+  instance.seconds = function(time) {
     var has_colon,
         is_number,
         time_elements,
@@ -176,7 +178,7 @@ memento = function() {
     return seconds;
   };
   // test whether a timestamp is between a range
-  func.test_breakpoints = function(breakpoints, timestamp) {
+  instance.test_breakpoints = function(breakpoints, timestamp) {
     var mode;
     timestamp = timestamp || this.timestamp();
     if (breakpoints.low) {
@@ -195,17 +197,17 @@ memento = function() {
     }
   };
   // test a single range
-  func.test_single_breakpoint = function(breakpoints, timestamp) {
+  instance.test_single_breakpoint = function(breakpoints, timestamp) {
     var between;
     // resolve breakpoints to numbers if necessary
     if (typeof timestamp !== 'number') {
-      timestamp = func.seconds(timestamp);
+      timestamp = instance.seconds(timestamp);
     }
     if (typeof breakpoints.low !== 'number') {
-      breakpoints.low = func.seconds(breakpoints.low);
+      breakpoints.low = instance.seconds(breakpoints.low);
     }
     if (typeof breakpoints.high !== 'number') {
-      breakpoints.high = func.seconds(breakpoints.high);
+      breakpoints.high = instance.seconds(breakpoints.high);
     }
     // check timestamp position
     between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) );
@@ -213,7 +215,7 @@ memento = function() {
   };
   // test multiple ranges and return a map;
   // uses the single item test internally
-  func.test_multiple_breakpoints = function(breakpoints, timestamp) {
+  instance.test_multiple_breakpoints = function(breakpoints, timestamp) {
     var betweens;
     timestamp = timestamp || this.timestamp();
     betweens = breakpoints.map(function(item) {
@@ -224,7 +226,7 @@ memento = function() {
     return betweens;
   };
   // get data
-  func.data = function(timestamp) {
+  instance.data = function(timestamp) {
     var timestamp = timestamp || this.timestamp(),
         nearest_breakpoints,
         current_data;
@@ -236,7 +238,7 @@ memento = function() {
         return false;
       }
       breakpoints = {low: start, high: end};
-      between = func.test_breakpoints(breakpoints, timestamp);
+      between = instance.test_breakpoints(breakpoints, timestamp);
       return between;
     });
     if (current_data.length > 1) {
@@ -254,16 +256,18 @@ memento = function() {
     }
   }
   // round timestamp down for use in less precise lookups
-  func.rounded_timestamp = function() {
+  instance.rounded_timestamp = function() {
     var timestamp, rounded_timestamp;
-    timestamp = func.timestamp();
+    timestamp = instance.timestamp();
     rounded_timestamp = Math.floor(timestamp);
     return rounded_timestamp;
   };
   // get all timestamps registered in the data
   // object with time_ prefixes
-  func.breakpoints = function() {
-    var breakpoints, start, end;
+  instance.breakpoints = function() {
+    var breakpoints,
+        start,
+        end;
     breakpoints = [];
     // for each item
     for (var i = 0; i < data.length; i++) {
@@ -285,14 +289,14 @@ memento = function() {
     return breakpoints;
   };
   // get the breakpoints closest to a timestamp
-  func.nearest_breakpoints = function(timestamp) {
+  instance.nearest_breakpoints = function(timestamp) {
     var breakpoints,
         nearest_breakpoints,
         current_breakpoint,
         between,
         next_breakpoint,
         timestamp = timestamp || this.timestamp();
-    breakpoints = func.breakpoints();
+    breakpoints = instance.breakpoints();
     for (var i = 0; i < breakpoints.length; i++) {
       current_breakpoint = breakpoints[i];
       next_breakpoint = breakpoints[i + 1];
@@ -307,12 +311,12 @@ memento = function() {
   };
   // attach an arbitrary function under a key, and pass it
   // the scoped data via arguments
-  func.extend = function(label, bound_function) {
+  instance.extend = function(label, bound_function) {
     if (typeof label !== 'string' || typeof bound_function !== 'function') {
       return;
     }
     // if we're still running, bind the function with the current values
-    func[label] = function() {
+    instance[label] = function() {
       var timestamp,
           current_data,
           in_range;
@@ -320,10 +324,10 @@ memento = function() {
       current_data = this.data(timestamp);
       bound_function(current_data, timestamp, node);
     }
-    return func;
+    return instance;
   };
   // run a function every time the player updates
-  func.tick = function(breakpoints, iterator) {
+  instance.tick = function(breakpoints, iterator) {
     if (typeof iterator !== 'function') {
       return;
     }
@@ -335,7 +339,7 @@ memento = function() {
     }
   };
   // fire a function once when the trigger time is passed
-  func.trigger = function(trigger_time, trigger_function) {
+  instance.trigger = function(trigger_time, trigger_function) {
     var sent,
         counter,
         event,
@@ -349,19 +353,19 @@ memento = function() {
     event = new Event(event_label);
     event_handler = function(event) {
       var data, timestamp;
-      data = func.data();
-      timestamp = func.timestamp();
+      data = instance.data();
+      timestamp = instance.timestamp();
       trigger_function(data, timestamp, node);
     };
     this.__add_action(event_handler, trigger_time, null);
     node.addEventListener(event_label, event_handler)
-    func.tick(true, function() {
+    instance.tick(true, function() {
       var timestamp,
           passed;
       if (sent) {
         return;
       } else {
-        timestamp = func.timestamp();
+        timestamp = instance.timestamp();
         passed = timestamp > trigger_time;
         if (passed) {
           node.dispatchEvent(event);
@@ -371,7 +375,7 @@ memento = function() {
     });
   };
   // return results of the factory
-  return func;
+  return instance;
 };
 
 export { memento };
