@@ -1,3 +1,3 @@
-import { memento } from 'source/memento.js';
+import { memento } from './source/memento.js';
 
 export default memento;
