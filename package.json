@@ -2,7 +2,8 @@
   "name": "memento",
   "version": "0.1.1",
   "description": "data binding for HTML5 media nodes",
-  "main": "index.js",
+  "main": "build/memento.js",
+  "module": "index.js",
   "directories": {
     "test": "test"
   },
