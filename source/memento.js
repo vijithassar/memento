@@ -9,13 +9,12 @@ memento = function() {
       node;
   instance = {};
   // getter/setter for bound data
-  instance.all_data = function(obj) {
-    if (obj) {
-      input = obj;
-      data = instance.__wrap(obj);
+  instance.all_data = function(new_data) {
+    if (new_data) {
+      data = new_data;
       return instance;
     } else {
-      return input;
+      return data;
     }
   };
   // getter/setter for media node
@@ -26,31 +25,6 @@ memento = function() {
     } else {
       return node;
     }
-  };
-  // add an abstract getter function
-  instance.__add_extractor = function(obj) {
-    obj.__extract = function(key) {
-      if ( (key === 'start') || (key === 'end') ) {
-        if (obj[key]) {
-          return instance.seconds(obj[key]);
-        }
-      }
-      if (obj[key]) {
-        return obj[key];
-      } else {
-        return false;
-      }
-    }
-    return obj;
-  };
-  // extend all items in the data array with custom methods
-  instance.__wrap = function(data) {
-    var wrapped;
-    wrapped = data.map(function(item) {
-      item = instance.__add_extractor(item);
-      return item;
-    });
-    return wrapped;
   };
   instance.__update = function() {
     // every time the node updates
@@ -120,27 +94,23 @@ memento = function() {
   }
   // add a new item to the bound data
   instance.add_item = function(new_data) {
-    if (typeof input.map !== 'function') {
-      input = [];
+    if (typeof data.map !== 'function') {
+      data = [];
     }
     if (new_data) {
-      input = input.concat(new_data);
-      data = instance.__wrap(input);
-      return input;
+      data = data.concat(new_data);
+      return data;
     }
   };
   // remove a bound item by index
   instance.remove_item = function(int) {
-    var filtered;
     if (typeof int !== 'number') {
       return false;
     }
-    filtered = data.filter(function(item, index) {
+    data = data.filter(function(item, index) {
       return index !== int;
     });
-    input = filtered;
-    data = instance.__wrap(input);
-    return input;
+    return data;
   };
   // get exact timestamp from node
   instance.timestamp = function() {
@@ -237,8 +207,8 @@ memento = function() {
         current_data;
     current_data = data.filter(function(item) {
       var between, breakpoints, start, end;
-      start = item.__extract('start');
-      end = item.__extract('end');
+      start = item.start;
+      end = item.end;
       if (!start || !end) {
         return false;
       }
@@ -249,8 +219,8 @@ memento = function() {
     if (current_data.length > 1) {
       current_data = current_data.sort(function(a, b) {
         var a_start, b_start;
-        a_start = a.__extract('start');
-        b_start = b.__extract('start');
+        a_start = a.start;
+        b_start = b.start;
         return a_start > b_start;
       });
     }
@@ -278,12 +248,12 @@ memento = function() {
     // for each item
     for (var i = 0; i < data.length; i++) {
       // check start
-      start = data[i].__extract('start');
+      start = data[i].start;
       if (breakpoints.indexOf(start) === -1) {
         breakpoints.push(start);
       }
       // check end
-      end = data[i].__extract('end');
+      end = data[i].end;
       if (breakpoints.indexOf(end) === -1) {
         breakpoints.push(end);
       }
