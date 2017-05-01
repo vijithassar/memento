@@ -120,27 +120,32 @@ memento = function() {
   }
   // add a new item to the bound data
   instance.add_item = function(new_data) {
-    if (typeof data.map !== 'function') {
-      data = [];
+    if (typeof input.map !== 'function') {
+      input = [];
     }
     if (new_data) {
-      data = data.concat(new_data);
-      return data;
+      input = input.concat(new_data);
+      data = instance.__wrap(input);
+      return input;
     }
   };
   // remove a bound item by index
   instance.remove_item = function(int) {
+    var filtered;
     if (typeof int !== 'number') {
       return false;
     }
-    data = data.filter(function(item, index) {
+    filtered = data.filter(function(item, index) {
       return index !== int;
-    })
-    return data;
+    });
+    input = filtered;
+    data = instance.__wrap(input);
+    return input;
   };
   // get exact timestamp from node
   instance.timestamp = function() {
-    var timestamp = node.currentTime;
+    var timestamp;
+    timestamp = node.currentTime;
     return timestamp;
   };
   // resolve string times in format DD:HH:MM:SS to a number
@@ -220,7 +225,7 @@ memento = function() {
     timestamp = timestamp || this.timestamp();
     betweens = breakpoints.map(function(item) {
       var between;
-      between = test_single_breakpoint(item, timestamp);
+      between = instance.test_single_breakpoint(item, timestamp);
       return between;
     });
     return betweens;
@@ -257,7 +262,8 @@ memento = function() {
   }
   // round timestamp down for use in less precise lookups
   instance.rounded_timestamp = function() {
-    var timestamp, rounded_timestamp;
+    var timestamp,
+        rounded_timestamp;
     timestamp = instance.timestamp();
     rounded_timestamp = Math.floor(timestamp);
     return rounded_timestamp;
@@ -295,7 +301,8 @@ memento = function() {
         current_breakpoint,
         between,
         next_breakpoint,
-        timestamp = timestamp || this.timestamp();
+        timestamp;
+    timestamp = timestamp || this.timestamp();
     breakpoints = instance.breakpoints();
     for (var i = 0; i < breakpoints.length; i++) {
       current_breakpoint = breakpoints[i];
