@@ -1,6 +1,7 @@
 // function factory
 var memento,
-    update;
+    update,
+    seconds;
     
 update = function() {
   // every time the node updates
@@ -19,6 +20,39 @@ update = function() {
       }
     }
   };
+};
+
+seconds = function(time) {
+  var has_colon,
+      is_number,
+      time_elements,
+      days,
+      hours,
+      minutes,
+      seconds;
+  if (time.indexOf && time.indexOf(':') === -1) {
+    has_colon = true;
+  } else {
+    has_colon = false;
+  }
+  is_number = typeof time === 'number';
+  // if it's just a numerical value, return it
+  if (!has_colon && is_number) {
+    return time;
+  } else {
+    time_elements = time.split(':').reverse();
+    seconds = time_elements[0] || "0";
+    if (seconds.indexOf('.') !== -1) {
+      seconds = parseFloat(seconds);
+    } else {
+      seconds = parseInt(seconds);
+    }
+    minutes = parseInt(time_elements[1]) || 0;
+    hours = parseInt(time_elements[2]) || 0;
+    days = parseInt(time_elements[3]) || 0;
+  }
+  seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
+  return seconds;
 };
 
 memento = function() {
@@ -120,38 +154,7 @@ memento = function() {
   };
   // resolve string times in format DD:HH:MM:SS to a number
   // of seconds
-  instance.seconds = function(time) {
-    var has_colon,
-        is_number,
-        time_elements,
-        days,
-        hours,
-        minutes,
-        seconds;
-    if (time.indexOf && time.indexOf(':') === -1) {
-      has_colon = true;
-    } else {
-      has_colon = false;
-    }
-    is_number = typeof time === 'number';
-    // if it's just a numerical value, return it
-    if (!has_colon && is_number) {
-      return time;
-    } else {
-      time_elements = time.split(':').reverse();
-      seconds = time_elements[0] || "0";
-      if (seconds.indexOf('.') !== -1) {
-        seconds = parseFloat(seconds);
-      } else {
-        seconds = parseInt(seconds);
-      }
-      minutes = parseInt(time_elements[1]) || 0;
-      hours = parseInt(time_elements[2]) || 0;
-      days = parseInt(time_elements[3]) || 0;
-    }
-    seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
-    return seconds;
-  };
+  instance.seconds = seconds;
   // test whether a timestamp is between a range
   instance.test_breakpoints = function(breakpoints, timestamp) {
     var mode;
