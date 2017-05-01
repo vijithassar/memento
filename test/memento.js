@@ -75,30 +75,24 @@ describe('timestamp', function() {
 });
 
 describe('breakpoints', function() {
-    it('tests single', function() {
-        let instance = memento();
-        let breakpoint = {low: 1, high: 3};
-        let pass = instance.test_single_breakpoint(breakpoint, 2);
-        let fail = instance.test_single_breakpoint(breakpoint, 4);
-        assert.equal(pass, true);
-        assert.equal(fail, false);
-    });
-    it('tests multiple', function() {
-        let instance = memento();
-        let breakpoints = [{low: 1, high: 4}, {low: 2, high: 6}];
-        let first_result = instance.test_multiple_breakpoints(breakpoints, 3);
-        let second_result = instance.test_multiple_breakpoints(breakpoints, 5);
-        assert.equal(first_result[0], true);
-        assert.equal(first_result[1], true);
-        assert.equal(second_result[0], false);
-        assert.equal(second_result[1], true);
-    });
-    it('automatically switches breakpoint testing modes', function() {
+    describe('tests breakpoints', function() {
         let instance = memento();
         let single = {low: 1, high: 4};
         let multiple = [{low: 1, high: 4}, {low: 2, high: 6}];
-        assert.equal(typeof instance.test_breakpoints(single, 2), 'boolean');
-        assert.equal(typeof instance.test_breakpoints(multiple, 2).length, 'number');
+        it('single', function() {
+            assert.equal(instance.test_breakpoints(single, 2), true);
+            assert.equal(instance.test_breakpoints(single, 5), false);
+        });
+        it('multiple', function() {
+            assert.equal(instance.test_breakpoints(multiple, 3)[0], true);
+            assert.equal(instance.test_breakpoints(multiple, 3)[1], true);
+            assert.equal(instance.test_breakpoints(multiple, 5)[0], false);
+            assert.equal(instance.test_breakpoints(multiple, 5)[1], true);
+        });
+        it('switches', function() {
+            assert.equal(typeof instance.test_breakpoints(single, 2), 'boolean');
+            assert.equal(typeof instance.test_breakpoints(multiple, 2).length, 'number');
+        });
     });
     it('has a breakpoints compilation method', function() {
         assert.equal(typeof memento().breakpoints, 'function');

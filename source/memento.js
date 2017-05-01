@@ -1,18 +1,21 @@
 // function factory
 var memento,
     update,
-    seconds;
+    seconds,
+    test_breakpoints,
+    test_single_breakpoint,
+    test_multiple_breakpoints;
     
-update = function() {
+update = function(instance) {
   // every time the node updates
-  this.node().ontimeupdate = function() {
+  instance.node().ontimeupdate = function() {
     var data,
         timestamp,
         actions,
         action;
-    timestamp = this.timestamp();
-    data = this.data();
-    actions = this.timed_actions(timestamp);
+    timestamp = instance.timestamp();
+    data = instance.data();
+    actions = instance.timed_actions(timestamp);
     for (var i = 0; i < actions.length; i++) {
       action = actions[i];
       if (typeof action === 'function') {
@@ -53,6 +56,31 @@ seconds = function(time) {
   }
   seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
   return seconds;
+};
+
+test_single_breakpoint = function(breakpoints, timestamp) {
+  var between;
+  // resolve breakpoints to numbers if necessary
+  if (typeof timestamp !== 'number') {
+    timestamp = seconds(timestamp);
+  }
+  if (typeof breakpoints.low !== 'number') {
+    breakpoints.low = seconds(breakpoints.low);
+  }
+  if (typeof breakpoints.high !== 'number') {
+    breakpoints.high = seconds(breakpoints.high);
+  }
+  // check timestamp position
+  between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) );
+  return between;
+};
+
+test_multiple_breakpoints = function(breakpoints, timestamp) {
+  var betweens;
+  betweens = breakpoints.map(function(item) {
+    return test_single_breakpoint(item, timestamp);
+  });
+  return betweens;
 };
 
 memento = function() {
@@ -126,7 +154,7 @@ memento = function() {
     return timed_actions;
   };
   instance.watch = function() {
-      update.call(instance);
+      update(instance);
   }
   // add a new item to the bound data
   instance.add_item = function(new_data) {
@@ -167,41 +195,12 @@ memento = function() {
     // if you only pass in one breakpoints object
     // test it and return a boolean
     if (mode === 'single') {
-      return instance.test_single_breakpoint(breakpoints, timestamp);
+      return test_single_breakpoint(breakpoints, timestamp);
     // if you pass in an array of breakpoints objects,
     // test all and return a mapped array of booleans
     } else if (mode === 'multiple') {
-      return instance.test_multiple_breakpoints(breakpoints, timestamp);
+      return test_multiple_breakpoints(breakpoints, timestamp);
     }
-  };
-  // test a single range
-  instance.test_single_breakpoint = function(breakpoints, timestamp) {
-    var between;
-    // resolve breakpoints to numbers if necessary
-    if (typeof timestamp !== 'number') {
-      timestamp = instance.seconds(timestamp);
-    }
-    if (typeof breakpoints.low !== 'number') {
-      breakpoints.low = instance.seconds(breakpoints.low);
-    }
-    if (typeof breakpoints.high !== 'number') {
-      breakpoints.high = instance.seconds(breakpoints.high);
-    }
-    // check timestamp position
-    between = ( (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high) );
-    return between;
-  };
-  // test multiple ranges and return a map;
-  // uses the single item test internally
-  instance.test_multiple_breakpoints = function(breakpoints, timestamp) {
-    var betweens;
-    timestamp = timestamp || instance.timestamp();
-    betweens = breakpoints.map(function(item) {
-      var between;
-      between = instance.test_single_breakpoint(item, timestamp);
-      return between;
-    });
-    return betweens;
   };
   // get data
   instance.data = function(timestamp) {
@@ -358,4 +357,4 @@ memento = function() {
   return instance;
 };
 
-export { memento };
+export { memento, test_single_breakpoint, test_multiple_breakpoints };
