@@ -110,6 +110,10 @@ memento = function() {
     };
     actions = [];
     instance.add_action = function(new_function, start, end) {
+        if (typeof new_function !== 'function') {
+            console.error('action is not a function');
+            return;
+        }
         let action = {
             function: new_function
         };
@@ -287,7 +291,12 @@ memento = function() {
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
     instance.extend = function(label, bound_function) {
-        if (typeof label !== 'string' || typeof bound_function !== 'function') {
+        if (typeof label !== 'string') {
+            console.error('label must be a string');
+            return;
+        }
+        if (typeof bound_function !== 'function') {
+            console.error('extend integration requires a function');
             return;
         }
         // if we're still running, bind the function with the current values
@@ -303,6 +312,7 @@ memento = function() {
     // run a function every time the player updates
     instance.tick = function(breakpoints, iterator) {
         if (typeof iterator !== 'function') {
+            console.error('tick integration requires a function')
             return;
         }
         if (breakpoints === true) {
@@ -319,9 +329,13 @@ memento = function() {
             event,
             event_label,
             event_handler;
+        if (typeof trigger_function !== 'function') {
+            console.error('trigger integration requires a function');
+            return;
+        }
         sent = false;
         // resolve trigger time to seconds in case it's a string
-        trigger_time = instance.seconds(trigger_time);
+        trigger_time = seconds(trigger_time);
         event_label = 'trigger-' + trigger_time;
         event = new Event(event_label);
         event_handler = function() {
