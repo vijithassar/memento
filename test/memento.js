@@ -53,14 +53,14 @@ describe('actions', function() {
     describe('mutation', function() {
         it('adds', function() {
             let instance = memento();
-            instance.add_action(noop, 3, 5);
+            instance.tick({low: 3, high: 5}, noop);
             assert.equal(instance.all_actions().length, 1);
         });
     });
     describe('storage', function() {
         it('uses the expected storage format', function() {
             let instance = memento();
-            instance.add_action(noop, 1, '1:30');
+            instance.tick({low: 1, high: '1:30'}, noop);
             let action = instance.all_actions().pop();
             assert.equal(typeof action, 'object');
             assert.equal(Object.keys(action).length, 3);

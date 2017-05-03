@@ -88,7 +88,8 @@ memento = function() {
     var instance,
         data,
         node,
-        actions;
+        actions,
+        add_action;
     instance = {};
     // getter/setter for bound data
     instance.payload = function(new_data) {
@@ -109,7 +110,7 @@ memento = function() {
         }
     };
     actions = [];
-    instance.add_action = function(new_function, start, end) {
+    add_action = function(new_function, start, end) {
         if (typeof new_function !== 'function') {
             console.error('action is not a function');
             return;
@@ -316,10 +317,10 @@ memento = function() {
             return;
         }
         if (breakpoints === true) {
-            instance.add_action(iterator);
+            add_action(iterator);
         }
         if (breakpoints.low && breakpoints.high) {
-            instance.add_action(iterator, breakpoints.low, breakpoints.high);
+            add_action(iterator, breakpoints.low, breakpoints.high);
         }
     };
     // fire a function once when the trigger time is passed
@@ -345,7 +346,7 @@ memento = function() {
             timestamp = instance.timestamp();
             trigger_function(data, timestamp, node);
         };
-        instance.add_action(event_handler, trigger_time, null);
+        add_action(event_handler, trigger_time, null);
         node.addEventListener(event_label, event_handler)
         instance.tick(true, function() {
             var timestamp,
