@@ -46,6 +46,16 @@ describe('actions', function() {
             assert.equal(typeof instance.timed_actions().length, 'number');
         });
     });
+    describe('mutation', function() {
+        it('adds', function() {
+            let instance = memento();
+            let noop = function() {
+                return;
+            };
+            instance.add_action(noop, 3, 5);
+            assert.equal(instance.all_actions().length, 1);
+        });
+    });
 });
 
 describe('mutation', function() {
