@@ -98,12 +98,12 @@ Most basic functionality in memento deals with setting up the data binds or retr
 
 memento provides a number of ways with which to expose its internal information to your custom functions. You should of course feel free to augment any memento instance through the use of timeouts, intervals, events, or direct addition of new methods. The primary benefit of using the integrations is that they pass the data, timestamp, and media node from memento's internal scope into the new function via arguments.
 
-Functions that use time-sensitive integrations are stored as an array of registered functions which is itself saved on the memento instance object. In order to fire integrated functions at the correct time, you'll need to call the memento instance function in order to get it to start watching the media node timestamp updates.
+Functions that use time-sensitive integrations are stored as an array of registered functions which is itself saved on the memento instance object. In order to fire integrated functions at the correct time, you'll need to call the memento instance's watch method.
 
 ```javascript
 // fire the instance function, allowing
 // integrated functions to execute
-project();
+project.watch();
 ```
 
 Basic functionality and user-defined methods and integrations which don't depend on timing information can be used without first calling the instance.
