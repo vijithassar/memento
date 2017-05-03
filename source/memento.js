@@ -1,5 +1,4 @@
-// function factory
-var memento,
+var factory,
     update,
     seconds,
     test_single_breakpoint,
@@ -85,7 +84,7 @@ test_multiple_breakpoints = function(breakpoints, timestamp) {
     return betweens;
 };
 
-memento = function() {
+factory = function() {
     // return value of the factory function
     var instance,
         data,
@@ -387,4 +386,4 @@ memento = function() {
     return api;
 };
 
-export { memento };
+export { factory as memento };
