@@ -26,42 +26,42 @@ describe('node', function() {
     });
     it('stores the node', function() {
         let node = [];
-        let instance = memento();
-        instance.node(node)
-        assert.equal(instance.node(), node);
+        let m = memento();
+        m.node(node)
+        assert.equal(m.node(), node);
     });
 });
 
 describe('actions', function() {
     describe('all', function() {
         it('returns an array', function() {
-            let instance = memento();
-            assert(typeof instance.all_actions, 'function');
-            assert(instance.all_actions() instanceof Array);
-            assert.equal(typeof instance.all_actions().length, 'number');
+            let m = memento();
+            assert(typeof m.allActions, 'function');
+            assert(m.allActions() instanceof Array);
+            assert.equal(typeof m.allActions().length, 'number');
         });
     });
     describe('timed', function() {
         it('returns an array', function() {
             let node = {currentTime: 1};
-            let instance = memento().node(node);
-            assert(typeof instance.timed_actions, 'function');
-            assert(instance.timed_actions() instanceof Array);
-            assert.equal(typeof instance.timed_actions().length, 'number');
+            let m = memento().node(node);
+            assert(typeof m.timedActions, 'function');
+            assert(m.timedActions() instanceof Array);
+            assert.equal(typeof m.timedActions().length, 'number');
         });
     });
     describe('mutation', function() {
         it('adds', function() {
-            let instance = memento();
-            instance.tick({low: 3, high: 5}, noop);
-            assert.equal(instance.all_actions().length, 1);
+            let m = memento();
+            m.tick({low: 3, high: 5}, noop);
+            assert.equal(m.allActions().length, 1);
         });
     });
     describe('storage', function() {
         it('uses the expected storage format', function() {
-            let instance = memento();
-            instance.tick({low: 1, high: '1:30'}, noop);
-            let action = instance.all_actions().pop();
+            let m = memento();
+            m.tick({low: 1, high: '1:30'}, noop);
+            let action = m.allActions().pop();
             assert.equal(typeof action, 'object');
             assert.equal(Object.keys(action).length, 3);
             assert.equal(typeof action.start, 'number');
@@ -69,9 +69,9 @@ describe('actions', function() {
             assert.equal(typeof action.function, 'function')
         });
         it('returns the original functions', function() {
-            let instance = memento();
-            instance.tick({low: 1, high: '1:30'}, noop);
-            let action = instance.all_actions().pop();
+            let m = memento();
+            m.tick({low: 1, high: '1:30'}, noop);
+            let action = m.allActions().pop();
             assert.equal(action.function, noop);
         });
     });
@@ -79,54 +79,58 @@ describe('actions', function() {
 
 describe('mutation', function() {
     it('adds item', function() {
-        let instance = memento().payload([{a: 1}]);
-        instance.add_item({b: 2});
-        assert.equal(instance.payload().length, 2);
+        let m = memento().payload([{a: 1}]);
+        m.addItem({b: 2});
+        assert.equal(m.payload().length, 2);
     });
     it('remove item', function() {
-        let instance = memento().payload([{a: 1}]);
-        instance.remove_item(0);
-        assert.equal(instance.payload().length, 0);
+        let m = memento().payload([{a: 1}]);
+        m.removeItem(0);
+        assert.equal(m.payload().length, 0);
     });
 });
 
 describe('timestamp', function() {
-    let instance = memento().node({currentTime: 1});
+    let m = memento().node({currentTime: 1});
     it('retrieves node timestamp', function() {
-        assert.equal(instance.timestamp(), 1);
+        assert.equal(m.timestamp(), 1);
     });
 });
 
 describe('breakpoints', function() {
     describe('tests breakpoints', function() {
-        let instance = memento();
+        let m = memento();
         let single = {low: 1, high: 4};
         let multiple = [{low: 1, high: 4}, {low: 2, high: 6}];
         it('single', function() {
-            assert.equal(instance.test_breakpoints(single, 2), true);
-            assert.equal(instance.test_breakpoints(single, 5), false);
+            assert.equal(m.testBreakpoints(single, 2), true);
+            assert.equal(m.testBreakpoints(single, 5), false);
         });
         it('multiple', function() {
-            assert.equal(instance.test_breakpoints(multiple, 3)[0], true);
-            assert.equal(instance.test_breakpoints(multiple, 3)[1], true);
-            assert.equal(instance.test_breakpoints(multiple, 5)[0], false);
-            assert.equal(instance.test_breakpoints(multiple, 5)[1], true);
+            assert.equal(m.testBreakpoints(multiple, 3)[0], true);
+            assert.equal(m.testBreakpoints(multiple, 3)[1], true);
+            assert.equal(m.testBreakpoints(multiple, 5)[0], false);
+            assert.equal(m.testBreakpoints(multiple, 5)[1], true);
         });
         it('switches', function() {
-            assert.equal(typeof instance.test_breakpoints(single, 2), 'boolean');
-            assert.equal(typeof instance.test_breakpoints(multiple, 2).length, 'number');
+            assert.equal(typeof m.testBreakpoints(single, 2), 'boolean');
+            assert.equal(typeof m.testBreakpoints(multiple, 2).length, 'number');
         });
     });
     it('has a breakpoints compilation method', function() {
         assert.equal(typeof memento().breakpoints, 'function');
     });
     it('finds nearest breakpoints', function() {
-        let instance = memento();
-        instance.breakpoints = function() {
-            let breakpoints = [1, 2, 3, 4, 5];
-            return breakpoints;
-        }
-        let result = instance.nearest_breakpoints(3.5);
+        let m = memento();
+        let data = [
+            {function: noop, start: 1, end: 2},
+            {function: noop, start: 3, end: 4},
+            {function: noop, start: 3, end: 5},
+            {function: noop, start: 2, end: 5},
+            {function: noop, start: 2, end: 6},
+        ];
+        m.payload(data);
+        let result = m.nearestBreakpoints(3.5);
         assert.equal(result.low, 3);
         assert.equal(result.high, 4);
     });
@@ -138,74 +142,74 @@ describe('data', function() {
     });
     it('stores data', function() {
         let data = [{a: 1}];
-        let instance = memento();
-        instance.payload(data);
-        assert.equal(instance.payload(), data);
+        let m = memento();
+        m.payload(data);
+        assert.equal(m.payload(), data);
     });
     it('overwrites data', function() {
         let first = [{a: 1}];
         let second = [{a: 2}];
-        let instance = memento();
-        instance.payload(first);
-        instance.payload(second);
-        assert.notEqual(instance.payload().pop().a, first.pop().a);
+        let m = memento();
+        m.payload(first);
+        m.payload(second);
+        assert.notEqual(m.payload().pop().a, first.pop().a);
     });
 });
 
 describe('seconds helper', function() {
-    let instance = memento();
+    let m = memento();
     it('resolves strings', function() {
-        assert.equal(instance.seconds('1:30'), 90);
-        assert.equal(instance.seconds('2:35'), 155);
-        assert.equal(instance.seconds('1:01:30'), 3690);
+        assert.equal(m.seconds('1:30'), 90);
+        assert.equal(m.seconds('2:35'), 155);
+        assert.equal(m.seconds('1:01:30'), 3690);
     });
     it('returns numbers transparently', function() {
-        let test = 5;
-        assert.equal(instance.seconds(test), test);
-        assert.equal(typeof instance.seconds(test), 'number');
+        let int = 5;
+        assert.equal(m.seconds(int), int);
+        assert.equal(typeof m.seconds(int), 'number');
     });
 });
 
 describe('watching', function() {
     it('updates node', function() {
         let player = {currentTime: 2};
-        let instance = memento().node(player);
-        instance.watch();
-        assert.equal(typeof instance.node().ontimeupdate, 'function');
+        let m = memento().node(player);
+        m.watch();
+        assert.equal(typeof m.node().ontimeupdate, 'function');
     });
 });
 
 describe('integrations', function() {
     let player = {currentTime: 2};
     let datum = {start: 1, end: 3, value: 1};
-    let instance = memento()
+    let m = memento()
         .node(player)
         .payload([datum]);
-    instance.watch();
+    m.watch();
     describe('extend', function() {
-        instance.extend('test', function(data, timestamp, node) {
+        m.extend('m', function(data, timestamp, node) {
             assert.equal(data.pop().value, datum.value);
             assert.equal(timestamp, player.currentTime);
             assert.equal(node, player);
         });
         it('exists', function() {
-            assert.equal(typeof instance.extend, 'function');
+            assert.equal(typeof m.extend, 'function');
         });
         it('extends', function() {
-            assert.equal(typeof instance.test, 'function');
+            assert.equal(typeof m.m, 'function');
         });
         it('passes arguments', function() {
-            instance.test();
+            m.m();
         });
     });
     describe('tick', function() {
         it('exists', function() {
-            assert.equal(typeof instance.tick, 'function');
+            assert.equal(typeof m.tick, 'function');
         });
     });
     describe('trigger', function() {
         it('exists', function() {
-            assert.equal(typeof instance.trigger, 'function');
+            assert.equal(typeof m.trigger, 'function');
         });
     });
 });

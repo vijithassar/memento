@@ -25,6 +25,8 @@ update = function(instance) {
     };
 };
 
+// resolve string times in format DD:HH:MM:SS to a number
+// of seconds
 seconds = function(time) {
     var has_colon,
         is_number,
@@ -89,13 +91,15 @@ memento = function() {
         data,
         node,
         actions,
-        add_action;
+        add_action,
+        test_breakpoints,
+        api;
     instance = {};
     // getter/setter for bound data
     instance.payload = function(new_data) {
         if (new_data) {
             data = new_data;
-            return instance;
+            return api;
         } else {
             return data;
         }
@@ -104,7 +108,7 @@ memento = function() {
     instance.node = function(element) {
         if (element) {
             node = element;
-            return instance;
+            return api;
         } else {
             return node;
         }
@@ -150,15 +154,12 @@ memento = function() {
                 return false;
             } else {
                 breakpoints = {low: item.start, high: item.end};
-                match = instance.test_breakpoints(breakpoints);
+                match = test_breakpoints(breakpoints);
                 return match;
             }
         });
         return timed_actions;
     };
-    instance.watch = function() {
-        update(instance);
-    }
     // add a new item to the bound data
     instance.add_item = function(new_data) {
         if (! data || typeof data.map !== 'function') {
@@ -185,11 +186,8 @@ memento = function() {
     instance.timestamp = function() {
         return node.currentTime;
     };
-    // resolve string times in format DD:HH:MM:SS to a number
-    // of seconds
-    instance.seconds = seconds;
     // test whether a timestamp is between a range
-    instance.test_breakpoints = function(breakpoints, timestamp) {
+    test_breakpoints = function(breakpoints, timestamp) {
         var mode;
         timestamp = timestamp || instance.timestamp();
         if (breakpoints.low) {
@@ -222,7 +220,7 @@ memento = function() {
                 return false;
             }
             breakpoints = {low: start, high: end};
-            between = instance.test_breakpoints(breakpoints, timestamp);
+            between = test_breakpoints(breakpoints, timestamp);
             return between;
         });
         if (current_data.length > 1) {
@@ -301,14 +299,14 @@ memento = function() {
             return;
         }
         // if we're still running, bind the function with the current values
-        instance[label] = function() {
+        api[label] = function() {
             var timestamp,
                 current_data;
             timestamp = instance.timestamp();
             current_data = instance.data(timestamp);
             bound_function(current_data, timestamp, node);
         }
-        return instance;
+        return api;
     };
     // run a function every time the player updates
     instance.tick = function(breakpoints, iterator) {
@@ -322,6 +320,7 @@ memento = function() {
         if (breakpoints.low && breakpoints.high) {
             add_action(iterator, breakpoints.low, breakpoints.high);
         }
+        return api;
     };
     // fire a function once when the trigger time is passed
     instance.trigger = function(trigger_time, trigger_function) {
@@ -362,9 +361,29 @@ memento = function() {
                 sent = true;
             }
         });
+        return api;
     };
-    // return results of the factory
-    return instance;
+    api = {
+        data: instance.data,
+        payload: instance.payload,
+        node: instance.node,
+        timestamp: instance.timestamp,
+        seconds: seconds,
+        addItem: instance.add_item,
+        removeItem: instance.remove_item,
+        allActions: instance.all_actions,
+        timedActions: instance.timed_actions,
+        breakpoints: instance.breakpoints,
+        testBreakpoints: test_breakpoints,
+        nearestBreakpoints: instance.nearest_breakpoints,
+        extend: instance.extend,
+        tick: instance.tick,
+        trigger: instance.trigger,
+        watch: function() {
+            update(api);
+        }
+    };
+    return api;
 };
 
 export { memento };
