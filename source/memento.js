@@ -96,9 +96,13 @@ factory = function() {
         api;
     instance = {};
     // getter/setter for bound data
-    instance.payload = function(new_data) {
-        if (new_data) {
-            data = new_data;
+    instance.payload = function(array) {
+        if (array && ! array instanceof Array) {
+            console.error('bound data must be an array');
+            return;
+        }
+        if (array) {
+            data = array;
             return api;
         } else {
             return data;
@@ -106,6 +110,10 @@ factory = function() {
     };
     // getter/setter for media node
     instance.node = function(element) {
+        if (element && typeof element.nodeName !== 'string') {
+            console.error('bound node must be a valid DOM element');
+            return;
+        }
         if (element) {
             node = element;
             return api;

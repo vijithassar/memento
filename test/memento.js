@@ -25,7 +25,7 @@ describe('node', function() {
         assert.equal(typeof memento().node, 'function');
     });
     it('stores the node', function() {
-        let node = [];
+        let node = {nodeName: 'dummy'};
         let m = memento();
         m.node(node)
         assert.equal(m.node(), node);
@@ -43,7 +43,7 @@ describe('actions', function() {
     });
     describe('timed', function() {
         it('returns an array', function() {
-            let node = {currentTime: 1};
+            let node = {currentTime: 1, nodeName: 'dummy'};
             let m = memento().node(node);
             assert(typeof m.timedActions, 'function');
             assert(m.timedActions() instanceof Array);
@@ -91,7 +91,7 @@ describe('mutation', function() {
 });
 
 describe('timestamp', function() {
-    let m = memento().node({currentTime: 1});
+    let m = memento().node({currentTime: 1, nodeName: 'dummy'});
     it('retrieves node timestamp', function() {
         assert.equal(m.timestamp(), 1);
     });
@@ -172,7 +172,7 @@ describe('seconds helper', function() {
 
 describe('watching', function() {
     it('updates node', function() {
-        let player = {currentTime: 2};
+        let player = {currentTime: 2, nodeName: 'dummy'};
         let m = memento().node(player);
         m.watch();
         assert.equal(typeof m.node().ontimeupdate, 'function');
@@ -180,7 +180,7 @@ describe('watching', function() {
 });
 
 describe('integrations', function() {
-    let player = {currentTime: 2};
+    let player = {currentTime: 2, nodeName: 'dummy'};
     let datum = {start: 1, end: 3, value: 1};
     let m = memento()
         .node(player)
