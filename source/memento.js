@@ -2,7 +2,7 @@ var factory,
     update,
     seconds,
     between,
-    bang,
+    matching_data,
     breakpoints,
     nearest_breakpoints,
     validate_actions;
@@ -86,23 +86,23 @@ between = function(breakpoints, timestamp) {
 };
 
 // get data for a timestamp
-bang = function(timestamp, data) {
-    var current_data;
-    current_data = data.filter(function(item) {
+matching_data = function(timestamp, all_data) {
+    var matches;
+    matches = all_data.filter(function(item) {
         if (! item.start || ! item.end) {
             return false;
         }
         return between({low: item.start, high: item.end}, timestamp);
     });
-    if (current_data.length > 1) {
-        current_data = current_data.sort(function(a, b) {
+    if (matches.length > 1) {
+        matches.sort(function(a, b) {
             return a.start > b.start;
         });
     }
-    if (current_data.length === 0) {
+    if (matches.length === 0) {
         return false;
     } else {
-        return current_data;
+        return matches;
     }
 }
 
@@ -294,7 +294,7 @@ factory = function() {
             var timestamp,
                 current_data;
             timestamp = now();
-            current_data = bang(timestamp, data);
+            current_data = api.bang(timestamp, data);
             bound_function(current_data, timestamp, node);
         }
         return api;
@@ -333,7 +333,7 @@ factory = function() {
             var matching,
                 timestamp;
             timestamp = now();
-            matching = bang(timestamp, data);
+            matching = api.bang(timestamp);
             trigger_function(matching, timestamp, node);
         };
         add_action(event_handler, trigger_time, null);
@@ -358,7 +358,7 @@ factory = function() {
         data: _data,
         bang: function(timestamp) {
             timestamp = timestamp || now();
-            return bang(timestamp, data);
+            return matching_data(timestamp, data);
         },
         node: _node,
         now: now,
