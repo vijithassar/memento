@@ -108,7 +108,6 @@ bang = function(timestamp, data) {
 }
 
 memento = function() {
-    // return value of the factory function
     var instance,
         data,
         node,
@@ -122,6 +121,11 @@ memento = function() {
         trigger,
         api;
     instance = {};
+    actions = [];
+    // get timestamp from node
+    now = function() {
+        return node.currentTime;
+    };
     // getter/setter for bound data
     instance.data = function(array) {
         if (array && ! array instanceof Array) {
@@ -148,7 +152,6 @@ memento = function() {
             return node;
         }
     };
-    actions = [];
     add_action = function(new_function, start, end) {
         if (typeof new_function !== 'function') {
             console.error('action is not a function');
@@ -212,10 +215,6 @@ memento = function() {
             return index !== int;
         });
         return result;
-    };
-    // get timestamp from node
-    now = function() {
-        return node.currentTime;
     };
     // get all timestamps registered in the data
     // object
