@@ -95,6 +95,9 @@ factory = function() {
         add_datum,
         remove_datum,
         test_breakpoints,
+        extend,
+        tick,
+        trigger,
         api;
     instance = {};
     // getter/setter for bound data
@@ -299,7 +302,7 @@ factory = function() {
     };
     // attach an arbitrary function under a key, and pass it
     // the scoped data via arguments
-    instance.extend = function(label, bound_function) {
+    extend = function(label, bound_function) {
         if (typeof label !== 'string') {
             console.error('label must be a string');
             return;
@@ -319,7 +322,7 @@ factory = function() {
         return api;
     };
     // run a function every time the player updates
-    instance.tick = function(breakpoints, iterator) {
+    tick = function(breakpoints, iterator) {
         if (typeof iterator !== 'function') {
             console.error('tick integration requires a function')
             return;
@@ -333,7 +336,7 @@ factory = function() {
         return api;
     };
     // fire a function once when the trigger time is passed
-    instance.trigger = function(trigger_time, trigger_function) {
+    trigger = function(trigger_time, trigger_function) {
         var sent,
             previous,
             event,
@@ -386,9 +389,9 @@ factory = function() {
         breakpoints: instance.breakpoints,
         testBreakpoints: test_breakpoints,
         nearestBreakpoints: instance.nearest_breakpoints,
-        extend: instance.extend,
-        tick: instance.tick,
-        trigger: instance.trigger,
+        extend: extend,
+        tick: tick,
+        trigger: trigger,
         watch: function() {
             update(api);
             return api;
