@@ -174,6 +174,7 @@ describe('watching', function() {
     it('updates node', function() {
         let player = {currentTime: 2, nodeName: 'dummy'};
         let m = memento().node(player);
+        assert.notEqual(typeof m.node().ontimeupdate, 'function');
         m.watch();
         assert.equal(typeof m.node().ontimeupdate, 'function');
     });
