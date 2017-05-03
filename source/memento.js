@@ -112,6 +112,8 @@ factory = function() {
         add_action,
         add_datum,
         remove_datum,
+        breakpoints,
+        nearest_breakpoints,
         extend,
         tick,
         trigger,
@@ -214,50 +216,51 @@ factory = function() {
     };
     // get all timestamps registered in the data
     // object
-    instance.breakpoints = function() {
-        var breakpoints,
+    breakpoints = function() {
+        var points,
             start,
             end,
             i;
-        breakpoints = [];
+        points = [];
         // for each item
         for (i = 0; i < data.length; i++) {
             // check start
             start = data[i].start;
-            if (breakpoints.indexOf(start) === -1) {
-                breakpoints.push(start);
+            if (points.indexOf(start) === -1) {
+                points.push(start);
             }
             // check end
             end = data[i].end;
-            if (breakpoints.indexOf(end) === -1) {
-                breakpoints.push(end);
+            if (points.indexOf(end) === -1) {
+                points.push(end);
             }
         }
         // sort chronologically
-        breakpoints = breakpoints.sort(function(a, b) {
+        points.sort(function(a, b) {
             return a > b;
         });
-        return breakpoints;
+        return points;
     };
     // get the breakpoints closest to a timestamp
-    instance.nearest_breakpoints = function(timestamp) {
-        var breakpoints,
-            nearest_breakpoints,
-            current_breakpoint,
+    nearest_breakpoints = function(timestamp) {
+        var points,
+            current,
+            next,
             is_between,
-            next_breakpoint,
             i;
         timestamp = timestamp || now();
-        breakpoints = instance.breakpoints();
-        for (i = 0; i < breakpoints.length; i++) {
-            current_breakpoint = breakpoints[i];
-            next_breakpoint = breakpoints[i + 1];
+        points = breakpoints();
+        for (i = 0; i < points.length; i++) {
+            current = points[i];
+            next = points[i + 1];
             // if the timestamp is between one breakpoint and the next
-            is_between = current_breakpoint < timestamp && timestamp < next_breakpoint;
+            is_between = current < timestamp && timestamp < next;
             if (is_between) {
               // return both values as an object
-                nearest_breakpoints = {low: current_breakpoint, high: next_breakpoint};
-                return nearest_breakpoints;
+                return {
+                    low: current,
+                    high: next
+                };
             }
         }
     };
@@ -350,8 +353,8 @@ factory = function() {
         removeDatum: remove_datum,
         allActions: instance.all_actions,
         timedActions: instance.timed_actions,
-        breakpoints: instance.breakpoints,
-        nearestBreakpoints: instance.nearest_breakpoints,
+        breakpoints: breakpoints,
+        nearestBreakpoints: nearest_breakpoints,
         extend: extend,
         tick: tick,
         trigger: trigger,
