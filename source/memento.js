@@ -1,4 +1,4 @@
-var factory,
+var memento,
     update,
     seconds,
     between,
@@ -107,7 +107,7 @@ bang = function(timestamp, data) {
     }
 }
 
-factory = function() {
+memento = function() {
     // return value of the factory function
     var instance,
         data,
@@ -368,4 +368,4 @@ factory = function() {
     return api;
 };
 
-export { factory as memento };
+export { memento };
