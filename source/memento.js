@@ -79,6 +79,7 @@ factory = function() {
         data,
         node,
         now,
+        bang,
         actions,
         add_action,
         add_datum,
@@ -184,7 +185,7 @@ factory = function() {
         return node.currentTime;
     };
     // get data
-    instance.bang = function(timestamp) {
+    bang = function(timestamp) {
         var current_data;
         timestamp = timestamp || now();
         current_data = data.filter(function(item) {
@@ -273,7 +274,7 @@ factory = function() {
             var timestamp,
                 current_data;
             timestamp = now();
-            current_data = instance.bang(timestamp);
+            current_data = bang(timestamp, data);
             bound_function(current_data, timestamp, node);
         }
         return api;
@@ -311,7 +312,7 @@ factory = function() {
         event_handler = function() {
             var matching,
                 timestamp;
-            matching = instance.bang();
+            matching = bang();
             timestamp = now();
             trigger_function(matching, timestamp, node);
         };
@@ -335,7 +336,7 @@ factory = function() {
     };
     api = {
         data: instance.data,
-        bang: instance.bang,
+        bang: bang,
         node: instance.node,
         timestamp: now,
         seconds: seconds,
