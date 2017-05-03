@@ -93,11 +93,7 @@ bang = function(timestamp, data) {
     });
     if (current_data.length > 1) {
         current_data = current_data.sort(function(a, b) {
-            var a_start,
-                b_start;
-            a_start = a.start;
-            b_start = b.start;
-            return a_start > b_start;
+            return a.start > b.start;
         });
     }
     if (current_data.length === 0) {
