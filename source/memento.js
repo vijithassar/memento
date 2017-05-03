@@ -381,6 +381,7 @@ factory = function() {
         trigger: instance.trigger,
         watch: function() {
             update(api);
+            return api;
         }
     };
     return api;
