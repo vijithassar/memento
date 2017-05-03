@@ -320,8 +320,8 @@ factory = function() {
         event_handler = function() {
             var matching,
                 timestamp;
-            matching = bang();
             timestamp = now();
+            matching = bang(timestamp, data);
             trigger_function(matching, timestamp, node);
         };
         add_action(event_handler, trigger_time, null);
