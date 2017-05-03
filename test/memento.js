@@ -226,6 +226,8 @@ describe('api', function() {
         assert(Object.keys(m).length, expected.length);
         expected.forEach(function(method) {
             assert.equal(typeof m[method], 'function');
+            // prohibit snake case and private methods
+            assert.equal(method.indexOf('_'), -1);
         });
     });
 });
