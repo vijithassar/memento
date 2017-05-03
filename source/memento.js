@@ -87,7 +87,8 @@ memento = function() {
     // return value of the factory function
     var instance,
         data,
-        node;
+        node,
+        actions;
     instance = {};
     // getter/setter for bound data
     instance.payload = function(new_data) {
@@ -107,18 +108,18 @@ memento = function() {
             return node;
         }
     };
-    instance.__actions = [];
-    instance.__add_action = function(new_function, start, end) {
+    actions = [];
+    instance.add_action = function(new_function, start, end) {
         if (start) {
             new_function.start = start;
         }
         if (end) {
             new_function.end = end;
         }
-        instance.__actions.push(new_function);
+        actions.push(new_function);
     };
     instance.all_actions = function() {
-        return instance.__actions;
+        return actions;
     };
     instance.timed_actions = function() {
         var all_actions,
