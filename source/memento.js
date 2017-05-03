@@ -90,6 +90,7 @@ memento = function() {
     var instance,
         data,
         node,
+        now,
         actions,
         add_action,
         test_breakpoints,
@@ -183,13 +184,13 @@ memento = function() {
         return result;
     };
     // get exact timestamp from node
-    instance.timestamp = function() {
+    now = function() {
         return node.currentTime;
     };
     // test whether a timestamp is between a range
     test_breakpoints = function(breakpoints, timestamp) {
         var mode;
-        timestamp = timestamp || instance.timestamp();
+        timestamp = timestamp || now();
         if (breakpoints.low) {
             mode = 'single';
         } else if (breakpoints.length && typeof breakpoints.map === 'function') {
@@ -208,7 +209,7 @@ memento = function() {
     // get data
     instance.data = function(timestamp) {
         var current_data;
-        timestamp = timestamp || instance.timestamp()
+        timestamp = timestamp || now()
         current_data = data.filter(function(item) {
             var between,
                 breakpoints,
@@ -273,7 +274,7 @@ memento = function() {
             between,
             next_breakpoint,
             i;
-        timestamp = timestamp || instance.timestamp();
+        timestamp = timestamp || now();
         breakpoints = instance.breakpoints();
         for (i = 0; i < breakpoints.length; i++) {
             current_breakpoint = breakpoints[i];
@@ -302,7 +303,7 @@ memento = function() {
         api[label] = function() {
             var timestamp,
                 current_data;
-            timestamp = instance.timestamp();
+            timestamp = now();
             current_data = instance.data(timestamp);
             bound_function(current_data, timestamp, node);
         }
@@ -342,7 +343,7 @@ memento = function() {
             var data,
                 timestamp;
             data = instance.data();
-            timestamp = instance.timestamp();
+            timestamp = now();
             trigger_function(data, timestamp, node);
         };
         add_action(event_handler, trigger_time, null);
@@ -350,7 +351,7 @@ memento = function() {
         instance.tick(true, function() {
             var timestamp,
                 passed;
-            timestamp = instance.timestamp();
+            timestamp = now();
             passed = timestamp > trigger_time;
             if (! previous || previous < timestamp) {
                 sent = false;
@@ -367,7 +368,7 @@ memento = function() {
         data: instance.data,
         payload: instance.payload,
         node: instance.node,
-        timestamp: instance.timestamp,
+        timestamp: now,
         seconds: seconds,
         addItem: instance.add_item,
         removeItem: instance.remove_item,
