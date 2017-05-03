@@ -33,35 +33,23 @@ describe('node', function() {
 });
 
 describe('actions', function() {
-    describe('all', function() {
-        it('returns an array', function() {
-            let m = memento();
-            assert(typeof m.allActions, 'function');
-            assert(m.allActions() instanceof Array);
-            assert.equal(typeof m.allActions().length, 'number');
-        });
+    it('returns an array', function() {
+        let m = memento();
+        m.tick(true, noop);
+        assert(typeof m.actions, 'function');
+        assert(m.actions() instanceof Array);
+        assert.equal(typeof m.actions().length, 'number');
     });
-    describe('timed', function() {
-        it('returns an array', function() {
-            let node = {currentTime: 1, nodeName: 'dummy'};
-            let m = memento().node(node);
-            assert(typeof m.timedActions, 'function');
-            assert(m.timedActions() instanceof Array);
-            assert.equal(typeof m.timedActions().length, 'number');
-        });
-    });
-    describe('mutation', function() {
-        it('adds', function() {
-            let m = memento();
-            m.tick({low: 3, high: 5}, noop);
-            assert.equal(m.allActions().length, 1);
-        });
+    it('adds items', function() {
+        let m = memento();
+        m.tick(true, noop);
+        assert.equal(m.actions().length, 1);
     });
     describe('storage', function() {
         it('uses the expected storage format', function() {
             let m = memento();
             m.tick({low: 1, high: '1:30'}, noop);
-            let action = m.allActions().pop();
+            let action = m.actions().pop();
             assert.equal(typeof action, 'object');
             assert.equal(Object.keys(action).length, 3);
             assert.equal(typeof action.start, 'number');
@@ -71,7 +59,7 @@ describe('actions', function() {
         it('returns the original functions', function() {
             let m = memento();
             m.tick({low: 1, high: '1:30'}, noop);
-            let action = m.allActions().pop();
+            let action = m.actions().pop();
             assert.equal(action.function, noop);
         });
     });
@@ -90,10 +78,10 @@ describe('mutation', function() {
     });
 });
 
-describe('timestamp', function() {
+describe('now', function() {
     let m = memento().node({currentTime: 1, nodeName: 'dummy'});
     it('retrieves node timestamp', function() {
-        assert.equal(m.timestamp(), 1);
+        assert.equal(m.now(), 1);
     });
 });
 
@@ -222,12 +210,11 @@ describe('api', function() {
             'data',
             'bang',
             'node',
-            'timestamp',
+            'now',
             'seconds',
             'addDatum',
             'removeDatum',
-            'allActions',
-            'timedActions',
+            'actions',
             'breakpoints',
             'nearestBreakpoints',
             'extend',

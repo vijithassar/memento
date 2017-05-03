@@ -4,7 +4,8 @@ var factory,
     between,
     bang,
     breakpoints,
-    nearest_breakpoints;
+    nearest_breakpoints,
+    validate_actions;
 
 update = function(api) {
     if (! api) {
@@ -154,15 +155,24 @@ nearest_breakpoints = function(timestamp, points) {
     }
 };
 
+validate_actions = function(actions) {
+    var all_valid;
+    all_valid = actions.every(function(action) {
+        var each_valid;
+        each_valid = typeof action.function === 'function' && action.start && action.end;
+        return each_valid;
+    });
+    return all_valid;
+}
 
 factory = function() {
-    var instance,
-        data,
+    var data,
         _data,
         node,
         _node,
         now,
         actions,
+        _actions,
         add_action,
         add_datum,
         remove_datum,
@@ -170,7 +180,6 @@ factory = function() {
         tick,
         trigger,
         api;
-    instance = {};
     actions = [];
     // get timestamp from node
     now = function() {
@@ -218,31 +227,36 @@ factory = function() {
         }
         actions.push(action);
     };
-    instance.all_actions = function() {
-        return actions;
-    };
-    instance.timed_actions = function() {
-        var all_actions,
+    _actions = function(_) {
+        var timestamp,
             timed_actions;
-        all_actions = instance.all_actions();
-        timed_actions = all_actions.filter(function(item) {
-            var both_undefined,
-                one_undefined;
-            both_undefined = !item.start && !item.end;
-            one_undefined = ((!item.start && item.end) || (item.start && !item.end))
-            if (both_undefined) {
-                return true;
+        if (arguments.length === 0) {
+            return actions;
+        } else if (arguments.length === 1) {
+            if (typeof _ === 'number' || typeof _ === 'string') {
+                timestamp = seconds(_);
+                timed_actions = actions.filter(function(item) {
+                    var both_undefined,
+                        one_undefined;
+                    both_undefined = !item.start && !item.end;
+                    one_undefined = ((!item.start && item.end) || (item.start && !item.end))
+                    if (both_undefined) {
+                        return true;
+                    }
+                    if (one_undefined) {
+                        return false;
+                    }
+                    if (!item.start || !item.end) {
+                        return false;
+                    } else {
+                        return between({low: item.start, high: item.end}, timestamp);
+                    }
+                });
+                return timed_actions;
             }
-            if (one_undefined) {
-                return false;
-            }
-            if (!item.start || !item.end) {
-                return false;
-            } else {
-                return between({low: item.start, high: item.end});
-            }
-        });
-        return timed_actions;
+        } else if (_ instanceof Array && validate_actions(_)) {
+            actions = _;
+        }
     };
     // add a new item to the bound data
     add_datum = function(new_data) {
@@ -349,12 +363,11 @@ factory = function() {
             return bang(timestamp, data);
         },
         node: _node,
-        timestamp: now,
+        now: now,
         seconds: seconds,
         addDatum: add_datum,
         removeDatum: remove_datum,
-        allActions: instance.all_actions,
-        timedActions: instance.timed_actions,
+        actions: _actions,
         breakpoints: function() {
             return breakpoints(data);
         },
