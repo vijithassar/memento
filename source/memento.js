@@ -106,7 +106,9 @@ bang = function(timestamp, data) {
 factory = function() {
     var instance,
         data,
+        _data,
         node,
+        _node,
         now,
         actions,
         add_action,
@@ -125,7 +127,7 @@ factory = function() {
         return node.currentTime;
     };
     // getter/setter for bound data
-    instance.data = function(array) {
+    _data = function(array) {
         if (array && ! array instanceof Array) {
             console.error('bound data must be an array');
             return;
@@ -138,7 +140,7 @@ factory = function() {
         }
     };
     // getter/setter for media node
-    instance.node = function(element) {
+    _node = function(element) {
         if (element && typeof element.nodeName !== 'string') {
             console.error('bound node must be a valid DOM element');
             return;
@@ -341,12 +343,12 @@ factory = function() {
         return api;
     };
     api = {
-        data: instance.data,
+        data: _data,
         bang: function(timestamp) {
             timestamp = timestamp || now();
             return bang(timestamp, data);
         },
-        node: instance.node,
+        node: _node,
         timestamp: now,
         seconds: seconds,
         addDatum: add_datum,
