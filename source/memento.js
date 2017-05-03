@@ -1,7 +1,8 @@
 var factory,
     update,
     seconds,
-    between;
+    between,
+    bang;
 
 update = function(api) {
     // every time the node updates
@@ -73,13 +74,37 @@ between = function(breakpoints, timestamp) {
     return (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high);
 };
 
+// get data
+bang = function(timestamp, data) {
+    var current_data;
+    current_data = data.filter(function(item) {
+        if (! item.start || ! item.end) {
+            return false;
+        }
+        return between({low: item.start, high: item.end}, timestamp);
+    });
+    if (current_data.length > 1) {
+        current_data = current_data.sort(function(a, b) {
+            var a_start,
+                b_start;
+            a_start = a.start;
+            b_start = b.start;
+            return a_start > b_start;
+        });
+    }
+    if (current_data.length === 0) {
+        return false;
+    } else {
+        return current_data;
+    }
+}
+
 factory = function() {
     // return value of the factory function
     var instance,
         data,
         node,
         now,
-        bang,
         actions,
         add_action,
         add_datum,
@@ -184,31 +209,6 @@ factory = function() {
     now = function() {
         return node.currentTime;
     };
-    // get data
-    bang = function(timestamp) {
-        var current_data;
-        timestamp = timestamp || now();
-        current_data = data.filter(function(item) {
-            if (! item.start || ! item.end) {
-                return false;
-            }
-            return between({low: item.start, high: item.end}, timestamp);
-        });
-        if (current_data.length > 1) {
-            current_data = current_data.sort(function(a, b) {
-                var a_start,
-                    b_start;
-                a_start = a.start;
-                b_start = b.start;
-                return a_start > b_start;
-            });
-        }
-        if (current_data.length === 0) {
-            return false;
-        } else {
-            return current_data;
-        }
-    }
     // get all timestamps registered in the data
     // object
     instance.breakpoints = function() {
@@ -336,7 +336,10 @@ factory = function() {
     };
     api = {
         data: instance.data,
-        bang: bang,
+        bang: function(timestamp) {
+            timestamp = timestamp || now();
+            return bang(timestamp, data);
+        },
         node: instance.node,
         timestamp: now,
         seconds: seconds,
