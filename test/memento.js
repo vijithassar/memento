@@ -213,31 +213,31 @@ describe('integrations', function() {
         });
     });
 
-    describe('api', function() {
-        it('has the expected v0.1.1 API methods', function() {
-            let expected = [
-                'data',
-                'bang',
-                'node',
-                'timestamp',
-                'seconds',
-                'addDatum',
-                'removeDatum',
-                'allActions',
-                'timedActions',
-                'breakpoints',
-                'nearestBreakpoints',
-                'extend',
-                'tick',
-                'trigger',
-                'watch'
-            ];
-            let m = memento();
-            assert(Object.keys(m).length, expected.length);
-            expected.forEach(function(method) {
-                assert.equal(typeof m[method], 'function');
-            });
+});
+
+describe('api', function() {
+    it('has the expected v0.1.1 API methods', function() {
+        let expected = [
+            'data',
+            'bang',
+            'node',
+            'timestamp',
+            'seconds',
+            'addDatum',
+            'removeDatum',
+            'allActions',
+            'timedActions',
+            'breakpoints',
+            'nearestBreakpoints',
+            'extend',
+            'tick',
+            'trigger',
+            'watch'
+        ];
+        let m = memento();
+        assert(Object.keys(m).length, expected.length);
+        expected.forEach(function(method) {
+            assert.equal(typeof m[method], 'function');
         });
     });
-
 });
