@@ -19,7 +19,7 @@ update = function(instance) {
         for (i = 0; i < actions.length; i++) {
             action = actions[i];
             if (typeof action === 'function') {
-                action(data, timestamp, instance.node());
+                action.function(data, timestamp, instance.node());
             }
         }
     };
@@ -110,13 +110,16 @@ memento = function() {
     };
     actions = [];
     instance.add_action = function(new_function, start, end) {
+        let action = {
+            function: new_function
+        };
         if (start) {
-            new_function.start = start;
+            action.start = seconds(start);
         }
         if (end) {
-            new_function.end = end;
+            action.end = seconds(end);
         }
-        actions.push(new_function);
+        actions.push(action);
     };
     instance.all_actions = function() {
         return actions;
