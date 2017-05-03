@@ -187,7 +187,7 @@ describe('integrations', function() {
         .data([datum]);
     m.watch();
     describe('extend', function() {
-        m.extend('m', function(data, timestamp, node) {
+        m.extend('test', function(data, timestamp, node) {
             assert.equal(data.pop().value, datum.value);
             assert.equal(timestamp, player.currentTime);
             assert.equal(node, player);
@@ -196,10 +196,10 @@ describe('integrations', function() {
             assert.equal(typeof m.extend, 'function');
         });
         it('extends', function() {
-            assert.equal(typeof m.m, 'function');
+            assert.equal(typeof m.test, 'function');
         });
         it('passes arguments', function() {
-            m.m();
+            m.test();
         });
     });
     describe('tick', function() {
