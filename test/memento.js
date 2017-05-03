@@ -98,25 +98,6 @@ describe('timestamp', function() {
 });
 
 describe('breakpoints', function() {
-    describe('tests breakpoints', function() {
-        let m = memento();
-        let single = {low: 1, high: 4};
-        let multiple = [{low: 1, high: 4}, {low: 2, high: 6}];
-        it('single', function() {
-            assert.equal(m.testBreakpoints(single, 2), true);
-            assert.equal(m.testBreakpoints(single, 5), false);
-        });
-        it('multiple', function() {
-            assert.equal(m.testBreakpoints(multiple, 3)[0], true);
-            assert.equal(m.testBreakpoints(multiple, 3)[1], true);
-            assert.equal(m.testBreakpoints(multiple, 5)[0], false);
-            assert.equal(m.testBreakpoints(multiple, 5)[1], true);
-        });
-        it('switches', function() {
-            assert.equal(typeof m.testBreakpoints(single, 2), 'boolean');
-            assert.equal(typeof m.testBreakpoints(multiple, 2).length, 'number');
-        });
-    });
     it('has a breakpoints compilation method', function() {
         assert.equal(typeof memento().breakpoints, 'function');
     });

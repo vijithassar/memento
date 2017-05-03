@@ -1,8 +1,7 @@
 var factory,
     update,
     seconds,
-    test_single_breakpoint,
-    test_multiple_breakpoints;
+    between;
 
 update = function(api) {
     // every time the node updates
@@ -59,8 +58,7 @@ seconds = function(time) {
     return seconds;
 };
 
-test_single_breakpoint = function(breakpoints, timestamp) {
-    var between;
+between = function(breakpoints, timestamp) {
     // resolve breakpoints to numbers if necessary
     if (typeof timestamp !== 'number') {
         timestamp = seconds(timestamp);
@@ -72,16 +70,7 @@ test_single_breakpoint = function(breakpoints, timestamp) {
         breakpoints.high = seconds(breakpoints.high);
     }
     // check timestamp position
-    between = ((breakpoints.low <= timestamp) && (timestamp <= breakpoints.high));
-    return between;
-};
-
-test_multiple_breakpoints = function(breakpoints, timestamp) {
-    var betweens;
-    betweens = breakpoints.map(function(item) {
-        return test_single_breakpoint(item, timestamp);
-    });
-    return betweens;
+    return (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high);
 };
 
 factory = function() {
@@ -94,7 +83,6 @@ factory = function() {
         add_action,
         add_datum,
         remove_datum,
-        test_breakpoints,
         extend,
         tick,
         trigger,
@@ -148,12 +136,10 @@ factory = function() {
     };
     instance.timed_actions = function() {
         var all_actions,
-            timed_actions,
-            match;
+            timed_actions;
         all_actions = instance.all_actions();
         timed_actions = all_actions.filter(function(item) {
-            var breakpoints,
-                both_undefined,
+            var both_undefined,
                 one_undefined;
             both_undefined = !item.start && !item.end;
             one_undefined = ((!item.start && item.end) || (item.start && !item.end))
@@ -166,9 +152,7 @@ factory = function() {
             if (!item.start || !item.end) {
                 return false;
             } else {
-                breakpoints = {low: item.start, high: item.end};
-                match = test_breakpoints(breakpoints);
-                return match;
+                return between({low: item.start, high: item.end});
             }
         });
         return timed_actions;
@@ -199,42 +183,15 @@ factory = function() {
     now = function() {
         return node.currentTime;
     };
-    // test whether a timestamp is between a range
-    test_breakpoints = function(breakpoints, timestamp) {
-        var mode;
-        timestamp = timestamp || now();
-        if (breakpoints.low) {
-            mode = 'single';
-        } else if (breakpoints.length && typeof breakpoints.map === 'function') {
-            mode = 'multiple';
-        }
-        // if you only pass in one breakpoints object
-        // test it and return a boolean
-        if (mode === 'single') {
-            return test_single_breakpoint(breakpoints, timestamp);
-        // if you pass in an array of breakpoints objects,
-        // test all and return a mapped array of booleans
-        } else if (mode === 'multiple') {
-            return test_multiple_breakpoints(breakpoints, timestamp);
-        }
-    };
     // get data
     instance.bang = function(timestamp) {
         var current_data;
         timestamp = timestamp || now();
         current_data = data.filter(function(item) {
-            var between,
-                breakpoints,
-                start,
-                end;
-            start = item.start;
-            end = item.end;
-            if (!start || !end) {
+            if (! item.start || ! item.end) {
                 return false;
             }
-            breakpoints = {low: start, high: end};
-            between = test_breakpoints(breakpoints, timestamp);
-            return between;
+            return between({low: item.start, high: item.end}, timestamp);
         });
         if (current_data.length > 1) {
             current_data = current_data.sort(function(a, b) {
@@ -283,7 +240,7 @@ factory = function() {
         var breakpoints,
             nearest_breakpoints,
             current_breakpoint,
-            between,
+            is_between,
             next_breakpoint,
             i;
         timestamp = timestamp || now();
@@ -292,8 +249,8 @@ factory = function() {
             current_breakpoint = breakpoints[i];
             next_breakpoint = breakpoints[i + 1];
             // if the timestamp is between one breakpoint and the next
-            between = current_breakpoint < timestamp && timestamp < next_breakpoint;
-            if (between) {
+            is_between = current_breakpoint < timestamp && timestamp < next_breakpoint;
+            if (is_between) {
               // return both values as an object
                 nearest_breakpoints = {low: current_breakpoint, high: next_breakpoint};
                 return nearest_breakpoints;
@@ -387,7 +344,6 @@ factory = function() {
         allActions: instance.all_actions,
         timedActions: instance.timed_actions,
         breakpoints: instance.breakpoints,
-        testBreakpoints: test_breakpoints,
         nearestBreakpoints: instance.nearest_breakpoints,
         extend: extend,
         tick: tick,
