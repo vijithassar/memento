@@ -14,12 +14,6 @@ describe('factory', function() {
     });
 });
 
-describe('watch', function() {
-    it('exists', function() {
-        assert.equal(typeof memento().watch, 'function');
-    });
-});
-
 describe('node', function() {
     it('exists', function() {
         assert.equal(typeof memento().node, 'function');
@@ -159,6 +153,9 @@ describe('bang', function() {
 });
 
 describe('watching', function() {
+    it('method exists', function() {
+        assert.equal(typeof memento().watch, 'function');
+    });
     it('updates node', function() {
         let player = {currentTime: 2, nodeName: 'dummy'};
         let m = memento().node(player);
