@@ -1,4 +1,4 @@
-var memento,
+var factory,
     update,
     seconds,
     between,
@@ -82,7 +82,7 @@ between = function(breakpoints, timestamp) {
     return (breakpoints.low <= timestamp) && (timestamp <= breakpoints.high);
 };
 
-// get data
+// get data for a timestamp
 bang = function(timestamp, data) {
     var current_data;
     current_data = data.filter(function(item) {
@@ -107,7 +107,7 @@ bang = function(timestamp, data) {
     }
 }
 
-memento = function() {
+factory = function() {
     var instance,
         data,
         node,
@@ -367,4 +367,4 @@ memento = function() {
     return api;
 };
 
-export { memento };
+export { factory };
