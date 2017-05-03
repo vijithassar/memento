@@ -5,21 +5,21 @@ var memento,
     test_single_breakpoint,
     test_multiple_breakpoints;
 
-update = function(instance) {
+update = function(api) {
     // every time the node updates
-    instance.node().ontimeupdate = function() {
+    api.node().ontimeupdate = function() {
         var data,
             timestamp,
             actions,
             action,
             i;
-        timestamp = instance.timestamp();
-        data = instance.data();
-        actions = instance.timed_actions(timestamp);
+        timestamp = api.timestamp();
+        data = api.data();
+        actions = api.timedActions(timestamp);
         for (i = 0; i < actions.length; i++) {
             action = actions[i];
             if (typeof action === 'function') {
-                action.function(data, timestamp, instance.node());
+                action.function(data, timestamp, api.node());
             }
         }
     };
