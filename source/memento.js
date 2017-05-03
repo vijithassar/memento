@@ -5,6 +5,10 @@ var factory,
     bang;
 
 update = function(api) {
+    if (! api) {
+        console.error('no api object specified for watching');
+        return;
+    }
     // every time the node updates
     api.node().ontimeupdate = function() {
         var matching,
@@ -56,7 +60,11 @@ seconds = function(time) {
         days = parseInt(time_elements[3], 10) || 0;
     }
     seconds = seconds + (minutes * 60) + (hours * 60 * 60) + (days * 24 * 60 * 60);
-    return seconds;
+    if (typeof seconds === 'number') {
+        return seconds;
+    } else {
+        console.error('could not parse ' + time + ' into seconds');
+    }
 };
 
 between = function(breakpoints, timestamp) {
