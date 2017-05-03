@@ -151,6 +151,25 @@ describe('seconds helper', function() {
     });
 });
 
+describe('bang', function() {
+    let data = [
+        {start: 3, end: 7, value: 3},
+        {start: 1, end: 3, value: 1},
+        {start: 2, end: 5, value: 2},
+        {start: 4, end: 9, value: 4},
+        {start: 5, end: 11, value: 5},
+    ]
+    let m = memento().data(data);
+    it('returns relevant data', function() {
+        let result = m.bang(2.5);
+        assert.equal(result.length, 2)
+    });
+    it('sorts data by start time', function() {
+        let result = m.bang(2.5);
+        assert(result[0].start < result[1].start);
+    });
+});
+
 describe('watching', function() {
     it('updates node', function() {
         let player = {currentTime: 2, nodeName: 'dummy'};
