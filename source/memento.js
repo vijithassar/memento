@@ -41,6 +41,10 @@ seconds = function(time) {
         hours,
         minutes,
         seconds;
+    if (typeof time !== 'string' && typeof time !== 'number') {
+        console.error('seconds helper can only process strings in DD:HH:MM:SS format');
+        return;
+    }
     if (time.indexOf && time.indexOf(':') === -1) {
         has_colon = true;
     } else {
