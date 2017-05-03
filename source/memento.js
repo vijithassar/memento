@@ -316,10 +316,10 @@ memento = function() {
             return;
         }
         if (breakpoints === true) {
-            instance.__add_action(iterator);
+            instance.add_action(iterator);
         }
         if (breakpoints.low && breakpoints.high) {
-            instance.__add_action(iterator, breakpoints.low, breakpoints.high);
+            instance.add_action(iterator, breakpoints.low, breakpoints.high);
         }
     };
     // fire a function once when the trigger time is passed
@@ -345,7 +345,7 @@ memento = function() {
             timestamp = instance.timestamp();
             trigger_function(data, timestamp, node);
         };
-        instance.__add_action(event_handler, trigger_time, null);
+        instance.add_action(event_handler, trigger_time, null);
         node.addEventListener(event_label, event_handler)
         instance.tick(true, function() {
             var timestamp,
