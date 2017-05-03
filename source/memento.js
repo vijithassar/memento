@@ -158,9 +158,7 @@ nearest_breakpoints = function(timestamp, points) {
 validate_actions = function(actions) {
     var all_valid;
     all_valid = actions.every(function(action) {
-        var each_valid;
-        each_valid = typeof action.function === 'function' && action.start && action.end;
-        return each_valid;
+        return typeof action.function === 'function';
     });
     return all_valid;
 }
