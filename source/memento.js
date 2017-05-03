@@ -7,18 +7,18 @@ var factory,
 update = function(api) {
     // every time the node updates
     api.node().ontimeupdate = function() {
-        var data,
+        var matching,
             timestamp,
             actions,
             action,
             i;
         timestamp = api.timestamp();
-        data = api.data();
+        matching = api.bang();
         actions = api.timedActions(timestamp);
         for (i = 0; i < actions.length; i++) {
             action = actions[i];
             if (typeof action === 'function') {
-                action.function(data, timestamp, api.node());
+                action.function(matching, timestamp, api.node());
             }
         }
     };
@@ -98,7 +98,7 @@ factory = function() {
         api;
     instance = {};
     // getter/setter for bound data
-    instance.payload = function(array) {
+    instance.data = function(array) {
         if (array && ! array instanceof Array) {
             console.error('bound data must be an array');
             return;
@@ -192,7 +192,7 @@ factory = function() {
         });
         return result;
     };
-    // get exact timestamp from node
+    // get timestamp from node
     now = function() {
         return node.currentTime;
     };
@@ -216,9 +216,9 @@ factory = function() {
         }
     };
     // get data
-    instance.data = function(timestamp) {
+    instance.bang = function(timestamp) {
         var current_data;
-        timestamp = timestamp || now()
+        timestamp = timestamp || now();
         current_data = data.filter(function(item) {
             var between,
                 breakpoints,
@@ -313,7 +313,7 @@ factory = function() {
             var timestamp,
                 current_data;
             timestamp = now();
-            current_data = instance.data(timestamp);
+            current_data = instance.bang(timestamp);
             bound_function(current_data, timestamp, node);
         }
         return api;
@@ -349,11 +349,11 @@ factory = function() {
         event_label = 'trigger-' + trigger_time;
         event = new Event(event_label);
         event_handler = function() {
-            var data,
+            var matching,
                 timestamp;
-            data = instance.data();
+            matching = instance.bang();
             timestamp = now();
-            trigger_function(data, timestamp, node);
+            trigger_function(matching, timestamp, node);
         };
         add_action(event_handler, trigger_time, null);
         node.addEventListener(event_label, event_handler)
@@ -375,7 +375,7 @@ factory = function() {
     };
     api = {
         data: instance.data,
-        payload: instance.payload,
+        bang: instance.bang,
         node: instance.node,
         timestamp: now,
         seconds: seconds,

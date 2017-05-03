@@ -79,14 +79,14 @@ describe('actions', function() {
 
 describe('mutation', function() {
     it('adds datum', function() {
-        let m = memento().payload([{a: 1}]);
+        let m = memento().data([{a: 1}]);
         m.addDatum({b: 2});
-        assert.equal(m.payload().length, 2);
+        assert.equal(m.data().length, 2);
     });
     it('remove datum', function() {
-        let m = memento().payload([{a: 1}]);
+        let m = memento().data([{a: 1}]);
         m.removeDatum(0);
-        assert.equal(m.payload().length, 0);
+        assert.equal(m.data().length, 0);
     });
 });
 
@@ -129,7 +129,7 @@ describe('breakpoints', function() {
             {function: noop, start: 2, end: 5},
             {function: noop, start: 2, end: 6},
         ];
-        m.payload(data);
+        m.data(data);
         let result = m.nearestBreakpoints(3.5);
         assert.equal(result.low, 3);
         assert.equal(result.high, 4);
@@ -138,21 +138,21 @@ describe('breakpoints', function() {
 
 describe('data', function() {
     it('exists', function() {
-        assert.equal(typeof memento().payload, 'function');
+        assert.equal(typeof memento().data, 'function');
     });
     it('stores data', function() {
         let data = [{a: 1}];
         let m = memento();
-        m.payload(data);
-        assert.equal(m.payload(), data);
+        m.data(data);
+        assert.equal(m.data(), data);
     });
     it('overwrites data', function() {
         let first = [{a: 1}];
         let second = [{a: 2}];
         let m = memento();
-        m.payload(first);
-        m.payload(second);
-        assert.notEqual(m.payload().pop().a, first.pop().a);
+        m.data(first);
+        m.data(second);
+        assert.notEqual(m.data().pop().a, first.pop().a);
     });
 });
 
@@ -184,7 +184,7 @@ describe('integrations', function() {
     let datum = {start: 1, end: 3, value: 1};
     let m = memento()
         .node(player)
-        .payload([datum]);
+        .data([datum]);
     m.watch();
     describe('extend', function() {
         m.extend('m', function(data, timestamp, node) {

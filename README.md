@@ -6,7 +6,7 @@ momentary data binding along a timeline for HTML5 media
 
 # Overview #
 
-memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .data() method on a memento object will retrieve the data corresponding to that point in time. Calling the .data() method repeatedly at different points in time will retrieve different data.
+memento.js binds data to regions of audio or video and allows you to quickly recall the results at any point during playback or scrubbing. Calling the .bang() method on a memento object will retrieve the data corresponding to that point in time. Calling the .bang() method repeatedly at different points in time will retrieve different data.
 
 Conceptually, memento can be thought of as a way to slave all JavaScript execution to the playback as defined by the bound media node. It doesn't meaningfully use JavaScript events, though. Instead, it wraps around a playable media node and a queryable data structure, and then uses timing information from the former to deliver dynamic data payloads from the latter that automatically change over time.
 
@@ -44,14 +44,12 @@ var data = [
 
 # Setup #
 
-First, instantiate a memento object by running the memento() function factory, which returns a function instance.
+First, instantiate a memento object by running the memento() function factory, which returns an instance.
 
 ```javascript
 // create a memento instance
 var project = memento();
 ```
-
-If for some reason you already have a global variable named "memento" then the library will expose itself under the name "memento_factory" instead.
 
 Use the .node() method to bind an HTML5 media element to the instance.
 
@@ -62,29 +60,29 @@ var audio = document.getElementById('target-audio');
 project.node(audio);
 ```
 
-Use the .payload() method to bind an array to the instance.
+Use the .data() method to bind an array to the instance.
 
 ```javascript
 // fetch data however you wish
-var data = get_data();
+var project_data = get_data();
 // bind all data to memento object
-project.payload(data);
+project.data(data);
 ```
 
-Now, as you play or scrub the audio, you can retrieve the matching data for time ranges which overlap the current playback position by calling the .data() method on the memento object.
+Now, as you play or scrub the audio, you can retrieve the matching data for time ranges which overlap the current playback position by calling the .bang() method on the memento object.
 
 ```javascript
 // retrieve all data bound to the current timestamp
-var current_data = project.data();
+var current_data = project.bang();
 ```
 
-The return value of the .data() method will be a boolean false if there is no data bound to ranges overlapping the current timestamp. If there is matching data, the return value of the .data() method will be an *array* of all matching data elements from the input array. This means that multiple matching data elements can overlap on a particular time position, but it also means you may need to navigate around an array even if you only expect one result.
+The return value of the .bang() method will be a boolean false if there is no data bound to ranges overlapping the current timestamp. If there is matching data, the return value of the .bang() method will be an *array* of all matching data elements from the input array. This means that multiple matching data elements can overlap on a particular time position, but it also means you may need to navigate around an array even if you only expect one result.
 
-The .data() method can also take an optional timestamp in string or numerical format to retrieve data for a playback position other than the current one.
+The .bang() method can also take an optional timestamp in string or numerical format to retrieve data for a playback position other than the current one.
 
 ```javascript
 // get bound data for thirty seconds in
-var thirty_second_data = project.data(30);
+var thirty_second_data = project.bang(30);
 ```
 
 # Basic Functionality #
@@ -92,8 +90,8 @@ var thirty_second_data = project.data(30);
 Most basic functionality in memento deals with setting up the data binds or retrieving data at a particular point.
 
 - **memento.node()** sets the bound media or retrieves the existing bound media. When used as a setter, it takes one argument, which should be a DOM element for an HTML5 audio or video node.
-- **memento.payload()** sets the bound data or retrieves the existing bound data. When used as a setter, it takes one argument, which should be an array of data items. When used as a getter, it returns all data, ignoring relevance to the current playback timestamp. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .data() method, and for the most part will be ignored. This behavior can be useful in cases where you want to bind data initially but don't have all the timestamp information yet.
-- **memento.data()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp in numerical or string format, in which case it will return the data bound to that timestamp instead of to the current playback time.
+- **memento.data()** sets the bound data or retrieves the existing bound data. When used as a setter, it takes one argument, which should be an array of data items. When used as a getter, it returns all data, ignoring relevance to the current playback timestamp. Remember that data items must contain properties for "start" and "end" in order to be matched to a particular range. Bound data items without those keys will be stored in scope but will not be accessible using the .bang() method, and for the most part will be ignored. This behavior can be useful in cases where you want to bind data initially but don't have all the timestamp information yet.
+- **memento.bang()** retrieves an array of all data elements whose ranges overlap the current playback position. It can optionally take a single argument, a timestamp in numerical or string format, in which case it will return the data bound to that timestamp instead of to the current playback time.
 - **memento.timestamp()** retrieves a number representing the current playback position in seconds.
 
 # Integrations #
