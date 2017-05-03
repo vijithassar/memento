@@ -92,6 +92,8 @@ factory = function() {
         now,
         actions,
         add_action,
+        add_datum,
+        remove_datum,
         test_breakpoints,
         api;
     instance = {};
@@ -169,7 +171,7 @@ factory = function() {
         return timed_actions;
     };
     // add a new item to the bound data
-    instance.add_item = function(new_data) {
+    add_datum = function(new_data) {
         if (! data || typeof data.map !== 'function') {
             data = [];
         }
@@ -179,7 +181,7 @@ factory = function() {
         }
     };
     // remove a bound item by index
-    instance.remove_item = function(int) {
+    remove_datum = function(int) {
         if (typeof int !== 'number' || int > data.length) {
             console.error('array index to remove is invalid');
             return;
@@ -377,8 +379,8 @@ factory = function() {
         node: instance.node,
         timestamp: now,
         seconds: seconds,
-        addItem: instance.add_item,
-        removeItem: instance.remove_item,
+        addDatum: add_datum,
+        removeDatum: remove_datum,
         allActions: instance.all_actions,
         timedActions: instance.timed_actions,
         breakpoints: instance.breakpoints,

@@ -78,14 +78,14 @@ describe('actions', function() {
 });
 
 describe('mutation', function() {
-    it('adds item', function() {
+    it('adds datum', function() {
         let m = memento().payload([{a: 1}]);
-        m.addItem({b: 2});
+        m.addDatum({b: 2});
         assert.equal(m.payload().length, 2);
     });
-    it('remove item', function() {
+    it('remove datum', function() {
         let m = memento().payload([{a: 1}]);
-        m.removeItem(0);
+        m.removeDatum(0);
         assert.equal(m.payload().length, 0);
     });
 });
