@@ -68,6 +68,12 @@ describe('actions', function() {
             assert.equal(typeof action.end, 'number');
             assert.equal(typeof action.function, 'function')
         });
+        it('returns the original functions', function() {
+            let instance = memento();
+            instance.tick({low: 1, high: '1:30'}, noop);
+            let action = instance.all_actions().pop();
+            assert.equal(action.function, noop);
+        });
     });
 });
 
