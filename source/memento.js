@@ -326,7 +326,7 @@ factory = function() {
         };
         add_action(event_handler, trigger_time, null);
         node.addEventListener(event_label, event_handler)
-        instance.tick(true, function() {
+        tick(true, function() {
             var timestamp,
                 passed;
             timestamp = now();
